@@ -1,6 +1,6 @@
 'use client'
-import ChatBox from '@/app/components/ChatBox'; // Usa la ruta correcta
-import InputBox from '@/app/components/InputBox'; // Usa la ruta correcta
+import ChatBox from '@/components/ChatBox'; // Usa la ruta correcta
+import InputBox from '@/components/InputBox'; // Usa la ruta correcta
 
 const Chat = () => {
   return (

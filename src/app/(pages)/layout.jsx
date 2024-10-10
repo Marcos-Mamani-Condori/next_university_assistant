@@ -1,9 +1,5 @@
 'use client'; 
-import React, { useEffect } from 'react';
-import Header from '@/app/components/header';
-import NavBar from '@/app/components/navbar';
-import ProvidersContext from '@/app/context/ProvidersContext';
-
+import React, { useEffect} from 'react';
 const useDisableScrollOnMobile = () => {
   useEffect(() => {
     // Verificar si estamos en el lado del cliente
@@ -27,12 +23,8 @@ const Layout = ({ children }) => {
   useDisableScrollOnMobile();
 
   return (
-    <div className='grid grid-cols-12 grid-rows-10 w-full h-full fixed overflow-hidden'>
-      <ProvidersContext>
-        <Header className={"col-span-12 row-span-1"} />
+    <div className='mx-2 md:mx-10 lg:mx-[10rem] grid grid-rows-10 col-span-12 row-span-10'>
           {children}
-        <NavBar className={"col-span-12 row-span-1"} />
-      </ProvidersContext>
     </div>
   );
 };

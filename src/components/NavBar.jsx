@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link'; // Usamos el componente Link de Next.js para la navegación
 import { usePathname } from 'next/navigation'; // Reemplaza useLocation
-import { useDevice } from '@/app/context/DeviceContext';
-import { useInputFocus } from '@/app/context/InputFocusContext';
+import { useDevice } from '@/context/DeviceContext';
+import { useInputFocus } from '@/context/InputFocusContext';
 
 const NavBar = ({ className }) => {
     const { deviceType } = useDevice();
@@ -40,20 +40,20 @@ const NavBar = ({ className }) => {
                     </Link>
                 </li>
                 <li className="flex justify-center items-center">
-                    <Link href="/pages/chat" onClick={() => handleLinkClick('/pages/chat')}>
+                    <Link href="/chat" onClick={() => handleLinkClick('/chat')}>
                         <span className={`inline-flex flex-col items-center justify-center px-8 py-2 ${activeLink === '/chat' ? 'text-blue-600' : 'text-gray-300'} hover:bg-gray-50 dark:hover:bg-gray-800 group`}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M4 4h16v12H5.17L4 17.17zm0-2c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 10h8v2H6zm0-3h12v2H6zm0-3h12v2H6z" />
                             </svg>
-                            <span className={`text-sm ${activeLink === '/pages/chat' ? 'text-blue-600' : 'text-gray-500'} dark:text-gray-400`}>
+                            <span className={`text-sm ${activeLink === '/chat' ? 'text-blue-600' : 'text-gray-500'} dark:text-gray-400`}>
                                 Chat
                             </span>
                         </span>
                     </Link>
                 </li>
                 <li className="flex justify-center items-center">
-                    <Link href="/pages/bot" onClick={() => handleLinkClick('/bot')}>
-                        <span className={`inline-flex flex-col items-center justify-center px-8 py-2 ${activeLink === '/pages/bot' ? 'text-blue-600' : 'text-gray-300'} hover:bg-gray-50 dark:hover:bg-gray-800 group`}>
+                    <Link href="/bot" onClick={() => handleLinkClick('/bot')}>
+                        <span className={`inline-flex flex-col items-center justify-center px-8 py-2 ${activeLink === '/bot' ? 'text-blue-600' : 'text-gray-300'} hover:bg-gray-50 dark:hover:bg-gray-800 group`}>
                             <svg className="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3">
                                     <path d="M4 15.5a2 2 0 1 1 0-4m16 4a2 2 0 1 0 0-4M7 7V4m10 3V4" />
@@ -63,7 +63,7 @@ const NavBar = ({ className }) => {
                                     <path d="M9.5 15c.57.607 1.478 1 2.5 1s1.93-.393 2.5-1m-5.491-4H9m6.009 0H15" />
                                 </g>
                             </svg>
-                            <span className={`text-sm ${activeLink === '/pages/bot' ? 'text-blue-600' : 'text-gray-500'} dark:text-gray-400`}>
+                            <span className={`text-sm ${activeLink === '/bot' ? 'text-blue-600' : 'text-gray-500'} dark:text-gray-400`}>
                                 Bot
                             </span>
                         </span>

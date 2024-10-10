@@ -14,7 +14,6 @@ const InputFocusProvider = ({ children }) => {
 
     useEffect(() => {
         const handleFocus = () => { 
-            console.log('focus');
             setIsInputFocused(true);
         };
         const handleBlur = () => setIsInputFocused(false);
@@ -22,13 +21,10 @@ const InputFocusProvider = ({ children }) => {
         const inputElement = inputRef.current;
 
         if (inputElement) {
-            console.log('inputElement:', inputElement);
-            console.log('location:', pathname);
             inputElement.addEventListener('focus', handleFocus);
             inputElement.addEventListener('blur', handleBlur);
 
             return () => {
-                console.log("Desmontando");
                 inputElement.removeEventListener('focus', handleFocus);
                 inputElement.removeEventListener('blur', handleBlur);
             };

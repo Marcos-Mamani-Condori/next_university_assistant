@@ -1,8 +1,8 @@
-'use client'; // Asegúrate de agregar esta línea para que el contexto se pueda utilizar en el lado del cliente.
+'use client'; // Asegúrate de agregar esta línea para que el contexto se pueda utilizar en 
 
 import React, { useEffect, useState, createContext, useContext } from 'react';
 import io from 'socket.io-client';
-import ModalContext from './ModalContext';
+import ModalContext from '@/context/ModalContext';
 
 const ChatGlobalContext = createContext();
 
@@ -11,7 +11,7 @@ const ChatGlobalProvider = ({ children }) => {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [newSocket, setSocket] = useState(null);
-    const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
+    const {setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const [offset, setOffset] = useState(0);
     const [hasMoreMessages, setHasMoreMessages] = useState(true); // Nuevo estado
 
@@ -137,7 +137,7 @@ const ChatGlobalProvider = ({ children }) => {
     };
 
     const data = { messages, handleSend, input, setInput, isSending, loadMoreMessages, offset, hasMoreMessages, newSocket };
-    
+   
     return (
         <ChatGlobalContext.Provider value={data}>
             {children}

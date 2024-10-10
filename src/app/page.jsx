@@ -1,6 +1,4 @@
-'use client'
-import React from "react";
-import CircularRadiusExam from "@/app/components/CircularRadiusExam"; // Usa la ruta correcta
+import CircularRadiusExam from "@/components/CircularRadiusExam"; // Usa la ruta correcta
 
 const Home = () => {
     // Obtiene la fecha actual

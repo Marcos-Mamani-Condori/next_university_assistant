@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useContext } from 'react';
-import ModalContext from '@/app/context/ModalContext';
-import Warning from '@/app/components/warning';
+import ModalContext from '@/context/ModalContext';
+import Warning from '@/components/warning';
 
 const RegisterModal = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState('');
@@ -35,7 +35,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   };
 
   const handleRegister = async () => {
-    const response = await fetch('/api/register', {
+    const response = await fetch('register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
+  if (isOpen) return null;
 
   return (
     <div
@@ -86,7 +86,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
     >
       <div
         className="bg-white p-8 rounded-lg shadow-lg w-96"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <button
           className="text-gray-500 hover:text-gray-700 float-right text-2xl"
@@ -104,13 +106,17 @@ const RegisterModal = ({ isOpen, onClose }) => {
           type="text"
           placeholder="Nombre de Usuario"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+          }}
           className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {!isLogin && (
           <select
             value={carrera}
-            onChange={(e) => setCarrera(e.target.value)}
+            onChange={(e) => {
+              setCarrera(e.target.value);
+            }}
             className="w-full p-3 mb-4 border rounded-md bg-gray-100 text-gray-700"
           >
             <option value="" disabled>
@@ -127,7 +133,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
           type="password"
           placeholder="Código Universitario"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
           className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button

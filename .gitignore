@@ -35,10 +35,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.env
-
-# Ignorar la carpeta de migraciones
-prisma/migrations/
-
-# Ignorar la base de datos SQLite (si usas SQLite)
-*.sqlite

@@ -1,14 +1,14 @@
 'use client'
 import React from "react";
-import chatbot_icon from '@/app/assets/images/chatbot_icon.png';
-import user_icon from '@/app/assets/images/user_icon.png';
-import LikeButton from '@/app/components/LikeButton'; // Importar el nuevo componente LikeButton
-
+import chatbot_icon from '@/public/static/chatbot_icon.png';
+import user_icon from '@/public/static/user_icon.png';
+import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
+import Image from "next/image";
 function SCMessage({ text, sender, id }) {
     const isUser = sender === 'user';
     const icon = isUser
-        ? <img src={user_icon} alt="User Icon" className="h-8 w-8 rounded-full" />
-        : <img src={chatbot_icon} alt="Chatbot Icon" className="h-8 w-8 rounded-full" />;
+    ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
+    : <Image src={chatbot_icon} alt="Chatbot Icon" width={32} height={32} className="rounded-full" />;
     
     const { username, carrera, fecha } = sender;
 

@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import chatbot_icon from '@/app/assets/images/chatbot_icon.png';
-import user_icon from '@/app/assets/images/user_icon.png';
-
+import chatbot_icon from '@/public/static/chatbot_icon.png';
+import user_icon from '@/public/static//user_icon.png';
+import Image from 'next/image';
 function* typewriterEffect(text) {
   for (let i = 0; i < text.length; i++) {
     yield text.slice(0, i + 1);
@@ -12,9 +12,9 @@ function* typewriterEffect(text) {
 function MessageBot({ text, sender }) {
   const isUser = sender === 'user';
   const icon = isUser ? (
-    <img src={user_icon} alt="User Icon" className="w-6 h-6 mr-2" />
+    <Image src={user_icon} alt="User Icon" width={24} height={24} className="mr-2" />
   ) : (
-    <img src={chatbot_icon} alt="Chatbot Icon" className="w-6 h-6 mr-2" />
+    <Image src={chatbot_icon} alt="Chatbot Icon" width={24} height={24} className="mr-2" />
   );
 
   const [serverMessage, setServerMessage] = useState('');

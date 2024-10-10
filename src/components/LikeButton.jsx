@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useContext } from "react";
-import ChatGlobalContext from "@app/context/ChatGlobalContext";
-import RegisterModal from "@app/components/RegisterModal";
+import ChatGlobalContext from "@/context/ChatGlobalContext";
+import RegisterModal from "@/components/RegisterModal";
 
 function LikeButton({ messageId, username }) {
   const { newSocket } = useContext(ChatGlobalContext); // Obtener el socket del contexto
