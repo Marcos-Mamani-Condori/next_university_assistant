@@ -1,4 +1,4 @@
-'use client'; // Asegúrate de agregar esta línea para que el contexto se ejecute en el lado del cliente.
+'use client'; 
 
 import React, { useState, createContext } from 'react';
 

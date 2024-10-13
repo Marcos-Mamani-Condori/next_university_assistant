@@ -1,79 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
+datasource db {
+  provider = "sqlite"
+ url      = env("DATABASE_URL")  // Archivo SQLite local
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE") 
-}
-
-model Usuario {
-  id         Int       @id @default(autoincrement())
-  password   String
-  nombre     String
-  correo     String    @unique
-  carrera    String?
-  preguntas  Pregunta[]
-  mensajes   Message[]
-  likes      Like[]    // Relación con Like
-  respuestas Respuesta[]  // Relación con Respuesta
-}
-
-model Pregunta {
-  id          Int       @id @default(autoincrement())
-  usuarioId   Int?
-  texto       String
-  fecha       DateTime  @default(now())
-  usuario     Usuario?  @relation(fields: [usuarioId], references: [id])
-  respuestas   Respuesta[]
-  imagenes     Imagen[]
-  contadores   Contador[]
-  likes        Like[]
-}
-
-model Respuesta {
-  id          Int       @id @default(autoincrement())
-  preguntaId  Int
-  usuarioId   Int
-  texto       String
-  fecha       DateTime  @default(now())
-  pregunta    Pregunta   @relation(fields: [preguntaId], references: [id])
-  usuario     Usuario    @relation(fields: [usuarioId], references: [id]) // Relación con Usuario
-}
-
-model Imagen {
-  id          Int       @id @default(autoincrement())
-  preguntaId  Int
-  url         String
-  pregunta    Pregunta   @relation(fields: [preguntaId], references: [id])
-}
-
-model Like {
-  id           Int       @id @default(autoincrement())
-  preguntasId  Int
-  usuariosId   String
-  usuarioLike  Int?
-  fecha        DateTime  @default(now())
-  pregunta     Pregunta   @relation(fields: [preguntasId], references: [id])
-  usuario      Usuario?   @relation(fields: [usuarioLike], references: [id]) // Relación inversa con Usuario
-}
-
-model Contador {
-  id           Int       @id @default(autoincrement())
-  preguntasId  Int
-  contador     Int
-  pregunta     Pregunta   @relation(fields: [preguntasId], references: [id])
-}
-
-model Message {
-  id       Int      @id @default(autoincrement())
-  userId   Int
-  message  String
-  usuario  Usuario   @relation(fields: [userId], references: [id])
+model User {
+  id       Int     @id @default(autoincrement())
+  email String @unique
+  username String  @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
