@@ -67,7 +67,7 @@ function ChatBox({ className }) {
         <div
             ref={containerRef}
             className={`${className} overflow-y-auto h-full flex-1 bg-gray-100 relative`}
-            onScroll={pathname === "/chat" ? handleScroll : undefined} // Cambiar router.pathname a pathname
+            onScroll={pathname === "/chat" ? handleScroll : undefined} 
         >
             {loading && hasMoreMessages && (
                 <div className="absolute top-0 left-0 right-0 bg-white text-center py-2">
@@ -76,7 +76,7 @@ function ChatBox({ className }) {
             )}
 
             {messages.map((msg, index) => {
-                return pathname === "/bot" // Cambiar router.pathname a pathname
+                return pathname === "/bot" 
                     ? <MessageBot key={index} text={msg.text} sender={msg.sender} />
                     : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} />;
             })}
