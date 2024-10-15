@@ -23,6 +23,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
         username: data.username,
         email: data.email,
         password: data.password,
+        carrera: data.carrera,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +132,43 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
           {errors.confirmPassword && (
             <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
           )}
-
+ <label htmlFor="carrera" className="text-slate-500 mb-2 block text-sm">
+            Carrera:
+          </label>
+          <select
+            {...register("carrera", {
+              required: {
+                value: true,
+                message: "Carrera is required",
+              },
+            })}
+            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+          >
+            <option value="">Selecciona tu carrera</option>
+            {[
+              'Adm. Empresas',
+              'Ing. Comercial',
+              'Ing. Financiera',
+              'Derecho',
+              'Comunicación',
+              'Ing. Civil',
+              'Ing. Industrial',
+              'Ing. Sistemas',
+              'Ing. Mecánica',
+              'Ing. Electrónica',
+              'Ing. Ambiental',
+              'Gastronomía',
+              'Veterinaria',
+            ].map((carrera) => (
+              <option key={carrera} value={carrera}>
+                {carrera}
+              </option>
+            ))}
+          </select>
+          {errors.carrera && (
+            <span className="text-red-500 text-sm">{errors.carrera.message}</span>
+          )}
+          
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
             Register
           </button>

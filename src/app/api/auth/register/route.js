@@ -34,7 +34,8 @@ const newUser = await db.user.create({
         data: {
             username: data.username,
             email: data.email,
-            password: hashedPassword
+            password: hashedPassword,
+            carrera: data.carrera
         }
     }
 )

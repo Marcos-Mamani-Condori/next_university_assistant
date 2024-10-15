@@ -15,7 +15,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
 
   const onSubmit = handleSubmit(async (data) => {
     const res = await signIn("credentials", {
-      email: data.email,
+      username: data.username,
       password: data.password,
       redirect: false,
     });
@@ -51,22 +51,22 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
         )}
         <h1 className="text-slate-200 font-bold text-4xl mb-4">LOGIN</h1>
         <form onSubmit={onSubmit}> 
-          <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
-            Email:
+          <label htmlFor="nombre" className="text-slate-500 mb-2 block text-sm">
+            Nombre:
           </label>
           <input
-            type="email"
-            {...register("email", {
+            type="text"
+            {...register("username", {
               required: {
                 value: true,
-                message: "Email es requerido",
+                message: "usuario es requerido",
               },
             })}
             className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-            placeholder="user@email.com"
+            placeholder="nombre"
           />
-          {errors.email && ( 
-            <span className="text-red-500 text-xs">{errors.email.message}</span>
+          {errors.username && ( 
+            <span className="text-red-500 text-xs">{errors.username.message}</span>
           )}
 
           <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
