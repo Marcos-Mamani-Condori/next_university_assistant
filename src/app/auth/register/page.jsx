@@ -2,7 +2,12 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+const inputBaseStyles=()=> {
+  return "p-3 rounded block mb-2 bg-slate-900 text-slate-300";
+}
+const labelBaseStyles=()=> {
+  return "text-slate-500 mb-2 block text-sm";
+}
 function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
   const {
     register,
@@ -61,7 +66,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Register</h1>
 
         <form onSubmit={onSubmit} className="flex flex-col">
-          <label htmlFor="username" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="username" className={labelBaseStyles()}>
             Username:
           </label>
           <input
@@ -72,14 +77,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
                 message: "Username is required",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+            className={inputBaseStyles()}
             placeholder="yourUser123"
           />
           {errors.username && (
             <span className="text-red-500 text-xs">{errors.username.message}</span>
           )}
 
-          <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="email" className={labelBaseStyles()}>
             Email:
           </label>
           <input
@@ -90,14 +95,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
                 message: "Email is required",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+            className={inputBaseStyles()}
             placeholder="user@email.com"
           />
           {errors.email && (
             <span className="text-red-500 text-xs">{errors.email.message}</span>
           )}
 
-          <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="password" className={labelBaseStyles()}>
             Password:
           </label>
           <input
@@ -108,14 +113,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
                 message: "Password is required",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+            className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.password && (
             <span className="text-red-500 text-sm">{errors.password.message}</span>
           )}
 
-          <label htmlFor="confirmPassword" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="confirmPassword" className={labelBaseStyles()}>
             Confirm Password:
           </label>
           <input
@@ -126,13 +131,13 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
                 message: "Confirm Password is required",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+            className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.confirmPassword && (
             <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
           )}
- <label htmlFor="carrera" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="carrera" className={labelBaseStyles()}>
             Carrera:
           </label>
           <select
@@ -142,7 +147,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
                 message: "Carrera is required",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
+            className={inputBaseStyles()}
           >
             <option value="">Selecciona tu carrera</option>
             {[

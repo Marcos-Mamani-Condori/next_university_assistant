@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+const inputBaseStyles=()=> {
+  return "p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full";
+}
 const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   const {
     register,
@@ -62,7 +64,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
                 message: "usuario es requerido",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+            className={inputBaseStyles()}
             placeholder="nombre"
           />
           {errors.username && ( 
@@ -80,7 +82,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
                 message: "Password es requerido",
               },
             })}
-            className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+            className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.password && ( 
