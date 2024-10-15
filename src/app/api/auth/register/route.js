@@ -19,7 +19,7 @@ export async function POST(request) {
     }
     const usernameFound = await db.user.findUnique({
         where: { 
-            username: data.username
+            name: data.name
         }
     })
     if (usernameFound){
@@ -32,10 +32,12 @@ export async function POST(request) {
 const hashedPassword = await bcrypt.hash(data.password, 10 )
 const newUser = await db.user.create({
         data: {
-            username: data.username,
+            name: data.name,
             email: data.email,
             password: hashedPassword,
-            carrera: data.carrera
+            major: data.major, 
+            role: data.role || 'registrado', 
+            status: data.status || 'inactivo'
         }
     }
 )

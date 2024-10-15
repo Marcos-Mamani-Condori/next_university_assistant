@@ -14,11 +14,15 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   const [error, setError] = useState(null);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("Datos enviados:", data); // Verificar qué datos se están enviando
+
     const res = await signIn("credentials", {
-      username: data.username,
+      name: data.name,
       password: data.password,
       redirect: false,
     });
+
+    console.log("Respuesta de signIn:", res); // Verificar la respuesta de la autenticación
 
     if (res.error) {
       console.log('Error al iniciar sesión:', res.error); 
@@ -56,7 +60,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
           </label>
           <input
             type="text"
-            {...register("username", {
+            {...register("name", {
               required: {
                 value: true,
                 message: "usuario es requerido",
@@ -65,8 +69,8 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
             placeholder="nombre"
           />
-          {errors.username && ( 
-            <span className="text-red-500 text-xs">{errors.username.message}</span>
+          {errors.name && ( 
+            <span className="text-red-500 text-xs">{errors.name.message}</span>
           )}
 
           <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">

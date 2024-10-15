@@ -1,19 +1,109 @@
-// prisma/schema.prisma
-datasource db {
-  provider = "sqlite"
- url      = env("DATABASE_URL")  // Archivo SQLite local
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model User {
-  id       Int     @id @default(autoincrement())
-  email String @unique
-  username String  @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  carrera String 
+  id         Int      @id @default(autoincrement())
+  password   String
+  name       String   @unique
+  email      String   @unique
+  major      String?
+  role       String?
+  status     String?
+  createdAt  DateTime @default(now())
+  
+  messages   Message[]
+  activities Activity[]
+  announcements Announcement[]
+  likes      Like[]
+  notifications Notification[]
+  answers    Answer[]  // Relación añadida
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  text      String
+  date      DateTime @default(now())
+  isBot     Boolean  @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  answers   Answer[]
+  likes     Like[]
+  notifications Notification[]
+}
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  toDoEndLine DateTime @default(now())
+  activities  String
+  career      String?
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  images      Image[]
+}
+
+model Announcement {
+  id           Int      @id @default(autoincrement())
+  text         String
+  date         DateTime @default(now())
+  name         String
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  images       Image[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  text       String
+  date       DateTime @default(now())
+  userId     Int
+  messageId  Int
+  user       User     @relation(fields: [userId], references: [id])
+  message    Message  @relation(fields: [messageId], references: [id])
+  images     Image[]
+}
+
+model Image {
+  id             Int      @id @default(autoincrement())
+  url            String
+  answerId       Int?
+  announcementId Int?
+  activityId     Int?
+  answer         Answer?      @relation(fields: [answerId], references: [id])
+  announcement   Announcement? @relation(fields: [announcementId], references: [id])
+  activity       Activity?     @relation(fields: [activityId], references: [id])
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  messageId  Int
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  message    Message  @relation(fields: [messageId], references: [id])
+  
+  notifications Notification[]  // Relación añadida
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  likeId    Int?
+  messageId Int?
+  date      DateTime @default(now())
+  seen      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  like      Like?    @relation(fields: [likeId], references: [id])
+  message   Message? @relation(fields: [messageId], references: [id])
 }

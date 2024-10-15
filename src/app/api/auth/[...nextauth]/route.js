@@ -7,17 +7,17 @@ const authOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        username: { label: "username", type: "text", placeholder: "jsmith" },
+        name: { label: "name", type: "text", placeholder: "jsmith" },
         password: { label: "password", type: "password" },
       },
       async authorize(credentials, req) {
         console.log("Credentials received:", credentials);
-        if (!credentials.username) {
+        if (!credentials.name) {
             console.error("Username is required.");
             return null;
         }
         const userFound = await db.user.findUnique({
-            where: { username: credentials.username}
+            where: { name: credentials.name}
         })
             if (!userFound)  throw new Error("usuario no encontrado")
             
@@ -28,9 +28,11 @@ const authOptions = {
             
             return {
                 id: userFound.id,
-                name: userFound.username,
+                name: userFound.name,
                 email: userFound.email,
-                carrera: userFound.carrera,
+                major: userFound.major,
+                role: userFound.role, 
+                status: userFound.status
             }
       },
     }),

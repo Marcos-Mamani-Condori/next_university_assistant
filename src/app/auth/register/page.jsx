@@ -20,10 +20,10 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
     const res = await fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
-        username: data.username,
+        name: data.name,
         email: data.email,
         password: data.password,
-        carrera: data.carrera,
+        major: data.major,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -61,22 +61,22 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Register</h1>
 
         <form onSubmit={onSubmit} className="flex flex-col">
-          <label htmlFor="username" className="text-slate-500 mb-2 block text-sm">
+          <label htmlFor="name" className="text-slate-500 mb-2 block text-sm">
             Username:
           </label>
           <input
             type="text"
-            {...register("username", {
+            {...register("name", {
               required: {
                 value: true,
-                message: "Username is required",
+                message: "name is required",
               },
             })}
             className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
             placeholder="yourUser123"
           />
-          {errors.username && (
-            <span className="text-red-500 text-xs">{errors.username.message}</span>
+          {errors.name && (
+            <span className="text-red-500 text-xs">{errors.name.message}</span>
           )}
 
           <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
@@ -136,10 +136,10 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             Carrera:
           </label>
           <select
-            {...register("carrera", {
+            {...register("major", {
               required: {
                 value: true,
-                message: "Carrera is required",
+                message: "major is required",
               },
             })}
             className="p-3 rounded block mb-2 bg-slate-900 text-slate-300"
@@ -159,14 +159,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
               'Ing. Ambiental',
               'Gastronomía',
               'Veterinaria',
-            ].map((carrera) => (
-              <option key={carrera} value={carrera}>
-                {carrera}
+            ].map((major) => (
+              <option key={major} value={major}>
+                {major}
               </option>
             ))}
           </select>
-          {errors.carrera && (
-            <span className="text-red-500 text-sm">{errors.carrera.message}</span>
+          {errors.major && (
+            <span className="text-red-500 text-sm">{errors.major.message}</span>
           )}
           
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
