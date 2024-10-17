@@ -28,7 +28,7 @@ model User {
   announcements Announcement[]
   likes      Like[]
   notifications Notification[]
-  answers    Answer[]  // Relación añadida
+  answers    Answer[]  
 }
 
 model Message {
