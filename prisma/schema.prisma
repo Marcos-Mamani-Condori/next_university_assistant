@@ -1,109 +1,101 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         Int      @id @default(autoincrement())
-  password   String
-  name       String   @unique
-  email      String   @unique
-  major      String?
-  role       String?
-  status     String?
-  createdAt  DateTime @default(now())
-  
-  messages   Message[]
-  activities Activity[]
-  announcements Announcement[]
-  likes      Like[]
-  notifications Notification[]
-  answers    Answer[]  
-}
-
-model Message {
-  id        Int      @id @default(autoincrement())
-  text      String
-  date      DateTime @default(now())
-  isBot     Boolean  @default(false)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  answers   Answer[]
-  likes     Like[]
-  notifications Notification[]
-}
-
-model Activity {
-  id          Int      @id @default(autoincrement())
-  toDoEndLine DateTime @default(now())
-  activities  String
-  career      String?
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  images      Image[]
-}
-
-model Announcement {
-  id           Int      @id @default(autoincrement())
-  text         String
-  date         DateTime @default(now())
-  name         String
-  userId       Int
-  user         User     @relation(fields: [userId], references: [id])
-  images       Image[]
-}
-
-model Answer {
-  id         Int      @id @default(autoincrement())
-  text       String
-  date       DateTime @default(now())
-  userId     Int
-  messageId  Int
-  user       User     @relation(fields: [userId], references: [id])
-  message    Message  @relation(fields: [messageId], references: [id])
-  images     Image[]
-}
-
-model Image {
+model activities {
   id             Int      @id @default(autoincrement())
-  url            String
-  answerId       Int?
-  announcementId Int?
-  activityId     Int?
-  answer         Answer?      @relation(fields: [answerId], references: [id])
-  announcement   Announcement? @relation(fields: [announcementId], references: [id])
-  activity       Activity?     @relation(fields: [activityId], references: [id])
+  to_do_end_line DateTime @default(now())
+  activities     String
+  career         String?
+  user_id        Int?
+  users          users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  images         images[]
 }
 
-model Like {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  messageId  Int
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
-  message    Message  @relation(fields: [messageId], references: [id])
-  
-  notifications Notification[]  // Relación añadida
+model announcements {
+  id      Int      @id @default(autoincrement())
+  text    String
+  date    DateTime @default(now())
+  name    String
+  user_id Int?
+  users   users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  images  images[]
 }
 
-model Notification {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  likeId    Int?
-  messageId Int?
-  date      DateTime @default(now())
-  seen      Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
-  like      Like?    @relation(fields: [likeId], references: [id])
-  message   Message? @relation(fields: [messageId], references: [id])
+model answers {
+  id         Int       @id @default(autoincrement())
+  text       String
+  date       DateTime  @default(now())
+  user_id    Int?
+  message_id Int?
+  messages   messages? @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  images     images[]
+}
+
+model images {
+  id              Int            @id @default(autoincrement())
+  url             String
+  answer_id       Int?
+  announcement_id Int?
+  activity_id     Int?
+  activities      activities?    @relation(fields: [activity_id], references: [id], onUpdate: NoAction)
+  announcements   announcements? @relation(fields: [announcement_id], references: [id], onUpdate: NoAction)
+  answers         answers?       @relation(fields: [answer_id], references: [id], onUpdate: NoAction)
+}
+
+model likes {
+  id            Int             @id @default(autoincrement())
+  user_id       Int?
+  message_id    Int?
+  created_at    DateTime        @default(now())
+  messages      messages?       @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users         users?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notifications notifications[]
+}
+
+model messages {
+  id            Int             @id @default(autoincrement())
+  text          String
+  date          DateTime        @default(now())
+  is_bot        Boolean?        @default(false)
+  user_id       Int?
+  answers       answers[]
+  likes         likes[]
+  users         users?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notifications notifications[]
+}
+
+model notifications {
+  id         Int       @id @default(autoincrement())
+  user_id    Int?
+  like_id    Int?
+  message_id Int?
+  date       DateTime  @default(now())
+  seen       Boolean?  @default(false)
+  likes      likes?    @relation(fields: [like_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  messages   messages? @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id            Int             @id @default(autoincrement())
+  password      String
+  name          String          @unique
+  email         String          @unique
+  major         String?
+  role          String?
+  status        String?
+  created_at    DateTime        @default(now())
+  activities    activities[]
+  announcements announcements[]
+  answers       answers[]
+  likes         likes[]
+  messages      messages[]
+  notifications notifications[]
 }

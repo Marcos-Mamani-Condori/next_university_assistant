@@ -16,7 +16,7 @@ const authOptions = {
             console.error("Username is required.");
             return null;
         }
-        const userFound = await db.user.findUnique({
+        const userFound = await db.users.findUnique({
             where: { name: credentials.name}
         })
             if (!userFound)  throw new Error("usuario no encontrado")

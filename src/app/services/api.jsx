@@ -1,7 +1,7 @@
 'use server'
 const sendMessageBot = (message) => {
     console.log('Enviando mensaje al bot:', message); 
-    return fetch('http://192.168.1.103:5000/api/chatbot/message', { 
+    return fetch('http://192.168.125.37:5000/message', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ export async function POST(request) {
     try {
         const data = await request.json();
 
-    const userFound = await db.user.findUnique({
+    const userFound = await db.users.findUnique({
         where: { 
             email: data.email
         }
@@ -17,7 +17,7 @@ export async function POST(request) {
             status: 400
         })
     }
-    const usernameFound = await db.user.findUnique({
+    const usernameFound = await db.users.findUnique({
         where: { 
             name: data.name
         }
@@ -30,7 +30,7 @@ export async function POST(request) {
         })
     }
 const hashedPassword = await bcrypt.hash(data.password, 10 )
-const newUser = await db.user.create({
+const newUser = await db.users.create({
         data: {
             name: data.name,
             email: data.email,
@@ -41,9 +41,9 @@ const newUser = await db.user.create({
         }
     }
 )
-const {password: _, ...user}=newUser
-console.log("user:", JSON.stringify(user, null, 2)); 
-     return NextResponse.json(user);
+const {password: _, ...users}=newUser
+console.log("users:", JSON.stringify(users, null, 2)); 
+     return NextResponse.json(users);
     } catch (error) {
         return NextResponse.json(
             {
