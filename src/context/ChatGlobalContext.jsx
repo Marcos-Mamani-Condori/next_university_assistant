@@ -43,7 +43,7 @@ const ChatGlobalProvider = ({ children }) => {
             setOffset(data.messages.length); // Establecer offset inicial
         });
 
-        newSocket.on('new_pregunta', (pregunta) => {
+        newSocket.on('chat message', (pregunta) => {
             console.log('Recibido evento new_preguntas:', pregunta);
             setMessages((prevMessages) => [...prevMessages, pregunta]); // Agregar nuevo mensaje al final
             
@@ -87,7 +87,7 @@ const ChatGlobalProvider = ({ children }) => {
         console.log("Preparando para enviar mensaje:", { input, token });
 
         // Emitir el mensaje
-        newSocket.emit('send_pregunta', { message: input, token }, (response) => {
+        newSocket.emit('chat message', { message: input, token }, (response) => {
             console.log('Emit ejecutado. Esperando respuesta del servidor...');
             setInput("");
             if (response && response.error) {
