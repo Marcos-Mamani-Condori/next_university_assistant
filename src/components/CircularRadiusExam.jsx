@@ -46,42 +46,49 @@ const CircularRadiusExam = ({ startDate, dateExam, fechaActual }) => {
     const progressColor = daysPastEndDate > 3 ? 'text-gray-500 dark:text-neutral-700' : getColor(percentage);
 
     return (
-        <div className="relative w-40 h-40">
-            <svg
-                className="w-full h-full -rotate-90"
-                viewBox="0 0 36 36"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                {/* Círculo de fondo */}
-                <circle
-                    cx="18"
-                    cy="18"
-                    r={circleRadius}
-                    fill="none"
-                    className="stroke-current text-gray-200 dark:text-neutral-700"
-                    strokeWidth="2"
-                />
-                {/* Círculo de progreso */}
-                <circle
-                    cx="18"
-                    cy="18"
-                    r={circleRadius}
-                    fill="none"
-                    stroke={progressColor}
-                    strokeWidth="2"
-                    strokeDasharray={circleCircumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                />
-            </svg>
+        <div className="flex flex-col items-center p-4">
+  {/* Texto "Fecha de Examen" encima */}
+  <span className="mb-2 text-xl font-semibold text-red-800">Fecha de Examen</span>
 
-            {/* Texto de días restantes o "Sin fecha de examen" */}
-            <div className="absolute top-1/2 left-1/2 text-center transform -translate-y-1/2 -translate-x-1/2">
-                <span className="text-center text-xl font-bold text-blue-600 dark:text-blue-600">
-                    {centerText}
-                </span>
-            </div>
-        </div>
+  {/* Gráfico circular */}
+  <div className="relative w-40 h-40">
+    <svg
+      className="w-full h-full -rotate-90"
+      viewBox="0 0 36 36"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Círculo de fondo */}
+      <circle
+        cx="18"
+        cy="18"
+        r={circleRadius}
+        fill="none"
+        className="stroke-current text-gray-200 dark:text-neutral-700"
+        strokeWidth="2"
+      />
+      {/* Círculo de progreso */}
+      <circle
+        cx="18"
+        cy="18"
+        r={circleRadius}
+        fill="none"
+        stroke={progressColor}
+        strokeWidth="2"
+        strokeDasharray={circleCircumference}
+        strokeDashoffset={strokeDashoffset}
+        strokeLinecap="round"
+      />
+    </svg>
+
+    {/* Texto de días restantes o "Sin fecha de examen" */}
+    <div className="absolute top-1/2 left-1/2 text-center transform -translate-y-1/2 -translate-x-1/2">
+      <span className="text-center text-xl font-semibold text-blue-600 dark:text-blue-600">
+        {centerText}
+      </span>
+    </div>
+  </div>
+</div>
+        
     );
 };
 
