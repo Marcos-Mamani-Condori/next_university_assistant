@@ -18,20 +18,22 @@ const Home = () => {
     const now = new Date();
 
     return (
-        // Con (mx-2 md:mx-10 lg:mx-[10rem]) hacemos la responsividad en modo móvil, escritorio y tablet
-        <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
-            <div className="flex-1">
+        <div className="pt-2 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto h-screen pb-64 lg:pb-10">
+            <div className="col-span-2 md:col-span-1 lg:col-span-1">
                 <StudentsCounter />
             </div>
-            <div className="flex-1">
+
+            {/* Alineado hacia arriba en pantallas grandes (escritorio) */}
+            <div className="col-span-2 md:col-span-1 lg:col-span-1 flex items-center lg:items-start justify-center">
                 <CircularRadiusExam
                     startDate={'2024-10-17'}
                     dateExam={'2024-10-29'}
                     fechaActual={now}
                 />
             </div>
-            <div className="flex-1">
-                <ActivityCalendar activities={activities} /> 
+
+            <div className="col-span-2 md:col-span-1 lg:col-span-1">
+                <ActivityCalendar activities={activities} />
             </div>
         </div>
     );
