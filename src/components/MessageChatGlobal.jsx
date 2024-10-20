@@ -10,11 +10,11 @@ function SCMessage({ text, sender, id }) {
     ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
     : <Image src={chatbot_icon} alt="Chatbot Icon" width={32} height={32} className="rounded-full" />;
     
-    const { username, carrera, fecha } = sender;
+    const { username, major, date } = sender;
 
     // Para obtener la hora en que se envió el mensaje
     const obtenerTiempoTranscurrido = () => {
-        const fechaComentarioDate = new Date(fecha);
+        const fechaComentarioDate = new Date(date);
         const fechaActual = new Date();
         const diferenciaTiempo = fechaActual - fechaComentarioDate;
         const segundos = Math.floor(diferenciaTiempo / 1000);
@@ -49,7 +49,7 @@ function SCMessage({ text, sender, id }) {
                 <div className="ml-2">
                     <span className="font-semibold text-sm">{username}</span>
                     <span className="text-xs text-gray-500">{obtenerTiempoTranscurrido()}</span>
-                    <span className="block text-xs text-gray-500">{carrera}</span>
+                    <span className="block text-xs text-gray-500">{major}</span>
                 </div>
             </div>
             <p className="text-sm">{text}</p>
