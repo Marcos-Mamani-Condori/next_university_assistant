@@ -1,14 +1,27 @@
-'use client'; // Asegura que el componente sea interactivo en el lado del cliente
+"use client";
 
 import React, { useState, useEffect, useContext } from "react";
 import ChatGlobalContext from "@/context/ChatGlobalContext";
-import { useSession } from "next-auth/react"; // Importa useSession para obtener el token de autenticación
+import { useSession } from "next-auth/react";
 
 function LikeButton({ messageId, username }) {
-  const { newSocket } = useContext(ChatGlobalContext); // Obtener el socket del contexto
-  const [likeCount, setLikeCount] = useState(0); // Estado para el contador de likes
-  const [hasLiked, setHasLiked] = useState(false); // Estado para saber si el usuario ha dado like
-  const { data: session } = useSession(); // Obtener datos de sesión, incluido el token
+  const { newSocket, messages } = useContext(ChatGlobalContext);
+  const [likeCount, setLikeCount] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const { data: session } = useSession();
+
+  // Cargar estado de like desde localStorage al montar el componente
+  useEffect(() => {
+    const likedStatus = localStorage.getItem(`liked_${messageId}`);
+    if (likedStatus !== null) {
+      setHasLiked(JSON.parse(likedStatus));
+    }
+
+    const message = messages.find(msg => msg.id === messageId);
+    if (message) {
+      setLikeCount(message.totalLikes || 0); // Asegúrate de que totalLikes esté en el mensaje
+    }
+  }, [messages, messageId]); // Dependencias del useEffect
 
   // Cargar datos de likes al montar el componente
   useEffect(() => {
@@ -16,65 +29,72 @@ function LikeButton({ messageId, username }) {
       return; 
     }
 
-    const accessToken = session?.user?.accessToken; // Obtener el token de la sesión
+    const accessToken = session?.user?.accessToken;
 
-    // Función para cargar los datos de likes
     const loadLikeData = () => {
       if (newSocket.connected) {
-        newSocket.emit("get_like_count", messageId); // Solicitar el contador de likes
-
+        newSocket.emit("get_like_count", messageId);
         if (accessToken) {
-          newSocket.emit("check_user_like", { messageId, token: accessToken }); // Comprobar si el usuario ha dado like
+          newSocket.emit("check_user_like", { messageId, token: accessToken });
         }
       }
     };
 
-    loadLikeData(); // Llamar a la función para cargar datos de likes
+    loadLikeData(); // Cargar datos de likes
 
-    // Manejar la respuesta del contador de likes
     const handleLikeCountResponse = ({ preguntas_id, total_likes }) => {
       if (preguntas_id === messageId) {
-        setLikeCount(total_likes); // Actualizar el contador de likes
+        setLikeCount(total_likes);
       }
     };
 
-    // Manejar el estado de like del usuario
     const handleUserLikeStatus = ({ preguntas_id, has_liked }) => {
       if (preguntas_id === messageId) {
-        setHasLiked(has_liked); // Actualizar si el usuario ha dado like
+        setHasLiked(has_liked);
+        // Almacenar el estado de like en localStorage
+        localStorage.setItem(`liked_${messageId}`, JSON.stringify(has_liked));
       }
     };
 
-    // Escuchar eventos del socket
     newSocket.on("like_count_response", handleLikeCountResponse);
     newSocket.on("user_like_status", handleUserLikeStatus);
 
-    // Limpieza del efecto al desmontar
     return () => {
-      newSocket.off("like_count_response", handleLikeCountResponse); // Limpiar el listener
-      newSocket.off("user_like_status", handleUserLikeStatus); // Limpiar el listener
+      newSocket.off("like_count_response", handleLikeCountResponse);
+      newSocket.off("user_like_status", handleUserLikeStatus);
     };
   }, [messageId, newSocket, session]); // Dependencias del useEffect
 
-  // Manejar el clic en el botón de like
+  // Escuchar evento cuando se cargan más mensajes
+  useEffect(() => {
+    const handleMoreMessagesLoaded = () => {
+      console.log('Se han cargado más mensajes');
+      // Aquí puedes realizar acciones adicionales si es necesario
+    };
+
+    newSocket.on("more_preguntas_loaded", handleMoreMessagesLoaded);
+
+    return () => {
+      newSocket.off("more_preguntas_loaded", handleMoreMessagesLoaded);
+    };
+  }, [newSocket]);
+
   const handleLikeClick = () => {
-    const accessToken = session?.user?.accessToken; // Obtener el token de la sesión
+    const accessToken = session?.user?.accessToken;
 
     if (!newSocket || !accessToken) {
-      return;
+      return; // Asegúrate de que el socket y el token estén disponibles
     }
 
-    // Console.log para verificar el username
-    console.log(`Enviando like para mensaje ID ${messageId} con username ${username} y token ${accessToken}`);
+    newSocket.emit("like_pregunta", { messageId, username, token: accessToken });
 
-    newSocket.emit("like_pregunta", { messageId, username, token: accessToken }); // Enviar el evento de like con el token y el username
-
-    // Actualizar el contador de likes localmente
-    setLikeCount((prevCount) => {
-      const newCount = hasLiked ? prevCount - 1 : prevCount + 1; 
-      return newCount;
+    // Actualizar localmente el contador de likes
+    setLikeCount((prevCount) => (hasLiked ? prevCount - 1 : prevCount + 1));
+    setHasLiked((prevState) => {
+      const newLikedState = !prevState;
+      localStorage.setItem(`liked_${messageId}`, JSON.stringify(newLikedState)); // Guardar en localStorage
+      return newLikedState;
     });
-    setHasLiked((prevState) => !prevState); // Alternar el estado de like
   };
 
   return (

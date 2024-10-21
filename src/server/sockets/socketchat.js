@@ -115,6 +115,8 @@ const registerSockets = (io) => { // Cambiar 'httpServer' por 'io'
                     })),
                     has_more: hasMore,
                 });
+
+                socket.emit("more_preguntas_loaded");
             } catch (error) {
                 console.error('Error al cargar más preguntas:', error);
             }
