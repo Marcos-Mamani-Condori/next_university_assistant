@@ -2,20 +2,25 @@
 const express = require('express');
 const http = require('http');
 const next = require('next');
-const registerSockets = require('./sockets/socketchat'); // Importar el archivo de sockets
+const { Server } = require('socket.io'); // Importar Socket.IO
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
+const registerSockets = require('./sockets/socketchat'); // Importar archivo de sockets
+const registerLikes = require('./sockets/socketlike');   
 
 app.prepare().then(() => {
     const server = express();
 
     // Crear servidor HTTP para WebSockets
     const httpServer = http.createServer(server);
+ // Crear instancia de Socket.IO
+ const io = require('socket.io')(httpServer); // Inicializar Socket.IO con el servidor HTTP
 
-    // Registrar los sockets
-    registerSockets(httpServer);
+ // Registrar los sockets en la instancia de Socket.IO
+ registerSockets(io);  // Inicia la configuración de socketchat
+ registerLikes(io);    // Inicia la configuración de socketlike
 
     // Manejar rutas de Next.js
     server.all('*', (req, res) => {

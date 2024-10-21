@@ -2,9 +2,7 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerSockets = (httpServer) => {
-    const io = new Server(httpServer);
-
+const registerSockets = (io) => { // Cambiar 'httpServer' por 'io'
     io.on('connection', (socket) => {
         const sendInitialMessages = async () => {
             try {
