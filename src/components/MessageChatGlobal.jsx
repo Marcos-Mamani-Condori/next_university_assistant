@@ -26,19 +26,19 @@ function SCMessage({ text, sender, id }) {
         const años = Math.floor(días / 365);
 
         if (años > 0) {
-            return `hace ${años} año${años > 1 ? 's' : ''}`;
+            return ` hace ${años} año${años > 1 ? 's' : ''}`;
         } else if (meses > 0) {
-            return `hace ${meses} mes${meses > 1 ? 'es' : ''}`;
+            return ` hace ${meses} mes${meses > 1 ? 'es' : ''}`;
         } else if (semanas > 0) {
-            return `hace ${semanas} semana${semanas > 1 ? 's' : ''}`;
+            return ` hace ${semanas} semana${semanas > 1 ? 's' : ''}`;
         } else if (días > 0) {
-            return `hace ${días} día${días > 1 ? 's' : ''}`;
+            return ` hace ${días} día${días > 1 ? 's' : ''}`;
         } else if (horas > 0) {
-            return `hace ${horas} hora${horas > 1 ? 's' : ''}`;
+            return ` hace ${horas} hora${horas > 1 ? 's' : ''}`;
         } else if (minutos > 0) {
-            return `hace ${minutos} minuto${minutos > 1 ? 's' : ''}`;
+            return ` hace ${minutos} minuto${minutos > 1 ? 's' : ''}`;
         } else {
-            return `hace ${segundos} segundo${segundos > 1 ? 's' : ''}`;
+            return ` hace ${segundos} segundo${segundos > 1 ? 's' : ''}`;
         }
     };
 
