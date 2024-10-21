@@ -1,97 +1,112 @@
-'use client'
+"use client";
+
 import React, { useState, useEffect, useContext } from "react";
 import ChatGlobalContext from "@/context/ChatGlobalContext";
-import RegisterModal from "@/components/RegisterModal";
+import { useSession } from "next-auth/react";
 
 function LikeButton({ messageId, username }) {
-  const { newSocket } = useContext(ChatGlobalContext); // Obtener el socket del contexto
-  const [likeCount, setLikeCount] = useState(0); // Estado para el contador de likes
-  const [hasLiked, setHasLiked] = useState(false); // Estado para saber si el usuario ha dado like
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const { newSocket, messages } = useContext(ChatGlobalContext);
+  const [likeCount, setLikeCount] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const { data: session } = useSession();
+
+  // Cargar estado de like desde localStorage al montar el componente
   useEffect(() => {
-    if (!newSocket) {
-      console.log("Socket no está disponible."); // Mensaje de error si el socket no está disponible
-      return;
+    const likedStatus = localStorage.getItem(`liked_${messageId}`);
+    if (likedStatus !== null) {
+      setHasLiked(JSON.parse(likedStatus));
     }
 
-    const token = localStorage.getItem("token"); // Obtener el token del localStorage
+    const message = messages.find(msg => msg.id === messageId);
+    if (message) {
+      setLikeCount(message.totalLikes || 0); // Asegúrate de que totalLikes esté en el mensaje
+    }
+  }, [messages, messageId]); // Dependencias del useEffect
 
-    // Función para cargar los datos de likes
+  // Cargar datos de likes al montar el componente
+  useEffect(() => {
+    if (!newSocket) {
+      return; 
+    }
+
+    const accessToken = session?.user?.accessToken;
+
     const loadLikeData = () => {
       if (newSocket.connected) {
-        newSocket.emit("get_like_count", messageId); // Solicitar el contador de likes
-
-        if (token) {
-          newSocket.emit("check_user_like", { messageId, token }); // Comprobar si el usuario ha dado like
-        } else {
-          console.log(
-            "No hay token, no se puede comprobar si el usuario ha dado like."
-          ); // Mensaje de error
+        newSocket.emit("get_like_count", messageId);
+        if (accessToken) {
+          newSocket.emit("check_user_like", { messageId, token: accessToken });
         }
-      } else {
-        console.log("Socket no está conectado."); // Mensaje si el socket no está conectado
       }
     };
 
-    loadLikeData(); // Llamar a la función para cargar datos de likes
+    loadLikeData(); // Cargar datos de likes
 
-    // Manejar la respuesta del contador de likes
     const handleLikeCountResponse = ({ preguntas_id, total_likes }) => {
       if (preguntas_id === messageId) {
-        setLikeCount(total_likes); // Actualizar el contador de likes
+        setLikeCount(total_likes);
       }
     };
 
-    // Manejar el estado de like del usuario
     const handleUserLikeStatus = ({ preguntas_id, has_liked }) => {
       if (preguntas_id === messageId) {
-        setHasLiked(has_liked); // Actualizar si el usuario ha dado like
+        setHasLiked(has_liked);
+        // Almacenar el estado de like en localStorage
+        localStorage.setItem(`liked_${messageId}`, JSON.stringify(has_liked));
       }
     };
 
-    // Escuchar eventos del socket
     newSocket.on("like_count_response", handleLikeCountResponse);
     newSocket.on("user_like_status", handleUserLikeStatus);
 
-    // Limpieza del efecto al desmontar
     return () => {
-      newSocket.off("like_count_response", handleLikeCountResponse); // Limpiar el listener
-      newSocket.off("user_like_status", handleUserLikeStatus); // Limpiar el listener
+      newSocket.off("like_count_response", handleLikeCountResponse);
+      newSocket.off("user_like_status", handleUserLikeStatus);
     };
-  }, [messageId, newSocket]); // Dependencias del useEffect
+  }, [messageId, newSocket, session]); // Dependencias del useEffect
 
-  // Manejar el clic en el botón de like
+  // Escuchar evento cuando se cargan más mensajes
+  useEffect(() => {
+    const handleMoreMessagesLoaded = () => {
+      console.log('Se han cargado más mensajes');
+      // Aquí puedes realizar acciones adicionales si es necesario
+    };
+
+    newSocket.on("more_preguntas_loaded", handleMoreMessagesLoaded);
+
+    return () => {
+      newSocket.off("more_preguntas_loaded", handleMoreMessagesLoaded);
+    };
+  }, [newSocket]);
+
   const handleLikeClick = () => {
-    const token = localStorage.getItem("token"); // Obtener el token del localStorage
+    const accessToken = session?.user?.accessToken;
 
-    if (newSocket) {
-      newSocket.emit("like_pregunta", { messageId, username, token }); // Emitir evento de like
-
-      // Actualizar el contador de likes localmente
-      setLikeCount((prevCount) => {
-        const newCount = hasLiked ? prevCount - 1 : prevCount + 1; // Incrementar o decrementar el contador
-        return newCount;
-      });
-      // Actualizar el estado de like
-      setHasLiked((prevState) => {
-        const newState = !prevState; // Cambiar el estado de like
-        return newState;
-      });
+    if (!newSocket || !accessToken) {
+      return; // Asegúrate de que el socket y el token estén disponibles
     }
+
+    newSocket.emit("like_pregunta", { messageId, username, token: accessToken });
+
+    // Actualizar localmente el contador de likes
+    setLikeCount((prevCount) => (hasLiked ? prevCount - 1 : prevCount + 1));
+    setHasLiked((prevState) => {
+      const newLikedState = !prevState;
+      localStorage.setItem(`liked_${messageId}`, JSON.stringify(newLikedState)); // Guardar en localStorage
+      return newLikedState;
+    });
   };
 
   return (
     <div className="flex justify-start mt-2">
       <button onClick={handleLikeClick}>
         <span
-          className={
-            hasLiked ? "bg-red-500 text-white p-2 rounded" : "bg-transparent"
-          }
+          className={hasLiked ? "bg-red-500 text-white p-2 rounded" : "bg-transparent"}
         >
           👍
         </span>
       </button>
-      <span className="ml-2">{likeCount}</span> {/* Contador de likes */}
+      <span className="ml-2">{likeCount}</span> 
     </div>
   );
 }
