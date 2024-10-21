@@ -25,6 +25,7 @@ const registerLikes = (io) => {
                     return;
                 }
 
+                // Verificar el ID del usuario basado en el username
                 const user = await prisma.users.findUnique({
                     where: { name: username },
                     select: { id: true },
@@ -42,7 +43,7 @@ const registerLikes = (io) => {
                     const existingLike = await tx.likes.findFirst({
                         where: {
                             message_id: messageId,
-                            user_id: authenticatedUserId,
+                            user_liked: authenticatedUserId.toString(), // Verificar el like dado por el usuario autenticado
                         },
                     });
 
@@ -58,8 +59,8 @@ const registerLikes = (io) => {
                         await tx.likes.create({
                             data: {
                                 message_id: messageId,
-                                user_id: userId,
-                                user_liked: authenticatedUserId.toString(),
+                                user_id: userId, // Guardar el ID del usuario que creó el mensaje
+                                user_liked: authenticatedUserId.toString(), // Guardar el ID del usuario que dio el like
                             },
                         });
                         console.log(`Nuevo like agregado por el usuario con ID: ${authenticatedUserId}`);
@@ -102,7 +103,7 @@ const registerLikes = (io) => {
                 const existingLike = await prisma.likes.findFirst({
                     where: {
                         message_id: messageId,
-                        user_id: authenticatedUserId,
+                        user_liked: authenticatedUserId.toString(), // Verificar el like dado por el usuario autenticado
                     },
                 });
 

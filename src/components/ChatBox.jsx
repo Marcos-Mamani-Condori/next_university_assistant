@@ -76,7 +76,6 @@ function ChatBox({ className }) {
             )}
 
             {messages.map((msg, index) => {
-                console.log("Mensaje recibido:", msg); // Verifica las propiedades del mensaje
                 return pathname === "/bot" 
                     ? <MessageBot key={index} text={msg.text} sender={msg.sender} />
                     : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} />;
