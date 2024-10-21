@@ -6,10 +6,9 @@ const registerLikes = (io) => {
     io.on('connection', (socket) => {
         console.log(`Nuevo cliente conectado: ${socket.id}`);
 
+        // Manejo del evento para dar like a una pregunta
         socket.on("like_pregunta", async (data) => {
             const { messageId, username, token } = data;
-
-            console.log(`Username recibido en el servidor: ${username}`); // Verificar el username recibido
 
             if (!token) {
                 console.error('Token no proporcionado');
@@ -19,22 +18,16 @@ const registerLikes = (io) => {
             try {
                 const secret = process.env.NEXTAUTH_SECRET;
                 const decoded = jwt.verify(token, secret);
-                const authenticatedUserId = decoded.id; // Obtener el ID del usuario del token
-                console.log(`UserId autenticado desde el token: ${authenticatedUserId}`);
+                const authenticatedUserId = decoded.id;
 
                 if (!authenticatedUserId) {
-                    console.error('UserId autenticado no encontrado en el token');
+                    console.error('Usuario no autenticado');
                     return;
                 }
 
-                // Buscar el userId basado en el username proporcionado por el frontend
                 const user = await prisma.users.findUnique({
-                    where: {
-                        name: username, // Aquí se busca por el username recibido
-                    },
-                    select: {
-                        id: true,
-                    },
+                    where: { name: username },
+                    select: { id: true },
                 });
 
                 if (!user) {
@@ -42,50 +35,84 @@ const registerLikes = (io) => {
                     return;
                 }
 
-                const userId = user.id; // Aquí tenemos el userId basado en el username
-                console.log(`UserId encontrado: ${userId}`);
+                const userId = user.id;
 
-                const existingLike = await prisma.likes.findFirst({
-                    where: {
-                        message_id: messageId,
-                        user_id: userId, // Usar el userId encontrado
-                    },
-                });
-
-                if (existingLike) {
-                    // Si ya dio like, eliminar el like
-                    await prisma.likes.delete({
+                // Usar transacción para manejar la creación y eliminación de likes
+                const result = await prisma.$transaction(async (tx) => {
+                    const existingLike = await tx.likes.findFirst({
                         where: {
-                            id: existingLike.id,
-                        },
-                    });
-                    console.log(`Like eliminado para el messageId: ${messageId}`);
-                } else {
-                    // Si no ha dado like, crear uno nuevo
-                    await prisma.likes.create({
-                        data: {
                             message_id: messageId,
-                            user_id: userId, // Almacenar el userId basado en el username
-                            user_liked: authenticatedUserId.toString(), // Almacenar el ID del usuario autenticado como cadena
+                            user_id: authenticatedUserId,
                         },
                     });
-                    console.log(`Nuevo like agregado por el usuario con ID: ${authenticatedUserId}`);
-                }
 
-                const totalLikes = await prisma.likes.count({
-                    where: {
-                        message_id: messageId,
-                    },
+                    if (existingLike) {
+                        // Si ya dio like, eliminarlo
+                        await tx.likes.delete({
+                            where: { id: existingLike.id },
+                        });
+                        console.log(`Like eliminado para el messageId: ${messageId} por el usuario: ${authenticatedUserId}`);
+                        return 'removed'; // Indica que se eliminó un like
+                    } else {
+                        // Si no ha dado like, crear uno nuevo
+                        await tx.likes.create({
+                            data: {
+                                message_id: messageId,
+                                user_id: userId,
+                                user_liked: authenticatedUserId.toString(),
+                            },
+                        });
+                        console.log(`Nuevo like agregado por el usuario con ID: ${authenticatedUserId}`);
+                        return 'added'; // Indica que se agregó un like
+                    }
                 });
 
-                io.emit("like_added", { messageId, totalLikes, authenticatedUserId });
+                // Contar los likes totales para esta pregunta
+                const totalLikes = await prisma.likes.count({
+                    where: { message_id: messageId },
+                });
+
+                // Emitir el nuevo total de likes a todos los clientes
+                io.emit("like_added", { messageId, totalLikes, action: result });
 
             } catch (error) {
                 console.error('Error al manejar like:', error);
             }
         });
 
-        // Otras funciones del socket...
+        // Manejo del evento para obtener el conteo de likes
+        socket.on("get_like_count", async (messageId) => {
+            try {
+                const totalLikes = await prisma.likes.count({
+                    where: { message_id: messageId },
+                });
+                socket.emit("like_count_response", { preguntas_id: messageId, total_likes: totalLikes });
+            } catch (error) {
+                console.error('Error al obtener el contador de likes:', error);
+            }
+        });
+
+        // Manejo del evento para verificar si el usuario ha dado like
+        socket.on("check_user_like", async ({ messageId, token }) => {
+            try {
+                const secret = process.env.NEXTAUTH_SECRET;
+                const decoded = jwt.verify(token, secret);
+                const authenticatedUserId = decoded.id;
+
+                const existingLike = await prisma.likes.findFirst({
+                    where: {
+                        message_id: messageId,
+                        user_id: authenticatedUserId,
+                    },
+                });
+
+                const hasLiked = existingLike !== null;
+                socket.emit("user_like_status", { preguntas_id: messageId, has_liked: hasLiked });
+
+            } catch (error) {
+                console.error('Error al comprobar el estado de like del usuario:', error);
+            }
+        });
 
         socket.on('disconnect', () => {
             console.log(`Cliente desconectado: ${socket.id}`);
