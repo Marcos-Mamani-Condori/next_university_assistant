@@ -23,7 +23,7 @@ const Header = ({ className }) => {
 
     const pathname = usePathname();
     const pageTitles = {
-        "/": "HOME",
+        "/": "INICIO",
         "/chat": "LOYOCHAT",
         "/bot": "LOYOBOT",
     };
