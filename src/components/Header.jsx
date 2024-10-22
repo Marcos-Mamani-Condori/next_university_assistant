@@ -3,6 +3,7 @@
 import { useContext } from 'react'; 
 import Image from 'next/image'; 
 import user_icon from '@/public/static/user_icon.png';
+import bell_icon from '@/public/static/bell_icon.svg';
 import RegisterModal from '@/components/RegisterModal';
 import { usePathname } from 'next/navigation'; 
 import ModalContext from '@/context/ModalContext';
@@ -49,6 +50,18 @@ const Header = ({ className }) => {
                     <Image 
                         src={user_icon} 
                         alt="User icon" 
+                        width={32} 
+                        height={32} 
+                        className="h-8 w-8" 
+                        loading="eager"
+                    /> 
+                </button>
+            </div>
+            <div className="absolute right-8 md:right-20"> 
+                <button onClick={handleRegisterClick}>
+                    <Image 
+                        src={bell_icon} 
+                        alt="one bell icon" 
                         width={32} 
                         height={32} 
                         className="h-8 w-8" 
