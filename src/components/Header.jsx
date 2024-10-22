@@ -39,6 +39,7 @@ const Header = ({ className }) => {
             <div className="absolute left-1">
                 {session && (
                     <div>
+                         <span className="text-white">Bienvenido, {session.user.name}!</span>
                         <button className="bg-white text-black px-4 py-2 rounded-md" onClick={() => signOut()}>
                             Logout
                         </button>

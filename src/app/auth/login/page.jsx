@@ -1,8 +1,9 @@
 'use client';
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react"; // Importa useSession
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Warning from '@/components/Warning'; 
 const inputBaseStyles=()=> {
   return "p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full";
 }
@@ -14,6 +15,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   } = useForm();
   const router = useRouter();
   const [error, setError] = useState(null);
+  const { data: session } = useSession(); 
 
   const onSubmit = handleSubmit(async (data) => {
     console.log("Datos enviados:", data); // Verificar qué datos se están enviando
@@ -105,6 +107,8 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
         >
           ¿No tienes cuenta? Regístrate
         </button>
+
+        {!session && <Warning message="Necesitas estar registrado para usar el chat global" />}
       </div>
     </div>
   );
