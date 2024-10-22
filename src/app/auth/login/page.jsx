@@ -60,7 +60,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
         <h1 className="text-slate-200 font-bold text-4xl mb-4">LOGIN</h1>
         <form onSubmit={onSubmit}> 
           <label htmlFor="nombre" className="text-slate-500 mb-2 block text-sm">
-            Nombre:
+            Nombre de usuario:
           </label>
           <input
             type="text"
@@ -78,7 +78,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
           )}
 
           <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
-            Password:
+            Contraseña:
           </label>
           <input
             type="password"
@@ -95,7 +95,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             <span className="text-red-500 text-sm">{errors.password.message}</span>
           )}
           <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Login
+            Iniciar sesión
           </button>
         </form>
 

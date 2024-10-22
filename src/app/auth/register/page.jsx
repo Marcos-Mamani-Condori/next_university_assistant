@@ -47,7 +47,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
       onClick={onClose}
     >
       <div
@@ -63,11 +63,11 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
         {error && ( 
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Register</h1>
+        <h1 className="text-slate-200 font-bold text-4xl mb-4">Registrarse</h1>
 
         <form onSubmit={onSubmit} className="flex flex-col">
           <label htmlFor="username" className={labelBaseStyles()}>
-            Username:
+            Nombre de usuario:
           </label>
           <input
             type="text"
@@ -78,14 +78,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
               },
             })}
             className={inputBaseStyles()}
-            placeholder="yourUser123"
+            placeholder="ej:JuanPerez"
           />
           {errors.name && (
             <span className="text-red-500 text-xs">{errors.name.message}</span>
           )}
 
           <label htmlFor="email" className={labelBaseStyles()}>
-            Email:
+            Correo:
           </label>
           <input
             type="email"
@@ -103,7 +103,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
           )}
 
           <label htmlFor="password" className={labelBaseStyles()}>
-            Password:
+            Contraseña:
           </label>
           <input
             type="password"
@@ -121,7 +121,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
           )}
 
           <label htmlFor="confirmPassword" className={labelBaseStyles()}>
-            Confirm Password:
+            Repita Contraseña:
           </label>
           <input
             type="password"
@@ -175,7 +175,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
           )}
           
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Register
+            Registrar
           </button>
         </form>
 

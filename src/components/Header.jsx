@@ -1,16 +1,16 @@
 'use client';
 
-import { useContext } from 'react'; 
-import Image from 'next/image'; 
+import { useContext } from 'react';
+import Image from 'next/image';
 import user_icon from '@/public/static/user_icon.png';
 import RegisterModal from '@/components/RegisterModal';
-import { usePathname } from 'next/navigation'; 
+import { usePathname } from 'next/navigation';
 import ModalContext from '@/context/ModalContext';
 import { signOut, useSession } from 'next-auth/react';
 
 const Header = ({ className }) => {
     const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
-    const { data: session } = useSession(); 
+    const { data: session } = useSession();
 
     const handleRegisterClick = () => {
         setIsLoged(false);
@@ -35,34 +35,38 @@ const Header = ({ className }) => {
             <div className="text-center">
                 <h1 className="text-2xl font-bold text-white">{currentTitle}</h1>
             </div>
-            <div className="absolute left-1">
+
+            {/* Solo aparece esta seccion cuando estas en modo escritorio, por temas de diseño */}
+            <div className="absolute left-1 hidden lg:block">
                 {session && (
                     <div>
-                         <span className="text-white">Bienvenido, {session.user.name}!</span>
+                        <span className="text-white px-3">Bienvenido, {session.user.name}!</span>
                         <button className="bg-white text-black px-4 py-2 rounded-md" onClick={() => signOut()}>
-                            Logout
+                            Cerrar Sesión
                         </button>
                     </div>
                 )}
             </div>
-            <div className="absolute right-4 md:right-10"> 
+            {/* Hasta aqui es del diseño, hasta el momento por salvar walcover */}
+
+            <div className="absolute right-4 md:right-10">
                 <button onClick={handleRegisterClick}>
-                    <Image 
-                        src={user_icon} 
-                        alt="User icon" 
-                        width={32} 
-                        height={32} 
-                        className="h-8 w-8" 
+                    <Image
+                        src={user_icon}
+                        alt="User icon"
+                        width={32}
+                        height={32}
+                        className="h-8 w-8"
                         loading="eager"
-                    /> 
+                    />
                 </button>
             </div>
 
             {isRegisterModalOpen && (
-                <RegisterModal 
-                    isOpen={isRegisterModalOpen} 
-                    onClose={handleCloseRegisterModal} 
-                    setIsLoged={setIsLoged} 
+                <RegisterModal
+                    isOpen={isRegisterModalOpen}
+                    onClose={handleCloseRegisterModal}
+                    setIsLoged={setIsLoged}
                 />
             )}
         </header>
