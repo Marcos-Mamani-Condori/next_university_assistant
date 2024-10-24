@@ -37,3 +37,4 @@ next-env.d.ts
 
 # base de datos
 /prisma/dev.db
+/prisma/migrations/
