@@ -82,7 +82,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
               },
             })}
             className={inputBaseStyles()}
-            placeholder="ej: JuanPerez"
+            placeholder="Ej: Juan Perez"
           />
           {errors.name && (
             <span className="text-red-500 text-xs mb-2">{errors.name.message}</span>
@@ -100,7 +100,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
               },
             })}
             className={inputBaseStyles()}
-            placeholder="user@email.com"
+            placeholder="Ej: user@gmail.com"
           />
           {errors.email && (
             <span className="text-red-500 text-xs mb-2">{errors.email.message}</span>

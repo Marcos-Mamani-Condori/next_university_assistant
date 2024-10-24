@@ -72,7 +72,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   
             })}
             className={inputBaseStyles()}
-            placeholder="nombre"
+            placeholder="Ej: user@gmail.com"
           />
           {errors.name && ( 
             <span className="text-red-500 text-xs">{errors.name.message}</span>
