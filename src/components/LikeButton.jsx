@@ -101,12 +101,13 @@ function LikeButton({ messageId, username }) {
     <div className="flex justify-start mt-2">
       <button onClick={handleLikeClick}>
         <span
-          className={hasLiked ? "bg-red-500 text-white p-2 rounded" : "bg-transparent"}
+          className={hasLiked ? "bg-red-500 text-white p-1 pt-0.5 rounded" : "bg-transparent"}
         >
           👍
         </span>
       </button>
-      <span className="ml-2">{likeCount}</span> 
+      {/* Aqui se valida en no mostrar el numero 0 de los likes, solo si son mayores a 0 */}
+      <span className="ml-2">{likeCount <=0 ? "": likeCount}</span> 
     </div>
   );
 }
