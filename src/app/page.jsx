@@ -1,5 +1,10 @@
+'use client';
 import CircularRadiusExam from "@/components/CircularRadiusExam"; // Usa la ruta correcta
 import StudentsCounter from "@/components/StudentsCounter";
+import Announcements from "@/components/Announcements";
+import { useState } from "react";
+//import { useContext } from "react";
+//import ModalContext from "@/context/ModalContext";
 import ActivityCalendar from "@/components/ActivityCalendar";
 
 /////////////////////////////////////////////////////////////////
@@ -16,10 +21,29 @@ const activities = [
 const Home = () => {
     // Obtiene la fecha actual
     const now = new Date();
-
+    //const { isRegisterModalOpen, setIsRegisterModalOpen } = useContext(ModalContext);causas confusiones con otro componente y hace que se abra
+    //crear otro contexto o estado
+    const [ModalOpen,setIsModalOpen]=useState(false);
     return (
-        <div className="pt-2 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto h-screen pb-64 lg:pb-10 lg:mx-[12rem]">
-            <div className="col-span-2 md:col-span-1 lg:col-span-1">
+        //<div className={`${isRegisterModalOpen ? "blur-sm" : ""}`}></div>//
+        // Con (mx-2 md:mx-10 lg:mx-[10rem]) hacemos la responsividad en modo móvil, escritorio y tablet
+        <div>
+            <Announcements isModalOpen={ModalOpen} setModalOpen={setIsModalOpen}/>
+                <div className={`flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4 ${ModalOpen ? "blur-sm" : ""}`}>
+                    <div className="flex-1">
+                        <StudentsCounter />
+                    </div>
+                    <div className="flex-1">
+                        <CircularRadiusExam
+                            startDate={'2024-09-01'}
+                            dateExam={'2024-09-30'}
+                            fechaActual={now}
+                        />
+                    </div>
+                </div>
+            
+        <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
+            <div className="flex-1">
                 <StudentsCounter />
             </div>
 
@@ -31,9 +55,8 @@ const Home = () => {
                     fechaActual={now}
                 />
             </div>
-
-            <div className="col-span-2 md:col-span-1 lg:col-span-1">
-                <ActivityCalendar activities={activities} />
+            <div className="flex-1">
+                <ActivityCalendar activities={activities} /> 
             </div>
         </div>
     );
