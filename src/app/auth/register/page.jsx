@@ -74,14 +74,18 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("name", {
               required: {
                 value: true,
-                message: "name is required",
+                message: "Nombre es requerido",
+              },
+              minLength: {
+                value: 3,
+                message: "El nombre debe tener al menos 3 letras",
               },
             })}
             className={inputBaseStyles()}
-            placeholder="ej:JuanPerez"
+            placeholder="ej: JuanPerez"
           />
           {errors.name && (
-            <span className="text-red-500 text-xs">{errors.name.message}</span>
+            <span className="text-red-500 text-xs mb-2">{errors.name.message}</span>
           )}
 
           <label htmlFor="email" className={labelBaseStyles()}>
@@ -92,14 +96,14 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("email", {
               required: {
                 value: true,
-                message: "Email is required",
+                message: "Email es requerido  ",
               },
             })}
             className={inputBaseStyles()}
             placeholder="user@email.com"
           />
           {errors.email && (
-            <span className="text-red-500 text-xs">{errors.email.message}</span>
+            <span className="text-red-500 text-xs mb-2">{errors.email.message}</span>
           )}
 
           <label htmlFor="password" className={labelBaseStyles()}>
@@ -110,14 +114,18 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("password", {
               required: {
                 value: true,
-                message: "Password is required",
+                message: "Contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.password && (
-            <span className="text-red-500 text-sm">{errors.password.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.password.message}</span>
           )}
 
           <label htmlFor="confirmPassword" className={labelBaseStyles()}>
@@ -128,14 +136,18 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("confirmPassword", {
               required: {
                 value: true,
-                message: "Confirm Password is required",
+                message: "Confirmar contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.confirmPassword && (
-            <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.confirmPassword.message}</span>
           )}
           <label htmlFor="carrera" className={labelBaseStyles()}>
             Carrera:
@@ -144,7 +156,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("major", {
               required: {
                 value: true,
-                message: "major is required",
+                message: "Carrera es requerido",
               },
             })}
             className={inputBaseStyles()}
@@ -171,7 +183,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             ))}
           </select>
           {errors.major && (
-            <span className="text-red-500 text-sm">{errors.major.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.major.message}</span>
           )}
           
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">

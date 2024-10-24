@@ -57,18 +57,19 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
         {error && ( 
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">LOGIN</h1>
+        <h1 className="text-slate-200 font-bold text-4xl mb-4">LoyoApp</h1>
         <form onSubmit={onSubmit}> 
           <label htmlFor="nombre" className="text-slate-500 mb-2 block text-sm">
-            Nombre de usuario:
+            Correo:
           </label>
           <input
             type="text"
             {...register("name", {
               required: {
                 value: true,
-                message: "usuario es requerido",
-              },
+                message: "Correo es requerido",
+              }
+  
             })}
             className={inputBaseStyles()}
             placeholder="nombre"
@@ -85,7 +86,11 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             {...register("password", {
               required: {
                 value: true,
-                message: "Password es requerido",
+                message: "Contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
