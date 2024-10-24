@@ -47,7 +47,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
       onClick={onClose}
     >
       <div
@@ -63,79 +63,91 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
         {error && ( 
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Register</h1>
+        <h1 className="text-slate-200 font-bold text-4xl mb-4">Registrarse</h1>
 
         <form onSubmit={onSubmit} className="flex flex-col">
           <label htmlFor="username" className={labelBaseStyles()}>
-            Username:
+            Nombre de usuario:
           </label>
           <input
             type="text"
             {...register("name", {
               required: {
                 value: true,
-                message: "name is required",
+                message: "Nombre es requerido",
+              },
+              minLength: {
+                value: 3,
+                message: "El nombre debe tener al menos 3 letras",
               },
             })}
             className={inputBaseStyles()}
-            placeholder="yourUser123"
+            placeholder="Ej: Juan Perez"
           />
           {errors.name && (
-            <span className="text-red-500 text-xs">{errors.name.message}</span>
+            <span className="text-red-500 text-xs mb-2">{errors.name.message}</span>
           )}
 
           <label htmlFor="email" className={labelBaseStyles()}>
-            Email:
+            Correo:
           </label>
           <input
             type="email"
             {...register("email", {
               required: {
                 value: true,
-                message: "Email is required",
+                message: "Email es requerido  ",
               },
             })}
             className={inputBaseStyles()}
-            placeholder="user@email.com"
+            placeholder="Ej: user@gmail.com"
           />
           {errors.email && (
-            <span className="text-red-500 text-xs">{errors.email.message}</span>
+            <span className="text-red-500 text-xs mb-2">{errors.email.message}</span>
           )}
 
           <label htmlFor="password" className={labelBaseStyles()}>
-            Password:
+            Contraseña:
           </label>
           <input
             type="password"
             {...register("password", {
               required: {
                 value: true,
-                message: "Password is required",
+                message: "Contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.password && (
-            <span className="text-red-500 text-sm">{errors.password.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.password.message}</span>
           )}
 
           <label htmlFor="confirmPassword" className={labelBaseStyles()}>
-            Confirm Password:
+            Repita Contraseña:
           </label>
           <input
             type="password"
             {...register("confirmPassword", {
               required: {
                 value: true,
-                message: "Confirm Password is required",
+                message: "Confirmar contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
             placeholder="********"
           />
           {errors.confirmPassword && (
-            <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.confirmPassword.message}</span>
           )}
           <label htmlFor="carrera" className={labelBaseStyles()}>
             Carrera:
@@ -144,7 +156,7 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             {...register("major", {
               required: {
                 value: true,
-                message: "major is required",
+                message: "Carrera es requerido",
               },
             })}
             className={inputBaseStyles()}
@@ -171,11 +183,11 @@ function RegisterPage({ onClose, setIsLoged, toggleLoginRegister }) {
             ))}
           </select>
           {errors.major && (
-            <span className="text-red-500 text-sm">{errors.major.message}</span>
+            <span className="text-red-500 text-sm mb-2">{errors.major.message}</span>
           )}
           
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Register
+            Registrar
           </button>
         </form>
 

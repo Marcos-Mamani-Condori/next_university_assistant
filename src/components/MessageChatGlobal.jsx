@@ -43,7 +43,7 @@ function SCMessage({ text, sender, id }) {
     };
 
     return (
-        <div className={`flex flex-col mb-4 ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
+        <div className={`flex flex-col ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
             <div className="flex items-center mb-2">
                 {icon}
                 <div className="ml-2">
