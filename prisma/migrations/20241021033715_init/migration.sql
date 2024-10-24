@@ -45,6 +45,7 @@ CREATE TABLE "images" (
 CREATE TABLE "likes" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER,
+    "user_liked" TEXT,
     "message_id" INTEGER,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "likes_message_id_fkey" FOREIGN KEY ("message_id") REFERENCES "messages" ("id") ON DELETE CASCADE ON UPDATE NO ACTION,

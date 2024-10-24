@@ -18,7 +18,7 @@ const Home = () => {
     const now = new Date();
 
     return (
-        <div className="pt-2 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto h-screen pb-64 lg:pb-10">
+        <div className="pt-2 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto h-screen pb-64 lg:pb-10 lg:mx-[12rem]">
             <div className="col-span-2 md:col-span-1 lg:col-span-1">
                 <StudentsCounter />
             </div>
