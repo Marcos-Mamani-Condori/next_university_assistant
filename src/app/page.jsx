@@ -2,6 +2,7 @@
 import CircularRadiusExam from "@/components/CircularRadiusExam"; // Usa la ruta correcta
 import StudentsCounter from "@/components/StudentsCounter";
 import Announcements from "@/components/Announcements";
+import Homework from "@/components/Homework";
 import { useState } from "react";
 //import { useContext } from "react";
 //import ModalContext from "@/context/ModalContext";
@@ -27,36 +28,32 @@ const Home = () => {
     return (
         //<div className={`${isRegisterModalOpen ? "blur-sm" : ""}`}></div>//
         // Con (mx-2 md:mx-10 lg:mx-[10rem]) hacemos la responsividad en modo móvil, escritorio y tablet
-        <div>
-            <Announcements isModalOpen={ModalOpen} setModalOpen={setIsModalOpen}/>
-                <div className={`flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4 ${ModalOpen ? "blur-sm" : ""}`}>
-                    <div className="flex-1">
-                        <StudentsCounter />
-                    </div>
-                    <div className="flex-1">
-                        <CircularRadiusExam
-                            startDate={'2024-09-01'}
-                            dateExam={'2024-09-30'}
-                            fechaActual={now}
-                        />
-                    </div>
+        <div className="h-screen overflow-y-auto">
+            <Announcements isModalOpen={ModalOpen} setModalOpen={setIsModalOpen} />
+            <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
+                <div className="flex-1 max-h-[500px] overflow-y-auto">
+                    <Homework />
                 </div>
-            
-        <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
-            <div className="flex-1">
-                <StudentsCounter />
+                
+                <div className="flex-1">
+                    <CircularRadiusExam
+                        startDate={'2024-10-17'}
+                        dateExam={'2024-10-29'}
+                        fechaActual={now}
+                    />
+                </div>
             </div>
-            <div className="flex-1">
-                <CircularRadiusExam
-                    startDate={'2024-10-17'}
-                    dateExam={'2024-10-29'}
-                    fechaActual={now}
-                />
-            </div>
+            <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
+                <div className="flex-1">
+                    <StudentsCounter />
+                </div>
+                
                 <div className="flex-1">
                     <ActivityCalendar activities={activities} /> 
                 </div>
-        </div>
+            </div>
+            
+            
         </div>
     );
 }

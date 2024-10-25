@@ -12,7 +12,7 @@ import { signOut, useSession } from 'next-auth/react';
 const Header = ({ className }) => {
     const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession(); 
-
+    
     const handleRegisterClick = () => {
         setIsLoged(false);
         setIsRegisterModalOpen(true);
