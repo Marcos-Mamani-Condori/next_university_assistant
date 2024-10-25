@@ -2,8 +2,8 @@
 import React, { useEffect } from 'react';
 import "@/app/globals.css"; 
 import ProvidersContext from "@/context/ProvidersContext";
-import Header from "@/components/header";
-import NavBar from "@/components/navbar";
+import Header from "@/components/Header";
+import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";  // Importa SessionProvider
 const useDisableScrollOnMobile = () => {
   useEffect(() => {
