@@ -21,7 +21,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
     console.log("Datos enviados:", data); // Verificar qué datos se están enviando
 
     const res = await signIn("credentials", {
-      name: data.name,
+      email: data.email,
       password: data.password,
       redirect: false,
     });
@@ -63,8 +63,8 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             Correo:
           </label>
           <input
-            type="text"
-            {...register("name", {
+            type="email"
+            {...register("email", {
               required: {
                 value: true,
                 message: "Correo es requerido",
@@ -74,8 +74,8 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             className={inputBaseStyles()}
             placeholder="Ej: user@gmail.com"
           />
-          {errors.name && ( 
-            <span className="text-red-500 text-xs">{errors.name.message}</span>
+          {errors.email && ( 
+            <span className="text-red-500 text-xs">{errors.email.message}</span>
           )}
 
           <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
