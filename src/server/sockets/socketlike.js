@@ -2,9 +2,7 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerLikes = (io) => {
-    io.on('connection', (socket) => {
-        console.log(`Nuevo cliente conectado: ${socket.id}`);
+const registerLikes = (socket, io) => {
 
         // Manejo del evento para dar like a una pregunta
         socket.on("like_pregunta", async (data) => {
@@ -118,9 +116,9 @@ const registerLikes = (io) => {
         socket.on('disconnect', () => {
             console.log(`Cliente desconectado: ${socket.id}`);
         });
-    });
+    };
 
     console.log('Sockets de likes configurados y escuchando');
-};
+;
 
 module.exports = registerLikes;
