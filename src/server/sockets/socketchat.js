@@ -2,8 +2,7 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerSockets = (io) => { // Cambiar 'httpServer' por 'io'
-    io.on('connection', (socket) => {
+const registerSockets = (socket, io) => { // Cambiar 'httpServer' por 'io'
         const sendInitialMessages = async () => {
             try {
                 const messages = await prisma.messages.findMany({
@@ -124,9 +123,9 @@ const registerSockets = (io) => { // Cambiar 'httpServer' por 'io'
 
         socket.on('disconnect', () => {});
 
-    });
+    };
 
     console.log('Socket.IO configurado y escuchando');
-};
+;
 
 module.exports = registerSockets;

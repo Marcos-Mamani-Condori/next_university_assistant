@@ -2,8 +2,8 @@ const express = require('express');
 const http = require('http');
 const next = require('next');
 const { Server } = require('socket.io'); // Importar Socket.IO
-const registerSockets = require('./sockets/socketchat'); // Importar archivo de sockets
-const registerLikes = require('./sockets/socketlike');  
+const registerSockets = require('./sockets/socketchat'); // Importar archivo de sockets de chat
+const registerLikes = require('./sockets/socketlike'); // Importar archivo de sockets de likes
 const imageUploadRouter = require('./routes/imageUpload'); // Importar el router de la subida de imágenes
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -13,25 +13,34 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
     const server = express();
 
-    // Usar el router para manejar la subida y compresión de imágenes
     server.use('/api', imageUploadRouter);
 
-    // Crear servidor HTTP para WebSockets
     const httpServer = http.createServer(server);
     
-    // Crear instancia de Socket.IO
-    const io = require('socket.io')(httpServer); // Inicializar Socket.IO con el servidor HTTP
+    const io = new Server(httpServer);
 
-    // Registrar los sockets en la instancia de Socket.IO
-    registerSockets(io);  // Inicia la configuración de socketchat
-    registerLikes(io);    // Inicia la configuración de socketlike
+    let connectedUsers = 0;
 
-    // Manejar rutas de Next.js
+    io.on('connection', (socket) => {
+        connectedUsers++; 
+        console.log(`Usuario conectado. Total de usuarios: ${connectedUsers}`);
+        
+        io.emit('user_count', connectedUsers);
+
+        registerSockets(socket, io); 
+        registerLikes(socket, io);    
+
+        socket.on('disconnect', () => {
+            connectedUsers--; 
+            console.log(`Usuario desconectado. Total de usuarios: ${connectedUsers}`);
+            io.emit('user_count', connectedUsers); 
+        });
+    });
+
     server.all('*', (req, res) => {
         return handle(req, res);
     });
 
-    // Escuchar en el puerto 3000
     httpServer.listen(3000, (err) => {
         if (err) throw err;
         console.log('Servidor listo en http://localhost:3000');
