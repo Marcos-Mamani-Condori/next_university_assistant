@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import lockIcon from '@/public/static/user_icon.png';
+import lockIcon from '@/public/static/lock.svg';
+import Image from 'next/image';
+
 
 
 const Homework = () => {
@@ -107,7 +109,7 @@ const Homework = () => {
     "rol":"premium"
 }]);
 //BORRAR DATOS QUEMADOS
-const userId = 1; // Supongamos que el ID del usuario que está viendo la página es el 2.
+const userId = 2; // Supongamos que el ID del usuario que está viendo la página es el 2.
 
   /*useEffect(() => {
     // Obtener datos del usuario
@@ -143,38 +145,38 @@ const userId = 1; // Supongamos que el ID del usuario que está viendo la págin
     ? tareas.filter(tarea => tarea.carrera === usuarioActual.carrera)
     : [];
 
-  // Verificar si el usuario no es premium o es administrador para aplicar blur
+  
   const aplicarBlur = usuarioActual && usuarioActual.rol !== 'premium' && usuarioActual.rol !== 'administrador';
 
   return (
     <div
-      className="bg-amber-50 p-4 rounded-lg shadow-lg mt-4"
+      className=" p-4 rounded-lg shadow-lg mt-5"
       style={{ height: '300px', width: '90%', maxWidth: '770px', position: 'relative' }}
     >
+      
       {aplicarBlur && (
-        <img
-          src="https://png.pngtree.com/png-vector/20191024/ourmid/pngtree-lock-line-icon-vector-png-image_1859174.jpg"
+        <Image
+          src={lockIcon}
           alt="Imagen encima"
           style={{
             position: 'absolute',
-            top: '0',
+            top: '1',
             left: '0',
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            
             opacity: '0.5',
-            zIndex: '1', // Hace que la imagen esté encima
+            zIndex: '1', 
           }}
         />
       )}
 
-      <img src={lockIcon}/>
       <ul
         className={aplicarBlur ? 'blur-sm' : ''}
         style={{
-          filter: aplicarBlur ? 'blur(4px)' : 'none',
-          position: 'relative', // Mantiene la lista en la capa debajo de la imagen
-          zIndex: '2', // Asegura que el contenido esté debajo de la imagen
+          filter: aplicarBlur ? 'blur(3px)' : 'none',
+          position: 'relative',
+          zIndex: '2', 
         }}
       >
         {tareasFiltradas.length > 0 ? (
