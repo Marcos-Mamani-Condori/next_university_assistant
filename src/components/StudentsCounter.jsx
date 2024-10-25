@@ -141,15 +141,23 @@ const StudentsCounter = () => {
   const totalCount = carrera.length; // Total de carreras
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+      <p className="text-xl font-semibold text-red-800 pb-4">Usuarios Activos</p>
       {totalCount > 0 ? (
         <div>
           {Object.entries(carreraCount).map(([carreraName, count]) => {
             const percentage = ((count / totalCount) * 100).toFixed(2); // Calcular porcentaje
-
+            
+            // Procesar carreraName
+            const formattedCarreraName = carreraName
+              .trim() // Eliminar espacios al inicio y al final
+              .split(' ') // Dividir en palabras
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalizar la primera letra de cada palabra
+              .join(' '); // Unir las palabras nuevamente
+  
             return (
-              <div key={carreraName} className="mb-4">
-                <p className="font-bold">{carreraName}: {percentage}%</p>
+              <div key={carreraName} className="mb-4 ">
+                <p className="py-1">{formattedCarreraName}: {percentage}%</p>
                 <div className="w-full bg-gray-200 rounded-full h-4">
                   <div
                     className="bg-blue-500 h-4 rounded-full"
@@ -165,6 +173,7 @@ const StudentsCounter = () => {
       )}
     </div>
   );
+  
 };
 
 export default StudentsCounter;

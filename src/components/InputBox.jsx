@@ -17,7 +17,6 @@ function InputBox({ className }) {
     useEffect(() => {
         if (shouldFocus && inputRef.current && !isSending) {
             inputRef.current.focus();
-        
             setShouldFocus(false);
         }
     }, [shouldFocus, isSending, inputRef]);
@@ -27,6 +26,7 @@ function InputBox({ className }) {
             e.preventDefault();
             if (input.trim()) {
                 handleSend(); // Envía el mensaje solo si hay contenido
+                setInput(''); // Limpia el textarea después de enviar
             }
             setShouldFocus(true);
         }
@@ -36,6 +36,7 @@ function InputBox({ className }) {
         e.preventDefault(); // Previene el comportamiento predeterminado del formulario
         if (input.trim()) {
             handleSend(); // Envía el mensaje solo si hay contenido
+            setInput(''); // Limpia el textarea después de enviar
         }
         setShouldFocus(true);
     };

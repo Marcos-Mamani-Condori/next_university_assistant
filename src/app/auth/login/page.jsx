@@ -41,7 +41,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
       onClick={onClose}
     >
       <div
@@ -57,35 +57,40 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
         {error && ( 
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">LOGIN</h1>
+        <h1 className="text-slate-200 font-bold text-4xl mb-4">LoyoApp</h1>
         <form onSubmit={onSubmit}> 
           <label htmlFor="nombre" className="text-slate-500 mb-2 block text-sm">
-            Nombre:
+            Correo:
           </label>
           <input
             type="text"
             {...register("name", {
               required: {
                 value: true,
-                message: "usuario es requerido",
-              },
+                message: "Correo es requerido",
+              }
+  
             })}
             className={inputBaseStyles()}
-            placeholder="nombre"
+            placeholder="Ej: user@gmail.com"
           />
           {errors.name && ( 
             <span className="text-red-500 text-xs">{errors.name.message}</span>
           )}
 
           <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
-            Password:
+            Contraseña:
           </label>
           <input
             type="password"
             {...register("password", {
               required: {
                 value: true,
-                message: "Password es requerido",
+                message: "Contraseña es requerido",
+              },
+              minLength: {
+                value: 4,
+                message: "La contraseña debe tener al menos 4 letras",
               },
             })}
             className={inputBaseStyles()}
@@ -95,7 +100,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             <span className="text-red-500 text-sm">{errors.password.message}</span>
           )}
           <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Login
+            Iniciar sesión
           </button>
         </form>
 

@@ -81,32 +81,46 @@ function LikeButton({ messageId, username }) {
 
   const handleLikeClick = () => {
     const accessToken = session?.user?.accessToken;
-
+  
     if (!newSocket || !accessToken) {
       return; // Asegúrate de que el socket y el token estén disponibles
     }
-
+  
+    if (hasLiked && likeCount === 0) {
+      return; // Si ya ha dado like y el contador es 0, no hace nada
+    }
+  
     newSocket.emit("like_pregunta", { messageId, username, token: accessToken });
-
+  
     // Actualizar localmente el contador de likes
-    setLikeCount((prevCount) => (hasLiked ? prevCount - 1 : prevCount + 1));
+    setLikeCount((prevCount) => {
+      if (hasLiked && prevCount > 0) {
+        return prevCount - 1; // Permitir restar si ha dado like y el contador es mayor a 0
+      } else if (!hasLiked) {
+        return prevCount + 1; // Agregar un like normalmente
+      }
+      return prevCount; // No hacer nada si no se cumplen las condiciones
+    });
+  
     setHasLiked((prevState) => {
       const newLikedState = !prevState;
       localStorage.setItem(`liked_${messageId}`, JSON.stringify(newLikedState)); // Guardar en localStorage
       return newLikedState;
     });
   };
+  
 
   return (
     <div className="flex justify-start mt-2">
       <button onClick={handleLikeClick}>
         <span
-          className={hasLiked ? "bg-red-500 text-white p-2 rounded" : "bg-transparent"}
+          className={hasLiked ? "bg-red-500 text-white p-1 pt-0.5 rounded" : "bg-transparent"}
         >
           👍
         </span>
       </button>
-      <span className="ml-2">{likeCount}</span> 
+      {/* Aqui se valida en no mostrar el numero 0 de los likes, solo si son mayores a 0 */}
+      <span className="ml-2">{likeCount <=0 ? "": likeCount}</span> 
     </div>
   );
 }

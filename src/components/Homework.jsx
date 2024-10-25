@@ -2,11 +2,113 @@ import React, { useEffect, useState } from 'react';
 import lockIcon from '@/public/static/user_icon.png';
 
 const Homework = () => {
-  const [tareas, setTareas] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
-  const userId = 2; // Supongamos que el ID del usuario que está viendo la página es el 2.
+  //BORRAR DATOS QUEMADOS
+  const [tareas, setTareas] = useState([{
+    "id":1,
+    "name":"esta es la tarea de sistemas 1",
+    "message":"la tarea es hacer a",
+    "carrera":"sistemas",
+    "fecha": "2000-05-15"
+},{
+    "id":2,
+    "name":"esta es la tarea de sistemas 2",
+    "message":"la tarea es hacer b",
+    "carrera":"sistemas",
+    "fecha": "2001-05-15"
+},{
+    "id":3,
+    "name":"esta es la tarea de sistemas 3",
+    "message":"la tarea es hacer c",
+    "carrera":"sistemas",
+    "fecha": "2002-05-15"
+},{
+    "id":4,
+    "name":"esta es la tarea de civil 1",
+    "message":"la tarea es hacer c",
+    "carrera":"civil",
+    "fecha": "2002-05-15"
+},{
+    "id":5,
+    "name":"esta es la tarea de civil 2",
+    "message":"la tarea es hacer a",
+    "carrera":"civil",
+    "fecha": "2000-05-15"
+},{
+    "id":6,
+    "name":"esta es la tarea de sistemas 4",
+    "message":"la tarea es hacer b",
+    "carrera":"sistemas",
+    "fecha": "2001-05-15"
+},{
+    "id":7,
+    "name":"esta es la tarea de veterinaria 1",
+    "message":"la tarea es hacer c",
+    "carrera":"veterinaria",
+    "fecha": "2002-05-15"
+},{
+    "id":8,
+    "name":"esta es la tarea de civil 4",
+    "message":"la tarea es hacer c",
+    "carrera":"civil",
+    "fecha": "2002-05-15"
+},{
+    "id":9,
+    "name":"esta es la tarea de civil 1",
+    "message":"la tarea es hacer a",
+    "carrera":"civil",
+    "fecha": "2000-05-15"
+},{
+    "id":10,
+    "name":"esta es la tarea de sistemas 5",
+    "message":"la tarea es hacer b",
+    "carrera":"sistemas",
+    "fecha": "2001-05-15"
+},{
+    "id":11,
+    "name":"esta es la tarea de civil 5",
+    "message":"la tarea es hacer c",
+    "carrera":"civil",
+    "fecha": "2002-05-15"
+},{
+    "id":12,
+    "name":"esta es la tarea de veterinaria 2",
+    "message":"la tarea es hacer c",
+    "carrera":"veterinaria",
+    "fecha": "2002-05-15"
+}]);
+  const [usuarios, setUsuarios] = useState([{
+    "id":1,
+    "carrera":"sistemas",
+    "rol":"administrador"
+},{
+    "id":2,
+    "carrera":"civil",
+    "rol":"usuario"
+},{
+    "id":3,
+    "carrera":"veterinaria",
+    "rol":"premium"
+},{
+    "id":4,
+    "carrera":"sistemas",
+    "rol":"usuario"
+},{
+    "id":5,
+    "carrera":"civil",
+    "rol":"premium"
+},{
+    "id":6,
+    "carrera":"veterinaria",
+    "rol":"premium"
+},{
+    "id":7,
+    "carrera":"sistemas",
+    "rol":"premium"
+}]);
+//BORRAR DATOS QUEMADOS
+const userId = 1; // Supongamos que el ID del usuario que está viendo la página es el 2.
 
-  useEffect(() => {
+  /*useEffect(() => {
     // Obtener datos del usuario
     const fetchUsuarios = async () => {
       try {
@@ -31,7 +133,7 @@ const Homework = () => {
     fetchUsuarios();
     fetchTareas();
   }, []);
-
+*/
   // Encontrar al usuario con el userId
   const usuarioActual = usuarios.find(usuario => usuario.id === userId);
 
