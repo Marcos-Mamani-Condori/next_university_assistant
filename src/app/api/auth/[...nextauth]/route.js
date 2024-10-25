@@ -9,18 +9,18 @@ const authOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        name: { label: "name", type: "text", placeholder: "jsmith" },
+        email: { label: "email", type: "text", placeholder: "jsmith" },
         password: { label: "password", type: "password" },
       },
       async authorize(credentials, req) {
         // Validación de las credenciales
-        if (!credentials.name || !credentials.password) {
+        if (!credentials.email || !credentials.password) {
           throw new Error("Nombre de usuario y contraseña son obligatorios.");
         }
 
         // Buscar usuario en la base de datos
         const userFound = await db.users.findUnique({
-          where: { name: credentials.name },
+          where: { email: credentials.email },
         });
 
         // Si no se encuentra el usuario, lanza un error
