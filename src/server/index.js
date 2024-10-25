@@ -33,14 +33,16 @@ app.prepare().then(() => {
         socket.on('disconnect', () => {
             connectedUsers--; 
             console.log(`Usuario desconectado. Total de usuarios: ${connectedUsers}`);
-            io.emit('user_count', connectedUsers); 
+            io.emit('user_count', connectedUsers); // 
         });
     });
 
+    // Manejar rutas de Next.js
     server.all('*', (req, res) => {
         return handle(req, res);
     });
 
+    // Escuchar en el puerto 3000
     httpServer.listen(3000, (err) => {
         if (err) throw err;
         console.log('Servidor listo en http://localhost:3000');
