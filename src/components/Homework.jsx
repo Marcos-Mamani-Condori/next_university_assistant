@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import lockIcon from '@/public/static/user_icon.png';
 
+
 const Homework = () => {
   //BORRAR DATOS QUEMADOS
   const [tareas, setTareas] = useState([{
