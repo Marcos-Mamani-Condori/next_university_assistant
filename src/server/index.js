@@ -16,24 +16,26 @@ app.prepare().then(() => {
     server.use('/api', imageUploadRouter);
 
     const httpServer = http.createServer(server);
-    
     const io = new Server(httpServer);
 
     let connectedUsers = 0;
 
     io.on('connection', (socket) => {
-        connectedUsers++; 
+        connectedUsers++;
         console.log(`Usuario conectado. Total de usuarios: ${connectedUsers}`);
         
-        io.emit('user_count', connectedUsers);
+        // Emitir el conteo inicial al nuevo cliente
+        socket.emit('user_count', connectedUsers); // Envía el conteo inicial al cliente conectado
+        io.emit('user_count', connectedUsers); // Emitir a todos los demás clientes
 
+        // Llamar a los registros de sockets
         registerSockets(socket, io); 
-        registerLikes(socket, io);    
+        registerLikes(socket, io);
 
         socket.on('disconnect', () => {
             connectedUsers--; 
             console.log(`Usuario desconectado. Total de usuarios: ${connectedUsers}`);
-            io.emit('user_count', connectedUsers); // 
+            io.emit('user_count', connectedUsers); // Emitir la nueva cantidad a todos
         });
     });
 

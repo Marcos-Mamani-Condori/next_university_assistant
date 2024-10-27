@@ -1,4 +1,3 @@
-const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
