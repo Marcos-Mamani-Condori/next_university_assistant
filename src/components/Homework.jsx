@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 
 
+
 const Homework = () => {
   //BORRAR DATOS QUEMADOS
   const [tareas, setTareas] = useState([{
@@ -78,7 +79,55 @@ const Homework = () => {
     "message":"la tarea es hacer c",
     "carrera":"veterinaria",
     "fecha": "2002-05-15"
-}]);
+},{
+  "id":13,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":14,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":15,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":16,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":17,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":18,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":19,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":20,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},]);
   const [usuarios, setUsuarios] = useState([{
     "id":1,
     "carrera":"sistemas",
@@ -149,50 +198,33 @@ const userId = 2; // Supongamos que el ID del usuario que está viendo la págin
   const aplicarBlur = usuarioActual && usuarioActual.rol !== 'premium' && usuarioActual.rol !== 'administrador';
 
   return (
-    <div
-      className=" p-4 rounded-lg shadow-lg mt-5"
-      style={{ height: '300px', width: '90%', maxWidth: '770px', position: 'relative' }}
-    >
-      
-      {aplicarBlur && (
-        <Image
-          src={lockIcon}
-          alt="Imagen encima"
-          style={{
-            position: 'absolute',
-            top: '1',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            
-            opacity: '0.5',
-            zIndex: '1', 
-          }}
-        />
+<div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+      {aplicarBlur ? (
+        <div className="flex flex-col items-center" style={{
+          backgroundImage: `url("https://www.shutterstock.com/image-photo/close-old-dictionary-page-solution-260nw-1257550180.jpg")`,
+          backgroundSize: "cover", 
+          backgroundPosition: "center", 
+        }}>
+          <Image src={lockIcon} alt="Candado" className="w-10 h-10 mb-2" />
+          <h1 className="text-center text-slate-600">Contenido disponible solo para usuarios premium</h1>
+        </div>
+      ) : (
+        <ul>
+          {tareasFiltradas.length > 0 ? (
+            tareasFiltradas.map(tarea => (
+              <li key={tarea.id} className="mb-4">
+                <strong>{tarea.name}</strong>
+                <ul className="ml-4 list-disc">
+                  <li>{tarea.message}</li>
+                  <li>{tarea.fecha}</li>
+                </ul>
+              </li>
+            ))
+          ) : (
+            <p>No hay tareas disponibles para tu carrera.</p>
+          )}
+        </ul>
       )}
-
-      <ul
-        className={aplicarBlur ? 'blur-sm' : ''}
-        style={{
-          filter: aplicarBlur ? 'blur(3px)' : 'none',
-          position: 'relative',
-          zIndex: '2', 
-        }}
-      >
-        {tareasFiltradas.length > 0 ? (
-          tareasFiltradas.map(tarea => (
-            <li key={tarea.id}>
-              <strong>{tarea.name}</strong>
-              <ul>
-                <li>{tarea.message}</li>
-                <li>{tarea.fecha}</li>
-              </ul>
-            </li>
-          ))
-        ) : (
-          <p>No hay tareas disponibles para tu carrera.</p>
-        )}
-      </ul>
     </div>
   );
 };
