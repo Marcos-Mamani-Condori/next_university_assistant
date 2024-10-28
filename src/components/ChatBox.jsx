@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useEffect, useContext, useState } from "react";
 import MessageBot from "@/components/MessageBot";
-import SCMessage from "@/components/MessageChatGlobal";
+import MessageChatGlobal from "@/components/MessageChatGlobal";
 import  BotContext  from "@/context/BotContext"; // Importación de contexto de Bot
 import { usePathname } from 'next/navigation'; // Uso de usePathname de Next.js
 import ChatGlobalContext from "@/context/ChatGlobalContext";
@@ -78,7 +78,7 @@ function ChatBox({ className }) {
             {messages.map((msg, index) => {
                 return pathname === "/bot" 
                     ? <MessageBot key={index} text={msg.text} sender={msg.sender} />
-                    : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} />;
+                    : <MessageChatGlobal key={index} text={msg.message} sender={msg} id={msg.id} />;
             })}
             <div ref={messagesEndRef} />
         </div>
