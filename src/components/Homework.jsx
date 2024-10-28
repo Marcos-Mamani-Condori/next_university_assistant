@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import lockIcon from '@/public/static/user_icon.png';
+import lockIcon from '@/public/static/user_icon.svg';
 
 
 const Homework = () => {

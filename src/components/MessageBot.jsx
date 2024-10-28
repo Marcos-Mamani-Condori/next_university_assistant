@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
 import chatbot_icon from '@/public/static/chatbot_icon.png';
-import user_icon from '@/public/static//user_icon.png';
+import user_icon from '@/public/static//user_icon.svg';
 import Image from 'next/image';
 function* typewriterEffect(text) {
   for (let i = 0; i < text.length; i++) {

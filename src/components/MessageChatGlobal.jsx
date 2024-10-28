@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import chatbot_icon from '@/public/static/chatbot_icon.png';
-import user_icon from '@/public/static/user_icon.png';
+import user_icon from '@/public/static/user_icon.svg';
 import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
 import Image from "next/image";
 function SCMessage({ text, sender, id }) {
