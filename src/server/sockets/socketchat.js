@@ -20,7 +20,6 @@ const registerSockets = (socket, io) => {
                 take: 10,
             });
 
-
             socket.emit("initial_preguntas", {
                 messages: messages.map(msg => ({
                     id: msg.id,
@@ -28,7 +27,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.image_url || "default_image_url.jpg", // Incluye image_url
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
                 })),
             });
         } catch (error) {
@@ -51,7 +50,7 @@ const registerSockets = (socket, io) => {
             if (decoded) {
                 const userId = decoded.id;
                 const messageText = data.message;
-                const imageUrl = data.image_url || "default_image_url.jpg"; // Usa un valor predeterminado si no se proporciona
+                const imageUrl =`/uploads/${msg.user_id}.webp`
 
                 console.log("Creando mensaje con userId:", userId, "text:", messageText, "imageUrl:", imageUrl);
 
@@ -82,7 +81,7 @@ const registerSockets = (socket, io) => {
                     username: user.name,
                     major: user.major,
                     date: newMessage.created_at,
-                    image_url: newMessage.image_url, // Incluye image_url en el mensaje emitido
+                    image_url: imageUrl, // Usar la URL generada
                 };
 
                 console.log("Emitiendo 'new_pregunta' con mensaje formateado:", formattedMessage);
@@ -130,7 +129,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.image_url || "default_image_url.jpg", // Incluye image_url aquí también
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
                 })),
                 has_more: hasMore,
             });
