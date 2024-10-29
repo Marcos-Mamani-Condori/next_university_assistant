@@ -27,7 +27,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
                 })),
             });
         } catch (error) {
@@ -50,9 +50,7 @@ const registerSockets = (socket, io) => {
             if (decoded) {
                 const userId = decoded.id;
                 const messageText = data.message;
-                const imageUrl =`/uploads/${msg.user_id}.webp`
-
-                console.log("Creando mensaje con userId:", userId, "text:", messageText, "imageUrl:", imageUrl);
+                const imageUrl = `/uploads/${userId}.webp`; // Usando userId aquí
 
                 const newMessage = await prisma.messages.create({
                     data: {
@@ -129,7 +127,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
                 })),
                 has_more: hasMore,
             });
