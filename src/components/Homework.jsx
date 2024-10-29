@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import lockIcon from '@/public/static/user_icon.png';
+import lockIcon from '@/public/static/lock.svg';
+import Image from 'next/image';
+
+
 
 
 const Homework = () => {
@@ -76,7 +79,55 @@ const Homework = () => {
     "message":"la tarea es hacer c",
     "carrera":"veterinaria",
     "fecha": "2002-05-15"
-}]);
+},{
+  "id":13,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":14,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":15,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":16,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":17,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":18,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":19,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},{
+  "id":20,
+  "name":"esta es la tarea de sistemas 5",
+  "message":"la tarea es hacer b",
+  "carrera":"civil",
+  "fecha": "2001-05-15"
+},]);
   const [usuarios, setUsuarios] = useState([{
     "id":1,
     "carrera":"sistemas",
@@ -107,7 +158,7 @@ const Homework = () => {
     "rol":"premium"
 }]);
 //BORRAR DATOS QUEMADOS
-const userId = 1; // Supongamos que el ID del usuario que está viendo la página es el 2.
+const userId = 2; // Supongamos que el ID del usuario que está viendo la página es el 2.
 
   /*useEffect(() => {
     // Obtener datos del usuario
@@ -143,54 +194,37 @@ const userId = 1; // Supongamos que el ID del usuario que está viendo la págin
     ? tareas.filter(tarea => tarea.carrera === usuarioActual.carrera)
     : [];
 
-  // Verificar si el usuario no es premium o es administrador para aplicar blur
+  
   const aplicarBlur = usuarioActual && usuarioActual.rol !== 'premium' && usuarioActual.rol !== 'administrador';
 
   return (
-    <div
-      className="bg-amber-50 p-4 rounded-lg shadow-lg mt-4"
-      style={{ height: '300px', width: '90%', maxWidth: '770px', position: 'relative' }}
-    >
-      {aplicarBlur && (
-        <img
-          src="https://png.pngtree.com/png-vector/20191024/ourmid/pngtree-lock-line-icon-vector-png-image_1859174.jpg"
-          alt="Imagen encima"
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: '0.5',
-            zIndex: '1', // Hace que la imagen esté encima
-          }}
-        />
+<div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+      {aplicarBlur ? (
+        <div className="flex flex-col items-center" style={{
+          backgroundImage: `url("https://www.shutterstock.com/image-photo/close-old-dictionary-page-solution-260nw-1257550180.jpg")`,
+          backgroundSize: "cover", 
+          backgroundPosition: "center", 
+        }}>
+          <Image src={lockIcon} alt="Candado" className="w-10 h-10 mb-2" />
+          <h1 className="text-center text-slate-600">Contenido disponible solo para usuarios premium</h1>
+        </div>
+      ) : (
+        <ul>
+          {tareasFiltradas.length > 0 ? (
+            tareasFiltradas.map(tarea => (
+              <li key={tarea.id} className="mb-4">
+                <strong>{tarea.name}</strong>
+                <ul className="ml-4 list-disc">
+                  <li>{tarea.message}</li>
+                  <li>{tarea.fecha}</li>
+                </ul>
+              </li>
+            ))
+          ) : (
+            <p>No hay tareas disponibles para tu carrera.</p>
+          )}
+        </ul>
       )}
-
-      <img src={lockIcon}/>
-      <ul
-        className={aplicarBlur ? 'blur-sm' : ''}
-        style={{
-          filter: aplicarBlur ? 'blur(4px)' : 'none',
-          position: 'relative', // Mantiene la lista en la capa debajo de la imagen
-          zIndex: '2', // Asegura que el contenido esté debajo de la imagen
-        }}
-      >
-        {tareasFiltradas.length > 0 ? (
-          tareasFiltradas.map(tarea => (
-            <li key={tarea.id}>
-              <strong>{tarea.name}</strong>
-              <ul>
-                <li>{tarea.message}</li>
-                <li>{tarea.fecha}</li>
-              </ul>
-            </li>
-          ))
-        ) : (
-          <p>No hay tareas disponibles para tu carrera.</p>
-        )}
-      </ul>
     </div>
   );
 };

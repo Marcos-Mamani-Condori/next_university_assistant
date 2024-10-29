@@ -1,24 +1,27 @@
+// pages/connectedUsers.js
+'use client';
 import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 
 const ConnectedUsers = () => {
     const [connectedUsers, setConnectedUsers] = useState(0);
-    const socket = React.useRef(null); // Usar useRef para evitar recrear la conexión
 
     useEffect(() => {
-        // Crear la conexión al socket
-        socket.current = io('http://localhost:3000'); // Cambia la URL según tu entorno
-
-        // Escuchar el evento 'user_count'
-        socket.current.on('user_count', (count) => {
-            setConnectedUsers(count);
-        });
-
-        // Limpiar la conexión cuando el componente se desmonte
-        return () => {
-            socket.current.disconnect();
+        const fetchConnectedUsers = async () => {
+            try {
+                const response = await fetch('/api/connected-users');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Datos recibidos:", data);
+                setConnectedUsers(data.connectedUsers);
+            } catch (error) {
+                console.error("Error al obtener el conteo de usuarios:", error);
+            }
         };
-    }, []); // Ejecutar solo al montar el componente
+
+        fetchConnectedUsers();
+    }, []);
 
     return (
         <div>
