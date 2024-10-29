@@ -41,7 +41,7 @@ const UploadPage = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage(`Imagen subida y comprimida: ${data.filePath}`);
+        setMessage(`Imagen actualizada correctamente (cierre y abra el login para ver la imagen cambiada)`);
       } else {
         setMessage(`Error: ${data.error}`);
       }

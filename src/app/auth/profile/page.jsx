@@ -6,7 +6,7 @@ import UploadPage from '@/app/auth/profile/image/page';
 import Image from "next/image";
 
 const inputBaseStyles = () => {
-  return "p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full";
+  return "p-2 mb-4 rounded bg-gray-700 text-slate-100";
 };
 
 const labelBaseStyles = () => {
@@ -41,28 +41,27 @@ function ProfilePage({ onClose }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
 
-  
   const userId = session?.user?.id;
-  const userImagePath = `/uploads/${userId}.webp`; // Ruta de la imagen del usuario
-  const defaultImagePath = '/uploads/default.webp'; // Ruta para la imagen predeterminada
+  const userImagePath = `/uploads/${userId}.webp`;
+  const defaultImagePath = '/uploads/default.webp';
   const [profileImage, setProfileImage] = useState(defaultImagePath);
 
   useEffect(() => {
     const checkImage = async () => {
       if (userId) {
-        const response = await fetch(userImagePath, { method: 'HEAD' }); // Verificar solo los encabezados
+        const response = await fetch(`${userImagePath}?${Date.now()}`, { method: 'HEAD' });
         if (response.ok) {
-          setProfileImage(userImagePath); // Imagen de usuario existe
+          setProfileImage(`${userImagePath}?${Date.now()}`);
         } else {
-          setProfileImage(defaultImagePath); // Cargar imagen predeterminada
+          setProfileImage(defaultImagePath);
         }
       } else {
-        setProfileImage(defaultImagePath); // Cargar imagen predeterminada si no hay userId
+        setProfileImage(defaultImagePath);
       }
     };
 
     checkImage();
-  }, [userId]);
+  }, [userId, showUpload]); // Actualiza cuando showUpload cambia
 
   const onSubmit = handleSubmit(async (data) => {
     const res = await fetch("/api/auth/put", {

@@ -29,10 +29,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
     const userId = decoded.id; // Asegúrate de que el ID esté en el token
 
-    console.log('ID de usuario:', userId); // Muestra el ID en la consola
 
     const outputFilePath = path.join(__dirname, '../../../public/uploads', `${userId}.webp`);
-    console.log('Ruta de salida:', outputFilePath); // Muestra la ruta del archivo de salida
 
     // Comprimir la imagen directamente desde el buffer
     await sharp(req.file.buffer)
