@@ -27,7 +27,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.png', // Usa la imagen por defecto si no hay user_id
                 })),
             });
         } catch (error) {
@@ -129,7 +129,7 @@ const registerSockets = (socket, io) => {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.webp', // Usa la imagen por defecto si no hay user_id
+                    image_url: msg.user_id ? `/uploads/${msg.user_id}.webp` : '/uploads/default.png', // Usa la imagen por defecto si no hay user_id
                 })),
                 has_more: hasMore,
             });

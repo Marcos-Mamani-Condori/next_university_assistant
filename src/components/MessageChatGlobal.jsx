@@ -48,7 +48,7 @@ function SCMessage({ text, sender, id, imageUrl }) { // Agregar imageUrl
 
     // Manejar el error de carga de la imagen
     const handleImageError = () => {
-        setCurrentImageUrl('/uploads/default.webp'); // Cambiar a la imagen por defecto si hay un error
+        setCurrentImageUrl('/uploads/default.png'); // Cambiar a la imagen por defecto si hay un error
     };
 
     return (

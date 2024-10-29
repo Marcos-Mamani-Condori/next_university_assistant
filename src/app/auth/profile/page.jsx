@@ -43,7 +43,7 @@ function ProfilePage({ onClose }) {
 
   const userId = session?.user?.id;
   const userImagePath = `/uploads/${userId}.webp`;
-  const defaultImagePath = '/uploads/default.webp';
+  const defaultImagePath = '/uploads/default.png';
   const [profileImage, setProfileImage] = useState(defaultImagePath);
 
   useEffect(() => {
