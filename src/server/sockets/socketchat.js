@@ -20,7 +20,6 @@ const registerSockets = (socket, io) => {
                 take: 10,
             });
 
-            console.log("Mensajes iniciales recuperados:", messages);
 
             socket.emit("initial_preguntas", {
                 messages: messages.map(msg => ({

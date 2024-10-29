@@ -29,7 +29,7 @@ const Header = ({ className }) => {
 
     const pathname = usePathname();
     const pageTitles = {
-        "/": "Inicio",
+        "/": "LoyoApp",
         "/chat": "LoyoChat",
         "/bot": "LoyoBot",
     };

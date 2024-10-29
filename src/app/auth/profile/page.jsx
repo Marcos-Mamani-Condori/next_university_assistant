@@ -1,7 +1,9 @@
 'use client';
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
+import UploadPage from '@/app/auth/profile/image/page';
+import Image from "next/image";
 
 const inputBaseStyles = () => {
   return "p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full";
@@ -23,12 +25,11 @@ function ProfilePage({ onClose }) {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues, // Asegúrate de que getValues esté importado
+    getValues,
   } = useForm({
     defaultValues: {
       name: session?.user?.name || '',
       email: session?.user?.email || '',
-      major: session?.user?.major || '',
     },
   });
 
@@ -36,8 +37,32 @@ function ProfilePage({ onClose }) {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [error, setError] = useState(null);
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar la contraseña
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Estado para mostrar la confirmación
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
+
+  
+  const userId = session?.user?.id;
+  const userImagePath = `/uploads/${userId}.webp`; // Ruta de la imagen del usuario
+  const defaultImagePath = '/uploads/default.webp'; // Ruta para la imagen predeterminada
+  const [profileImage, setProfileImage] = useState(defaultImagePath);
+
+  useEffect(() => {
+    const checkImage = async () => {
+      if (userId) {
+        const response = await fetch(userImagePath, { method: 'HEAD' }); // Verificar solo los encabezados
+        if (response.ok) {
+          setProfileImage(userImagePath); // Imagen de usuario existe
+        } else {
+          setProfileImage(defaultImagePath); // Cargar imagen predeterminada
+        }
+      } else {
+        setProfileImage(defaultImagePath); // Cargar imagen predeterminada si no hay userId
+      }
+    };
+
+    checkImage();
+  }, [userId]);
 
   const onSubmit = handleSubmit(async (data) => {
     const res = await fetch("/api/auth/put", {
@@ -82,6 +107,27 @@ function ProfilePage({ onClose }) {
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Personalizar Perfil</h1>
+        
+        {/* Mostrar imagen de perfil */}
+        <div className="flex justify-center mb-4">
+          <Image
+            src={profileImage}
+            alt="Imagen de Perfil"
+            width={100}
+            height={100}
+            className="rounded-full"
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowUpload(!showUpload)}
+          className="bg-blue-500 text-white p-2 rounded mb-4"
+        >
+          {showUpload ? "Cancelar Cambiar Imagen" : "Cambiar Imagen de Perfil"}
+        </button>
+
+        {showUpload && <UploadPage />}
 
         <form onSubmit={onSubmit} className="flex flex-col">
           <label htmlFor="name" className={labelBaseStyles()}>
@@ -104,14 +150,6 @@ function ProfilePage({ onClose }) {
               placeholder="Ej: Juan Perez"
               disabled={!isEditingName}
             />
-            
-            {/* Sección para la carrera */}
-        <div className="mt-4">
-          <label className={labelBaseStyles()}>
-            Carrera:
-          </label>
-          <p className="text-slate-300">{session?.user?.major || 'No especificada'}</p>
-        </div>
             <button
               type="button"
               onClick={() => {
@@ -177,7 +215,7 @@ function ProfilePage({ onClose }) {
                 Nueva Contraseña:
               </label>
               <input
-                type={showPassword ? "text" : "password"} // Cambia el tipo de entrada
+                type={showPassword ? "text" : "password"}
                 {...register("password", {
                   minLength: {
                     value: 6,
@@ -198,7 +236,7 @@ function ProfilePage({ onClose }) {
                 Confirmar Contraseña:
               </label>
               <input
-                type={showConfirmPassword ? "text" : "password"} // Cambia el tipo de entrada
+                type={showConfirmPassword ? "text" : "password"}
                 {...register("confirmPassword", {
                   validate: value =>
                     value === getValues('password') || "Las contraseñas no coinciden",
