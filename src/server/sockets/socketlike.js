@@ -1,10 +1,7 @@
-const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerLikes = (io) => {
-    io.on('connection', (socket) => {
-        console.log(`Nuevo cliente conectado: ${socket.id}`);
+const registerLikes = (socket, io) => {
 
         // Manejo del evento para dar like a una pregunta
         socket.on("like_pregunta", async (data) => {
@@ -43,7 +40,7 @@ const registerLikes = (io) => {
                     const existingLike = await tx.likes.findFirst({
                         where: {
                             message_id: messageId,
-                            user_liked: authenticatedUserId.toString(), // Verificar el like dado por el usuario autenticado
+                            user_id: authenticatedUserId, // Verificar el like dado por el usuario autenticado
                         },
                     });
 
@@ -59,8 +56,7 @@ const registerLikes = (io) => {
                         await tx.likes.create({
                             data: {
                                 message_id: messageId,
-                                user_id: userId, // Guardar el ID del usuario que creó el mensaje
-                                user_liked: authenticatedUserId.toString(), // Guardar el ID del usuario que dio el like
+                                user_id: authenticatedUserId, // Guardar el ID del usuario que dio el like
                             },
                         });
                         console.log(`Nuevo like agregado por el usuario con ID: ${authenticatedUserId}`);
@@ -103,7 +99,7 @@ const registerLikes = (io) => {
                 const existingLike = await prisma.likes.findFirst({
                     where: {
                         message_id: messageId,
-                        user_liked: authenticatedUserId.toString(), // Verificar el like dado por el usuario autenticado
+                        user_id: authenticatedUserId, // Verificar el like dado por el usuario autenticado
                     },
                 });
 
@@ -118,9 +114,9 @@ const registerLikes = (io) => {
         socket.on('disconnect', () => {
             console.log(`Cliente desconectado: ${socket.id}`);
         });
-    });
+    };
 
     console.log('Sockets de likes configurados y escuchando');
-};
+;
 
 module.exports = registerLikes;
