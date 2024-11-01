@@ -4,8 +4,7 @@ import BotContext from "@/context/BotContext";
 import { useInputFocus } from "@/context/InputFocusContext";
 import ChatGlobalContext from "@/context/ChatGlobalContext";
 import { usePathname } from 'next/navigation'; 
-import { useSession } from 'next-auth/react'; // Importar useSession
-import LikeButton from '@/components/LikeButton'; // Asegúrate de que este componente esté importado si es necesario
+import { useSession } from 'next-auth/react'; 
 
 function InputBox({ className }) {
     const pathname = usePathname();
@@ -15,8 +14,8 @@ function InputBox({ className }) {
     const { inputRef } = useInputFocus();
 
     const [shouldFocus, setShouldFocus] = useState(false);
-    const { data: session } = useSession(); // Obtener la sesión
-    const [file, setFile] = useState(null); // Estado para manejar el archivo
+    const { data: session } = useSession();
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         if (shouldFocus && inputRef.current && !isSending) {
@@ -29,14 +28,14 @@ function InputBox({ className }) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (input.trim()) {
-                handleSubmit(e); // Enviar el formulario al presionar Enter
+                handleSubmit(e);
             }
             setShouldFocus(true);
         }
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]); // Guardar el archivo seleccionado
+        setFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
@@ -44,10 +43,10 @@ function InputBox({ className }) {
         if (input.trim()) {
             handleSend(); 
             if (source === 'inputchat' && file) {
-                await handleUpload(); // Llamar a la función para subir la imagen
+                await handleUpload();
             }
             setInput(''); 
-            setFile(null); // Limpiar el archivo después de enviar
+            setFile(null);
         }
         setShouldFocus(true);
     };
@@ -73,11 +72,36 @@ function InputBox({ className }) {
             const data = await response.json();
             if (response.ok) {
                 console.log('Imagen subida correctamente:', data);
+                // Imprimir el fileIndex recibido
+                console.log('File Index recibido:', data.fileIndex);
+                // Enviar el fileIndex al otro backend
+                await sendFileIndexToBackend(data.fileIndex);
             } else {
                 console.error('Error al subir la imagen:', data.error);
             }
         } catch (error) {
             console.error('Error al subir la imagen:', error);
+        }
+    };
+
+    const sendFileIndexToBackend = async (fileIndex) => {
+        try {
+            const response = await fetch('/api/receive-file-index', { // Cambia esto por la URL de tu otro backend
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ img: fileIndex }), // Enviando el fileIndex
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('FileIndex enviado correctamente al otro backend:', data);
+            } else {
+                console.error('Error al enviar el FileIndex al otro backend:', await response.json());
+            }
+        } catch (error) {
+            console.error('Error al enviar el FileIndex:', error);
         }
     };
 
@@ -98,8 +122,8 @@ function InputBox({ className }) {
                 type="file" 
                 onChange={handleFileChange} 
                 accept="image/*" 
-                className="hidden" // Ocultar el input de archivo
-                id="file-upload" // ID para acceder al input en el botón
+                className="hidden"
+                id="file-upload"
             />
             <label htmlFor="file-upload" className="cursor-pointer text-blue-500 hover:underline">
                 Seleccionar imagen

@@ -6,6 +6,7 @@ const registerSockets = require('./sockets/socketchat');
 const registerLikes = require('./sockets/socketlike');
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
+const { router: apiRouter, getReceivedData } = require('./routes/url'); // Importar el nuevo router
 const bodyParser = require('body-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -14,45 +15,30 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
     const server = express();
-    let receivedData; // Variable para almacenar los datos recibidos
 
     // Middleware para procesar el cuerpo de las solicitudes
     server.use(express.json());
     server.use(bodyParser.text());
 
-    // Rutas
+    // Usar las rutas
+    server.use('/api', apiRouter); // Usar el router de la API
     server.use('/api', imageUploadRouter);
     server.use('/api/connected-users', connectedUsersRouter);
 
-    server.post('/api/imgchat', (req, res) => {
-        const { fileIndex } = req.body; // Extraer fileIndex y message del cuerpo de la solicitud
-    
-        // Asegúrate de que fileIndex es un número
-        if (typeof fileIndex === 'undefined' || isNaN(fileIndex)) {
-            console.error('fileIndex no está definido o no es un número válido en la solicitud');
-        }
-    
-        receivedData = String(fileIndex); // Convertir a cadena
-        console.log('Datos recibidos en imgchat:', { fileIndex: receivedData }); // Mostrar ambos datos
-    
-        res.status(200).json({ message: 'Datos recibidos correctamente'+ { receivedData } });
-    });
-    
-    console.log('Datos recibidos en idsaaaaaaaaaaaaaamgchat:', receivedData);
-
+    // Crear el servidor HTTP
     const httpServer = http.createServer(server);
     const io = new Server(httpServer);
 
-    // Manejar la conexión de usuarios y emitir el conteo
+    // Manejar la conexión de usuarios
     io.on('connection', (socket) => {
-        handleusers(socket, io);
-        
-        // Asegúrate de que receivedData esté definido antes de pasarlo
-        registerSockets(socket, io, receivedData);
-        registerLikes(socket, io);
+        console.log("Cliente conectado:", socket.id);
 
-        // Escuchar el evento newFileIndex para obtener los datos actualizados
-            registerSockets(socket, io, message); // Actualiza registerSockets con el nuevo data
+        // Emitir el fileIndex actual al nuevo cliente conectado
+        socket.emit('fileIndex', { img: getReceivedData() }); // Llamar a getReceivedData para obtener el valor actual
+
+        handleusers(socket, io);
+        registerSockets(socket, io, getReceivedData()); // Pasar el valor actual de receivedData
+        registerLikes(socket, io);
     });
 
     // Manejar todas las demás rutas con Next.js
