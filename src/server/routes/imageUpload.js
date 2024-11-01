@@ -14,74 +14,82 @@ const upload = multer({ storage });
 
 // Ruta para subir y comprimir imágenes
 router.post('/upload', upload.single('image'), async (req, res) => {
+    console.log("Iniciando procesamiento de imagen...");
+
+    // Verificar si se subió un archivo
     if (!req.file) {
+        console.log("Error: No se subió ningún archivo");
         return res.status(400).json({ error: 'No se subió ningún archivo' });
     }
 
-    // Obtener el token del encabezado de autorización
+    // Verificar si se proporcionó el token de autenticación
     const authHeader = req.headers.authorization;
     if (!authHeader) {
+        console.log("Error: No se proporcionó token de autenticación");
         return res.status(401).json({ error: 'No se proporcionó token' });
     }
 
-    const token = authHeader.split(' ')[1]; // Asumiendo que el formato es "Bearer TOKEN"
-
+    const token = authHeader.split(' ')[1];
     try {
-        // Decodificar el token usando el secreto
         const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
-        const userId = decoded.id; // Asegúrate de que el ID esté en el token
-        console.log(`ID del usuario obtenido: ${userId}`); // Consola del ID del usuario
+        console.log("Token verificado, datos decodificados:", decoded);
+        
+        const userId = decoded.id;
+        const source = req.body.source || 'default';
+        let outputFileName;
+        let outputFilePath;
 
-        // Crear carpeta para el usuario si no existe
+        // Crear la carpeta del usuario si no existe
         const userFolderPath = path.join(__dirname, '../../../public/uploads', userId.toString());
         if (!fs.existsSync(userFolderPath)) {
             fs.mkdirSync(userFolderPath, { recursive: true });
             console.log(`Carpeta creada: ${userFolderPath}`);
-        } else {
-            console.log(`La carpeta ya existe: ${userFolderPath}`);
         }
 
-        // Crear un nombre de archivo único
-        let fileIndex = 1;
-        let outputFilePath;
-        let outputFileName;
-
         // Generar un nombre de archivo único en la carpeta del usuario
+        let fileIndex = 1;
         do {
             outputFileName = `${fileIndex}.webp`;
             outputFilePath = path.join(userFolderPath, outputFileName);
             fileIndex++;
         } while (fs.existsSync(outputFilePath));
 
-        // Comprimir la imagen directamente desde el buffer
+        console.log(`Ruta final para guardar la imagen: ${outputFilePath}`);
+
+        // Procesar la imagen con Sharp
         await sharp(req.file.buffer)
             .resize(500, 500, { fit: 'inside', kernel: sharp.kernel.lanczos3 })
             .webp({ quality: 100 })
             .toFile(outputFilePath);
 
-        console.log(`Imagen comprimida y guardada como: ${outputFileName} en ${userFolderPath}`);
-        const filePath = `${userId}/${outputFileName}`;
+        console.log(`Imagen comprimida y guardada con éxito: ${outputFilePath}`);
 
-// Enviar el filePath como parte de un objeto a la API imgchat
-const imgChatResponse = await fetch('http://localhost:3000/api/imgchat', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ filePath: filePath }), // Envío como un objeto
-});
+        const finalFileIndex = parseInt(outputFileName.replace('.webp', ''));
 
-        // Consola para verificar el nombre enviado
-        console.log(`Enviando a imgchat: {  ${filePath} }`);
-
+        // Enviar solo el fileIndex a imgchat
+        const imgChatResponse = await fetch('http://localhost:3000/api/imgchat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fileIndex: finalFileIndex }), // Envío de datos en formato JSON
+        });
+        
+        // Comprobar si la respuesta fue exitosa
         if (!imgChatResponse.ok) {
-            console.error('Error al enviar a imgchat:', imgChatResponse.statusText);
-            return res.status(500).json({ error: 'Error al enviar a imgchat' });
+            const errorText = await imgChatResponse.text();
+            console.error('Error al enviar a imgchat:', errorText);
+            return res.status(500).json({ error: 'Error al procesar la imagen en imgchat' });
         }
+
+        // Confirmación de que se envió el JSON correctamente
+        const responseData = await imgChatResponse.json(); // Obtener la respuesta del servidor
+        console.log('JSON enviado correctamente a imgchat:', { fileIndex: finalFileIndex });
+        console.log('Respuesta de imgchat:', responseData);
 
         res.status(200).json({
             message: 'Imagen convertida a WebP correctamente',
-            filePath: `/uploads/${userId}/${outputFileName}`, // Retorna la ruta pública correcta
+            filePath: `/uploads/${userId}/${outputFileName}`,
         });
     } catch (error) {
         console.error('Error al procesar la imagen:', error);

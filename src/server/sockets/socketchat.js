@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerSockets = (socket, io)=> {
+const registerSockets = (socket, io, receivedDataString)=> {
     const sendInitialMessages = async () => {
         try {
             console.log("Recuperando mensajes iniciales desde la base de datos...");
@@ -54,26 +54,15 @@ const registerSockets = (socket, io)=> {
             if (decoded) {
                 const userId = decoded.id;
                 const messageText = data.message;
-                const imageUrl = `/uploads/${userId}.webp`; // Usando userId aquí
-     
-                server.post('/api/imgchat', (req, res) => {
-                    const { filePath } = req.body;
-                
-                    console.log("Valor de filePath:", filePath);
-                
-                    receivedData = filePath;
-                
-                    res.status(200).json({ message: 'Datos recibidos correctamente', data: receivedData });
-                });
+                console.log("ek recibooooooooooooo" +receivedDataString)
 
-
-                console.log("Token válido, ID de usuario autenticado:", userId);
+                console.log("Token válido, ID de usuario autenticado:", receivedDataString);
 
                 const newMessage = await prisma.messages.create({
                     data: {
                         user_id: userId,
                         text: messageText,
-                        image_url: filePath,
+                        image_url: receivedDataString,
                         created_at: new Date(),
                     },
                 });
@@ -96,10 +85,11 @@ const registerSockets = (socket, io)=> {
                     username: user.name,
                     major: user.major,
                     date: newMessage.created_at,
-                    image_url: filePath,
+                    image_url: imageUrl,
                 };
 
                 console.log("Emitiendo 'new_pregunta' con el mensaje formateado:", formattedMessage);
+                console.log("fdkasjlfkjasdf" +receivedDataString)
                 io.emit("new_pregunta", formattedMessage);
             } else {
                 console.log("Token no válido. Desconectando socket.");
