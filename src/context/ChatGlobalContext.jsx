@@ -23,7 +23,7 @@ const ChatGlobalProvider = ({ children }) => {
             socketRef.current = getSocket();
 
             if (socketRef.current) {
-            socketRef.current.on('connect', () => {
+            socketRef.current.on('connect', () => {    
                 console.log('Conexión WebSocket establecida con el ID:', socketRef.current.id);
             });
 
@@ -42,6 +42,7 @@ const ChatGlobalProvider = ({ children }) => {
             });
 
             socketRef.current.on('new_pregunta', (pregunta) => {
+                
                 setMessages((prevMessages) => [...prevMessages, pregunta]);
                  // Actualizar el offset para reflejar el nuevo mensaje
             setOffset((prevOffset) => prevOffset + 1);

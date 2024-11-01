@@ -45,7 +45,7 @@ const {password: _, ...users}=newUser
 console.log("users:", JSON.stringify(users, null, 2)); 
      return NextResponse.json(users);
     } catch (error) {
-        return NextResponse.json(
+        return NextResponse.json( 
             {
             message: error.message,
         },

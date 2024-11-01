@@ -3,5 +3,6 @@ const person = {
     apellido: "ramirez"
 }
 
-const {name} = person
-console.log(name)
+const {name: nombre} = person
+
+console.log(nombre)

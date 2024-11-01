@@ -1,21 +1,17 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import { useContext } from 'react';
 import Image from 'next/image';
 import user_icon from '@/public/static/user_icon.svg';
-import bell_icon from '@/public/static/bell_icon.svg';
 import RegisterModal from '@/components/RegisterModal';
-import NotificationModal from '@/components/NotificationModal'; // Asegúrate de importar el modal
+import NotificationIcon from '@/components/NotificationIcon'; // Importa NotificationIcon
 import { usePathname } from 'next/navigation';
 import ModalContext from '@/context/ModalContext';
 import { signOut, useSession } from 'next-auth/react';
-import { useState } from 'react';
 
 const Header = ({ className }) => {
     const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
-    const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false); // Estado para el modal de notificaciones
 
     const handleRegisterClick = () => {
         setIsLoged(false);
@@ -24,14 +20,6 @@ const Header = ({ className }) => {
 
     const handleCloseRegisterModal = () => {
         setIsRegisterModalOpen(false);
-    };
-
-    const handleNotificationClick = () => {
-        setIsNotificationModalOpen(!isNotificationModalOpen); // Alterna el estado del modal de notificaciones
-    };
-
-    const handleCloseNotificationModal = () => {
-        setIsNotificationModalOpen(false); // Cierra el modal de notificaciones
     };
 
     const pathname = usePathname();
@@ -59,7 +47,9 @@ const Header = ({ className }) => {
                 )}
             </div>
 
-            <div className="absolute right-4 md:right-10 flex space-x-4"> {/* Agrupamos los botones con 'flex space-x-4' */}
+            <div className="absolute right-4 md:right-10 flex space-x-4">
+                {/* Icono de Notificaciones */}
+                <NotificationIcon /> {/* Usa NotificationIcon aquí */}
                 <button onClick={handleRegisterClick}>
                     <Image
                         src={user_icon}
@@ -70,21 +60,6 @@ const Header = ({ className }) => {
                         loading="eager"
                     />
                 </button>
-                <button onClick={handleNotificationClick}>
-                    <Image
-                        src={bell_icon}
-                        alt="Bell icon"
-                        width={32}
-                        height={32}
-                        className="h-8 w-8"
-                        loading="eager"
-                    />
-                </button>
-                {isNotificationOpen && ( // Render white box if notification is open
-                    <div className="absolute top-10 right-0 w-48 p-4 bg-white border border-gray-300 rounded shadow-lg">
-                        <p className="text-gray-700">No new notifications</p>
-                    </div>
-                )}
             </div>
 
             {/* Register Modal */}
@@ -93,13 +68,6 @@ const Header = ({ className }) => {
                     isOpen={isRegisterModalOpen}
                     onClose={handleCloseRegisterModal}
                     setIsLoged={setIsLoged}
-                />
-            )}
-            {isNotificationModalOpen && (
-                <NotificationModal
-                    message="Tienes nuevas notificaciones"
-                    details="Revisa tus mensajes recientes."
-                    onClose={handleCloseNotificationModal}
                 />
             )}
         </header>

@@ -4,6 +4,7 @@ const next = require('next');
 const { Server } = require('socket.io');
 const registerSockets = require('./sockets/socketchat');
 const registerLikes = require('./sockets/socketlike');
+const registerNotificationSockets = require('./sockets/socketnotification'); // Importar notificaciones
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
 
@@ -25,6 +26,7 @@ app.prepare().then(() => {
         handleusers(socket, io); // Manejar eventos de conexión de usuarios
         registerSockets(socket, io);
         registerLikes(socket, io);
+        registerNotificationSockets(socket, io); // Registrar eventos de notificaciones
     });
 
     // Manejar todas las demás rutas con Next.js

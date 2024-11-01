@@ -4,19 +4,22 @@ import { DeviceProvider } from "@/context/DeviceContext";
 import { InputFocusProvider } from "@/context/InputFocusContext";
 import { ChatGlobalProvider } from '@/context/ChatGlobalContext';
 import { ModalProvider } from '@/context/ModalContext';
+import { NotificationProvider } from "./NotificationContext";
 
 const ProvidersContext = ({ children }) => {
   return (
     <ModalProvider>
-    <DeviceProvider>
-      <ChatGlobalProvider>
-        <BotProvider>
-          <InputFocusProvider>
-          {children}
-          </InputFocusProvider>
-        </BotProvider>
-      </ChatGlobalProvider>
-    </DeviceProvider>
+      <DeviceProvider>
+        <NotificationProvider>
+          <ChatGlobalProvider>
+            <BotProvider>
+              <InputFocusProvider>
+                {children}
+              </InputFocusProvider>
+            </BotProvider>
+          </ChatGlobalProvider>
+        </NotificationProvider>
+      </DeviceProvider>
     </ModalProvider>
   );
 };

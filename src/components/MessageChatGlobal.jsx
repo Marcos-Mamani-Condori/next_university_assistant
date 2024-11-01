@@ -4,7 +4,7 @@ import chatbot_icon from '@/public/static/chatbot_icon.png';
 import user_icon from '@/public/static/user_icon.svg';
 import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
 import Image from "next/image";
-function SCMessage({ text, sender, id }) {
+function MessageChatGlobal({ text, sender, id }) {
     const isUser = sender === 'user';
     const icon = isUser
     ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
@@ -59,4 +59,4 @@ function SCMessage({ text, sender, id }) {
     );
 }
 
-export default SCMessage;
+export default MessageChatGlobal;

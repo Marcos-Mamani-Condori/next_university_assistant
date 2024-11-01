@@ -22,6 +22,7 @@ function LikeButton({ messageId, username }) {
 
     const loadLikeData = () => {
       if (socket.connected) {
+        console.log("socket conectado")
         socket.emit("get_like_count", messageId);
 
         if (accessToken) {
@@ -35,6 +36,7 @@ function LikeButton({ messageId, username }) {
     loadLikeData();
 
     const handleLikeCountResponse = ({ preguntas_id, total_likes }) => {
+      console.log("total de likes optenidos", total_likes)
       if (preguntas_id === messageId) {
         setLikeCount(total_likes);
       }
