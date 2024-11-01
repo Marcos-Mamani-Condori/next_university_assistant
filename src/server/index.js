@@ -8,8 +8,6 @@ const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
 const bodyParser = require('body-parser');
 
-const imagen = require('../uploads/descarga.jpg')
-
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -34,10 +32,10 @@ app.prepare().then(() => {
             console.error('fileIndex no está definido o no es un número válido en la solicitud');
         }
     
-        receivedData = imagen// String(fileIndex); // Convertir a cadena
-        console.log('Datos recibidos en imgchat:', { imagen: receivedData }); // Mostrar ambos datos
+        receivedData = String(fileIndex); // Convertir a cadena
+        console.log('Datos recibidos en imgchat:', { fileIndex: receivedData }); // Mostrar ambos datos
     
-        res.status(200).json({ message: 'Datos recibidos correctamente', data: { fileIndex: receivedData } });
+        res.status(200).json({ message: 'Datos recibidos correctamente'+ { receivedData } });
     });
     
     console.log('Datos recibidos en idsaaaaaaaaaaaaaamgchat:', receivedData);
