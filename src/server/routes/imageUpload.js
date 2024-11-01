@@ -64,16 +64,19 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
         console.log(`Imagen comprimida y guardada con éxito: ${outputFilePath}`);
 
-        const finalFileIndex = parseInt(outputFileName.replace('.webp', ''));
+     const finalFileIndex = parseInt(outputFileName.replace('.webp', ''));
 
-        // Enviar solo el fileIndex a imgchat
-        const imgChatResponse = await fetch('http://localhost:3000/api/imgchat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ fileIndex: finalFileIndex }), // Envío de datos en formato JSON
-        });
+// Enviar solo el fileIndex como texto plano
+const imgChatResponse = await fetch('http://localhost:3000/api/imgchat', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json', // Cambia el tipo de contenido a JSON
+    },
+    body: JSON.stringify({
+        fileIndex: finalFileIndex, // Envía el fileIndex
+        message: 'hola' // Envía el texto adicional
+    }),
+});
         
         // Comprobar si la respuesta fue exitosa
         if (!imgChatResponse.ok) {

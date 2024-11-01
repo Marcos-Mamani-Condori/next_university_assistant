@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerSockets = (socket, io, receivedDataString)=> {
+const registerSockets = (socket, io, receivedData)=> {
     const sendInitialMessages = async () => {
         try {
             console.log("Recuperando mensajes iniciales desde la base de datos...");
@@ -54,15 +54,15 @@ const registerSockets = (socket, io, receivedDataString)=> {
             if (decoded) {
                 const userId = decoded.id;
                 const messageText = data.message;
-                console.log("ek recibooooooooooooo" +receivedDataString)
+                console.log("ek recibooooooooooooo" +receivedData)
 
-                console.log("Token válido, ID de usuario autenticado:", receivedDataString);
+                console.log("Token válido, ID de usuario autenticado:", receivedData);
 
                 const newMessage = await prisma.messages.create({
                     data: {
                         user_id: userId,
                         text: messageText,
-                        image_url: receivedDataString,
+                        image_url: receivedData,
                         created_at: new Date(),
                     },
                 });
@@ -85,11 +85,11 @@ const registerSockets = (socket, io, receivedDataString)=> {
                     username: user.name,
                     major: user.major,
                     date: newMessage.created_at,
-                    image_url: imageUrl,
+                    image_url: receivedData,
                 };
 
                 console.log("Emitiendo 'new_pregunta' con el mensaje formateado:", formattedMessage);
-                console.log("fdkasjlfkjasdf" +receivedDataString)
+                console.log("fdkasjlfkjasdf" +receivedData)
                 io.emit("new_pregunta", formattedMessage);
             } else {
                 console.log("Token no válido. Desconectando socket.");
