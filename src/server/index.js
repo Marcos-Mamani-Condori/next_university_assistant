@@ -6,7 +6,6 @@ const registerSockets = require('./sockets/socketchat');
 const registerLikes = require('./sockets/socketlike');
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
-const { router: apiRouter, getReceivedData } = require('./routes/url'); // Importar el nuevo router
 const bodyParser = require('body-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -21,7 +20,6 @@ app.prepare().then(() => {
     server.use(bodyParser.text());
 
     // Usar las rutas
-    server.use('/api', apiRouter); // Usar el router de la API
     server.use('/api', imageUploadRouter);
     server.use('/api/connected-users', connectedUsersRouter);
 
@@ -34,10 +32,9 @@ app.prepare().then(() => {
         console.log("Cliente conectado:", socket.id);
 
         // Emitir el fileIndex actual al nuevo cliente conectado
-        socket.emit('fileIndex', { img: getReceivedData() }); // Llamar a getReceivedData para obtener el valor actual
 
         handleusers(socket, io);
-        registerSockets(socket, io, getReceivedData()); // Pasar el valor actual de receivedData
+        registerSockets(socket, io); // Pasar el valor actual de receivedData
         registerLikes(socket, io);
     });
 

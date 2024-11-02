@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('./../../libs/db');
 
-const registerSockets = (socket, io, receivedData)=> {
+const registerSockets = (socket, io)=> {
     const sendInitialMessages = async () => {
         try {
             console.log("Recuperando mensajes iniciales desde la base de datos...");
@@ -29,7 +29,7 @@ const registerSockets = (socket, io, receivedData)=> {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.imageUrl,
+                    image_url: msg.image_url,
                     profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
                 })),
             });
@@ -54,15 +54,15 @@ const registerSockets = (socket, io, receivedData)=> {
             if (decoded) {
                 const userId = decoded.id;
                 const messageText = data.message;
-                console.log("ek recibooooooooooooo" +receivedData)
-
-                console.log("Token válido, ID de usuario autenticado:", receivedData);
-
+                const filePath = data.img;
+             
                 const newMessage = await prisma.messages.create({
                     data: {
                         user_id: userId,
                         text: messageText,
-                        image_url: receivedData,
+                        image_url: filePath,
+                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
+
                         created_at: new Date(),
                     },
                 });
@@ -85,11 +85,12 @@ const registerSockets = (socket, io, receivedData)=> {
                     username: user.name,
                     major: user.major,
                     date: newMessage.created_at,
-                    image_url: receivedData,
+                    image_url: filePath,
+                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
+                    
                 };
 
                 console.log("Emitiendo 'new_pregunta' con el mensaje formateado:", formattedMessage);
-                console.log("fdkasjlfkjasdf" +receivedData)
                 io.emit("new_pregunta", formattedMessage);
             } else {
                 console.log("Token no válido. Desconectando socket.");
@@ -134,7 +135,7 @@ const registerSockets = (socket, io, receivedData)=> {
                     username: msg.users?.name,
                     major: msg.users?.major,
                     date: msg.created_at,
-                    image_url: msg.imageUrl,
+                    image_url: msg.image_url,
                     profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null,
                 })),
                 has_more: hasMore,

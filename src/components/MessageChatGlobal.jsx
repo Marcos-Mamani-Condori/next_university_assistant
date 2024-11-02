@@ -1,18 +1,20 @@
-'use client';
+// Debes asegurarte de que este archivo esté en una carpeta de componentes que soporte 'use client'
+// Si la carpeta del componente está marcada como 'use client', puedes omitir la declaración aquí
+
 import React, { useState } from "react";
 import chatbot_icon from '@/public/static/chatbot_icon.png';
 import user_icon from '@/public/static/user_icon.png';
 import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
 import Image from "next/image";
 
-function SCMessage({ text, sender, id, imageUrl }) { // Agregar imageUrl
+function SCMessage({ text, sender, id, imageUrl }) {
     const isUser = sender === 'user';
     const icon = isUser
         ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
         : <Image src={chatbot_icon} alt="Chatbot Icon" width={32} height={32} className="rounded-full" />;
 
     const { username, major, date } = sender;
-    
+
     // Estado para manejar la URL de la imagen
     const [currentImageUrl, setCurrentImageUrl] = useState(imageUrl);
 

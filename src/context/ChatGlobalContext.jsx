@@ -16,7 +16,7 @@ const ChatGlobalProvider = ({ children }) => {
     const socketRef = useRef(null); // Usamos useRef para evitar duplicados
     const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
-
+    const [filePath, setfilePath] = useState(null); // Estado para fileIndex
    
         // Inicializar el socket solo una vez
         if (!socketRef.current) {
@@ -77,10 +77,12 @@ const ChatGlobalProvider = ({ children }) => {
             return;
         }
 
-
+       
         socketRef.current.emit('send_pregunta', {
             message: input,
-            token: accessToken 
+            img: filePath,
+            token: accessToken
+             
         }, (response) => {
             setInput("");
             if (response && response.error) {
@@ -92,7 +94,7 @@ const ChatGlobalProvider = ({ children }) => {
                 console.log('Mensaje enviado exitosamente al chat global:', response);
             }
         });
-
+console.log("enviadooooo")
         setIsSending(false);
     };
 
@@ -131,6 +133,8 @@ const ChatGlobalProvider = ({ children }) => {
         loadMoreMessages,
         hasMoreMessages,
         offset,
+        filePath,
+        setfilePath,
     };
 
     return (
