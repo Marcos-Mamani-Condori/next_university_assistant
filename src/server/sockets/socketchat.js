@@ -61,7 +61,6 @@ const registerSockets = (socket, io)=> {
                         user_id: userId,
                         text: messageText,
                         image_url: filePath,
-                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
 
                         created_at: new Date(),
                     },
@@ -86,7 +85,6 @@ const registerSockets = (socket, io)=> {
                     major: user.major,
                     date: newMessage.created_at,
                     image_url: filePath,
-                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
                     
                 };
 

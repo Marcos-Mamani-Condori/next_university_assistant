@@ -7,7 +7,7 @@ import user_icon from '@/public/static/user_icon.png';
 import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
 import Image from "next/image";
 
-function SCMessage({ text, sender, id, imageUrl }) {
+function SCMessage({ text, sender, id, imageUrl, profileUrl }) {
     const isUser = sender === 'user';
     const icon = isUser
         ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
@@ -57,7 +57,7 @@ function SCMessage({ text, sender, id, imageUrl }) {
         <div className={`flex flex-col ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
             <div className="flex items-center mb-2">
                 <Image 
-                    src={currentImageUrl} // Mostrar la imagen del usuario o la por defecto
+                    src={profileUrl} // Mostrar la imagen del usuario o la por defecto
                     alt={`${username}'s profile`}
                     width={64}
                     height={64}
@@ -71,6 +71,14 @@ function SCMessage({ text, sender, id, imageUrl }) {
                 </div>
             </div>
             <p className="text-sm">{text}</p>
+            <Image 
+                    src={currentImageUrl} // Mostrar la imagen del usuario o la por defecto
+                    alt={`${username}'s profile`}
+                    width={64}
+                    height={64}
+                    className="rounded-full"
+                    onError={handleImageError} // Llamar a handleImageError si hay un error
+                />
             <LikeButton messageId={id} username={username} />
         </div>
     );
