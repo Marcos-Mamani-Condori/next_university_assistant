@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React from "react";
 import { useSession } from 'next-auth/react';
 
 const ImageUploader = ({ setFilePath, file, setFile }) => {
@@ -69,12 +69,7 @@ const ImageUploader = ({ setFilePath, file, setFile }) => {
             >
                 Seleccionar imagen
             </button>
-            {file && (
-                <div className="flex items-center ml-2">
-                    <img src={URL.createObjectURL(file)} alt="Previsualización" className="w-16 h-16 object-cover rounded" />
-                    <span className="ml-2">{file.name}</span>
-                </div>
-            )}
+            {/* Ya no necesitas mostrar la previsualización aquí */}
         </div>
     );
 };

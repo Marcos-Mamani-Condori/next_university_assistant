@@ -14,7 +14,7 @@ function InputBox({ className }) {
     const { inputRef } = useInputFocus();
 
     const [filePath, setFilePath] = useState('');
-    const [file, setFile] = useState(null); // Estado para el archivo
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         if (inputRef.current && !isSending) {
@@ -43,7 +43,7 @@ function InputBox({ className }) {
             handleSend(input, filePath);
             console.log("Mensaje enviado:", { text: input, img: filePath });
             setInput('');
-            setFilePath(''); // Limpiar la ruta del archivo
+            setFilePath('');
             setFile(null); // Limpiar el archivo
         } else {
             console.log("El input está vacío, no se enviará.");
@@ -51,27 +51,35 @@ function InputBox({ className }) {
     };
 
     return (
-        <form className={`${className} flex items-center justify-center`} onSubmit={handleSubmit}>
-            <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoComplete="off"
-                placeholder={isSending ? "Esperando respuesta..." : "Escribe un mensaje..."}
-                disabled={isSending}
-                rows={1}
-                className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
-            />
-            <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} /> {/* Pasa el estado del archivo */}
-            <button
-                type="submit"
-                disabled={isSending}
-                className={`text-white px-4 ml-2 py-2 rounded ${isSending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-            >
-                Enviar
-            </button>
-        </form>
+        <div>
+            {file && (
+                <div className="flex items-center mb-2">
+                    <img src={URL.createObjectURL(file)} alt="Previsualización" className="w-16 h-16 object-cover rounded mr-2" />
+                    <span className="text-gray-700">{file.name}</span>
+                </div>
+            )}
+            <form className={`${className} flex items-center justify-center`} onSubmit={handleSubmit}>
+                <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    autoComplete="off"
+                    placeholder={isSending ? "Esperando respuesta..." : "Escribe un mensaje..."}
+                    disabled={isSending}
+                    rows={1}
+                    className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
+                />
+                <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} />
+                <button
+                    type="submit"
+                    disabled={isSending}
+                    className={`text-white px-4 ml-2 py-2 rounded ${isSending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+                >
+                    Enviar
+                </button>
+            </form>
+        </div>
     );
 }
 
