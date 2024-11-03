@@ -1,34 +1,26 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import chatbot_icon from '@/public/static/chatbot_icon.png';
-import user_icon from '@/public/static/user_icon.png';
-import LikeButton from '@/components/LikeButton'; // Importar el nuevo componente LikeButton
+import LikeButton from '@/components/LikeButton';
 import Image from "next/image";
 import { useSession } from 'next-auth/react';
 
 function SCMessage({ text, sender, id, image_url, profileUrl }) {
     const { data: session } = useSession();
     const isUser = sender === 'user';
-    const icon = isUser
-        ? <Image src={user_icon} alt="User Icon" width={32} height={32} className="rounded-full" />
-        : <Image src={chatbot_icon} alt="Chatbot Icon" width={32} height={32} className="rounded-full" />;
-    
+
     const { username, major, date } = sender;
-    const [profileImage, setProfileImage] = useState('');
+    const [profileImage, setProfileImage] = useState('/uploads/default.png'); // Inicializar con imagen por defecto
 
     useEffect(() => {
-        // Suponiendo que el ID del usuario se obtiene del session
-        const userId = session?.user?.id; // Asegúrate de que el ID está en la sesión
-        console.log("el user es :  "+ image_url);
-        console.log("el user es sjaklsjd :  "+ id);
-
-
-        if (profileUrl) {
+        console.log("Profile URL: ", profileUrl);
+        
+        // Verificar si profileUrl es válido
+        if (profileUrl && profileUrl.trim() !== 'no') {
             setProfileImage(profileUrl);
         } else {
-            setProfileImage('/uploads/default.png'); // Si no hay ID, usar imagen por defecto
+            setProfileImage('/uploads/default.png'); // Usar imagen por defecto
         }
-    }, [session]);
+    }, [profileUrl]); // Solo dependemos de profileUrl
 
     // Para obtener la hora en que se envió el mensaje
     const obtenerTiempoTranscurrido = () => {
@@ -64,7 +56,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
         <div className={`flex flex-col ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
             <div className="flex items-center mb-2">
                 <Image 
-                    src={profileImage || '/uploads/default.png'} // Mostrar imagen de perfil o por defecto
+                    src={profileImage} // Forzar recarga
                     alt={`${username}'s profile`}
                     width={64}
                     height={64}
@@ -77,7 +69,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
                 </div>
             </div>
             <p className="text-sm">{text}</p>
-            {image_url && (
+            {image_url && image_url !== '' && (
                 <Image 
                     src={image_url} // Mostrar image_url si existe
                     alt="Contenido de la imagen"
@@ -85,7 +77,6 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
                     height={200}
                     className=""
                 />
-             
             )}
             <LikeButton messageId={id} username={username} />
         </div>
