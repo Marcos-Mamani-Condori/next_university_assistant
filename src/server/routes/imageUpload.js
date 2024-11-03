@@ -37,26 +37,37 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     let outputFileName;
     let outputFilePath;
 
-    // Crear la carpeta del usuario si no existe
-    const userFolderPath = path.join(
-      __dirname,
-      "../../../public/uploads",
-      userId.toString()
-    );
-    if (!fs.existsSync(userFolderPath)) {
-      fs.mkdirSync(userFolderPath, { recursive: true });
-      console.log(`Carpeta creada: ${userFolderPath}`);
+    // Verificar el valor de inputSource
+    const inputSource = req.body.inputSource;
+    console.log("Valor de inputSource:", inputSource);
+
+    if (inputSource === "inputChat") {
+      // Crear la carpeta del usuario si no existe
+      const userFolderPath = path.join(
+        __dirname,
+        "../../../public/uploads",
+        userId.toString()
+      );
+      if (!fs.existsSync(userFolderPath)) {
+        fs.mkdirSync(userFolderPath, { recursive: true });
+        console.log(`Carpeta creada: ${userFolderPath}`);
+      }
+
+      // Generar un nombre de archivo único en la carpeta del usuario
+      let fileIndex = 1;
+      do {
+        outputFileName = `${fileIndex}.webp`;
+        outputFilePath = path.join(userFolderPath, outputFileName);
+        fileIndex++;
+      } while (fs.existsSync(outputFilePath));
+
+      console.log(`Ruta final para guardar la imagen en inputChat: ${outputFilePath}`);
+    } else {
+      // Para el caso general, sobrescribir si existe
+      outputFileName = `${userId}.webp`; // Usar el ID para el archivo
+      outputFilePath = path.join(__dirname, "../../../public/uploads", outputFileName);
+      console.log(`Ruta final para guardar la imagen general: ${outputFilePath}`);
     }
-
-    // Generar un nombre de archivo único en la carpeta del usuario
-    let fileIndex = 1;
-    do {
-      outputFileName = `${fileIndex}.webp`;
-      outputFilePath = path.join(userFolderPath, outputFileName);
-      fileIndex++;
-    } while (fs.existsSync(outputFilePath));
-
-    console.log(`Ruta final para guardar la imagen: ${outputFilePath}`);
 
     // Procesar la imagen con Sharp
     await sharp(req.file.buffer)
@@ -66,13 +77,17 @@ router.post("/upload", upload.single("image"), async (req, res) => {
 
     console.log(`Imagen comprimida y guardada con éxito: ${outputFilePath}`);
 
-    const finalFileIndex = parseInt(outputFileName.replace(".webp", ""));
+    const finalFileIndex = inputSource === "inputChat" 
+      ? parseInt(outputFileName.replace(".webp", "")) 
+      : userId; // Usar userId como fileIndex en caso de no ser inputChat
 
     // Enviar la respuesta al frontend incluyendo el fileIndex
     res.status(200).json({
       message: "Imagen convertida a WebP correctamente",
       fileIndex: finalFileIndex, // Enviando el fileIndex al frontend
-      filePath: `/uploads/${userId}/${outputFileName}`,
+      filePath: inputSource === "inputChat" 
+        ? `/uploads/${userId}/${outputFileName}` 
+        : `/uploads/${outputFileName}`,
     });
   } catch (error) {
     console.error("Error al procesar la imagen:", error);

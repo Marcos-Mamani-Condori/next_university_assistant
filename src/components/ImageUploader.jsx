@@ -7,7 +7,7 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
 
     const handleFileChange = async (e) => {
         const selectedFile = e.target.files[0];
-        if(inputSource=="inputchat")
+        if(inputSource=="inputChat" || inputSource=="inputBot")
         {setFile(selectedFile);}
         if (selectedFile) {
             console.log("Archivo seleccionado:", selectedFile);
@@ -29,8 +29,8 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
 
         const formData = new FormData();
         formData.append('image', selectedFile);
-        formData.append('source', inputSource); // Envía inputSource a la API
-        console.log('Preparando para subir el archivo:', selectedFile);
+        formData.append('inputSource', inputSource); // Envía inputSource a la API
+        console.log('Preparando para subir el archivo source :', inputSource);
 
         try {
             const response = await fetch('/api/upload', {
