@@ -62,7 +62,6 @@ function ChatBox({ className }) {
             setLoading(false);
         }, 120); // Pequeño retraso para permitir que el DOM se actualice
     };
-
     return (
         <div
             ref={containerRef}
@@ -78,7 +77,7 @@ function ChatBox({ className }) {
             {messages.map((msg, index) => {
                 return pathname === "/bot" 
                     ? <MessageBot key={index} text={msg.text} sender={msg.sender}  imageUrl={msg.image_url} profileUrl={msg.profile_url} />
-                    : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} imageUrl={msg.image_url} profileUrl={msg.profile_url}  />;
+                    : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} image_url={msg.image_url} profileUrl={msg.profile_url}  />;
             })}
             <div ref={messagesEndRef} />
         </div>

@@ -34,7 +34,6 @@ const registerSockets = (socket, io)=> {
                 })),
             });
 
-            console.log("Emitido evento 'initial_preguntas' con los mensajes iniciales.");
         } catch (error) {
             console.error('Error al recuperar mensajes iniciales:', error);
         }
