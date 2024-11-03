@@ -5,11 +5,12 @@ import BotContext from "@/context/BotContext";
 import { useInputFocus } from "@/context/InputFocusContext";
 import ChatGlobalContext from "@/context/ChatGlobalContext";
 import { usePathname } from 'next/navigation'; 
-import ImageUploader from './ImageUploader';
+import ImageUploader from '@/components/ImageUploader';
 
 function InputBox({ className }) {
     const pathname = usePathname();
     const contexts = pathname === "/bot" ? BotContext : ChatGlobalContext;
+    const inputSource = pathname === "/bot" ? "inputBot" : "inputChat"; // Determina el source
     const { setInput, input, isSending, handleSend, setfilePath } = useContext(contexts);
     const { inputRef } = useInputFocus();
 
@@ -70,7 +71,7 @@ function InputBox({ className }) {
                     rows={1}
                     className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
                 />
-                <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} />
+                <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} /> {/* Pasa inputSource aquí */}
                 <button
                     type="submit"
                     disabled={isSending}

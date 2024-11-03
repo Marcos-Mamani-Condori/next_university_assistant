@@ -2,15 +2,16 @@
 import React from "react";
 import { useSession } from 'next-auth/react';
 
-const ImageUploader = ({ setFilePath, file, setFile }) => {
+const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => { 
     const { data: session } = useSession();
 
     const handleFileChange = async (e) => {
         const selectedFile = e.target.files[0];
-        setFile(selectedFile);
+        if(inputSource=="inputchat")
+        {setFile(selectedFile);}
         if (selectedFile) {
             console.log("Archivo seleccionado:", selectedFile);
-            const uploadedFilePath = await handleUpload(selectedFile);
+            const uploadedFilePath = await handleUpload(selectedFile); 
             if (uploadedFilePath) {
                 console.log("Ruta del archivo devuelta:", uploadedFilePath);
                 setFilePath(uploadedFilePath);
@@ -20,7 +21,7 @@ const ImageUploader = ({ setFilePath, file, setFile }) => {
         }
     };
 
-    const handleUpload = async (selectedFile) => {
+    const handleUpload = async (selectedFile) => { // Agrega inputSource como parámetro
         if (!selectedFile) {
             console.error('No se ha seleccionado ningún archivo.');
             return null;
@@ -28,6 +29,7 @@ const ImageUploader = ({ setFilePath, file, setFile }) => {
 
         const formData = new FormData();
         formData.append('image', selectedFile);
+        formData.append('source', inputSource); // Envía inputSource a la API
         console.log('Preparando para subir el archivo:', selectedFile);
 
         try {
