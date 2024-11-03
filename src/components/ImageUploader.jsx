@@ -1,7 +1,7 @@
 'use client';
 import React from "react";
 import { useSession } from 'next-auth/react';
-
+import imageicon from '@/public/static/more.png';
 const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => { 
     const { data: session } = useSession();
 
@@ -20,7 +20,6 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
             }
         }
     };
-
     const handleUpload = async (selectedFile) => { // Agrega inputSource como parámetro
         if (!selectedFile) {
             console.error('No se ha seleccionado ningún archivo.');
@@ -64,13 +63,13 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
                 className="hidden"
                 id="file-upload"
             />
-            <button
-                type="button"
-                className="text-white px-4 py-2 rounded bg-blue-500 hover:bg-blue-600"
+             <img 
+                src={imageicon.src} 
+                alt="Seleccionar imagen" 
                 onClick={() => document.getElementById('file-upload').click()}
-            >
-                Seleccionar imagen
-            </button>
+                className="cursor-pointer"
+                style={{ width: '50px', height: '50px' }} // Ajusta el tamaño según sea necesario
+            />
             {/* Ya no necesitas mostrar la previsualización aquí */}
         </div>
     );
