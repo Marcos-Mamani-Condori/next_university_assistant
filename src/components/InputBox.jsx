@@ -6,8 +6,11 @@ import { useInputFocus } from "@/context/InputFocusContext";
 import ChatGlobalContext from "@/context/ChatGlobalContext";
 import { usePathname } from 'next/navigation'; 
 import ImageUploader from '@/components/ImageUploader';
+import { useSession } from 'next-auth/react';
 
 function InputBox({ className }) {
+    const { data: session } = useSession();
+
     const pathname = usePathname();
     const contexts = pathname === "/bot" ? BotContext : ChatGlobalContext;
     const inputSource = pathname === "/bot" ? "inputBot" : "inputChat"; // Determina el source
@@ -72,13 +75,17 @@ function InputBox({ className }) {
                     className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
                 />
                 <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} /> {/* Pasa inputSource aquí */}
-                <button
+                {session && (
+                    <div>
+                        <button
                     type="submit"
                     disabled={isSending}
                     className={`text-white px-4 ml-2 py-2 rounded ${isSending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
                 >
                     Enviar
                 </button>
+                    </div>
+                )}
             </form>
         </div>
     );
