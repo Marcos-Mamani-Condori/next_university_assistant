@@ -46,6 +46,7 @@ export async function PUT(request) {
         const updatedData = {
             name: data.name,
             email: data.newEmail ? data.newEmail : user.email, // Actualizar el correo si se proporciona
+            profile_picture_url: data.profile_picture_url // Añadir filePath aquí
         };
 
         // Si se proporciona una nueva contraseña, encriptarla y agregarla a la actualización
@@ -59,8 +60,8 @@ export async function PUT(request) {
             where: { email: user.email }, // Buscar por el correo electrónico antiguo
             data: updatedData,
         });
-
         const { password: _, ...userWithoutPassword } = updatedUser; // Excluye la contraseña del objeto de respuesta
+
         return NextResponse.json(userWithoutPassword);
     } catch (error) {
         return NextResponse.json({

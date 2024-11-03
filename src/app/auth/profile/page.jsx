@@ -2,8 +2,8 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-import UploadPage from '@/app/auth/profile/image/page';
 import Image from "next/image";
+import ImageUploader from '@/components/ImageUploader';
 
 const inputBaseStyles = () => {
   return "p-2 mb-4 rounded bg-gray-700 text-slate-100";
@@ -32,7 +32,7 @@ function ProfilePage({ onClose }) {
       email: session?.user?.email || '',
     },
   });
-
+  
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -40,6 +40,7 @@ function ProfilePage({ onClose }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [filePath, setFilePath] = useState(null); // Estado para la ruta del archivo subido
 
   const userId = session?.user?.id;
   const userImagePath = `/uploads/${userId}.webp`;
@@ -64,19 +65,26 @@ function ProfilePage({ onClose }) {
   }, [userId, showUpload]); // Actualiza cuando showUpload cambia
 
   const onSubmit = handleSubmit(async (data) => {
+    const body = {
+      name: isEditingName ? data.name : session.user.name,
+      oldEmail: session.user.email,
+      newEmail: isEditingEmail ? data.email : session.user.email,
+      password: isEditingPassword ? data.password : null,
+    };
+  
+    // Solo añadir profile_picture_url si filePath no es null
+    if (filePath) {
+      body.profile_picture_url = filePath;
+    }
+  
     const res = await fetch("/api/auth/put", {
       method: "PUT",
-      body: JSON.stringify({
-        name: isEditingName ? data.name : session.user.name,
-        oldEmail: session.user.email,
-        newEmail: isEditingEmail ? data.email : session.user.email,
-        password: isEditingPassword ? data.password : null,
-      }),
+      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
     });
-
+  
     if (res.ok) {
       alert("Perfil actualizado con éxito");
       onClose();
@@ -86,7 +94,18 @@ function ProfilePage({ onClose }) {
       setError(errorData.message);
     }
   });
-
+useEffect(() => {
+  if (filePath) {
+    const data = {
+      name: isEditingName ? getValues("name") : session.user.name,
+      oldEmail: session.user.email,
+      newEmail: isEditingEmail ? getValues("email") : session.user.email,
+      password: isEditingPassword ? getValues("password") : null,
+      profile_picture_url: filePath, // Usar el filePath
+    };
+    onSubmit(data); // Llama a onSubmit con los datos
+  }
+}, [filePath]);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
@@ -126,8 +145,7 @@ function ProfilePage({ onClose }) {
           {showUpload ? "Cancelar Cambiar Imagen" : "Cambiar Imagen de Perfil"}
         </button>
 
-        {showUpload && <UploadPage />}
-
+        {showUpload && <ImageUploader setFilePath={setFilePath} inputSource="inputProfile" />}
         <form onSubmit={onSubmit} className="flex flex-col">
           <label htmlFor="name" className={labelBaseStyles()}>
             Nombre de usuario:
@@ -204,6 +222,7 @@ function ProfilePage({ onClose }) {
             type="button"
             onClick={() => setIsEditingPassword(!isEditingPassword)}
             className="bg-blue-500 text-white p-1 rounded-lg mt-4"
+            disabled={showUpload} // Desactiva el botón si showUpload es true
           >
             {isEditingPassword ? "Cancelar Cambiar Contraseña" : "Cambiar Contraseña"}
           </button>
@@ -253,7 +272,7 @@ function ProfilePage({ onClose }) {
           )}
 
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Actualizar Perfil
+          Actualizar Perfil
           </button>
         </form>
       </div>
