@@ -11,6 +11,7 @@ const registerSockets = (socket, io)=> {
                         select: {
                             name: true,
                             major: true,
+                            profile_picture_url:  true,
                         },
                     },
                 },
@@ -30,7 +31,7 @@ const registerSockets = (socket, io)=> {
                     major: msg.users?.major,
                     date: msg.created_at,
                     image_url: msg.image_url,
-                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null, // Cambiado a null si no hay user_id
+                    profileUrl:  msg.users?.profile_picture_url,
                 })),
             });
 
@@ -72,6 +73,7 @@ const registerSockets = (socket, io)=> {
                     select: {
                         name: true,
                         major: true,
+                        
                     },
                 });
 
@@ -110,6 +112,7 @@ const registerSockets = (socket, io)=> {
                         select: {
                             name: true,
                             major: true,
+                            profile_picture_url: true,
                         },
                     },
                 },
@@ -133,7 +136,7 @@ const registerSockets = (socket, io)=> {
                     major: msg.users?.major,
                     date: msg.created_at,
                     image_url: msg.image_url,
-                    profileUrl: msg.user_id ? `/uploads/${msg.user_id}.webp` : null,
+                    profileUrl: msg.users?.profile_picture_url,
                 })),
                 has_more: hasMore,
             });

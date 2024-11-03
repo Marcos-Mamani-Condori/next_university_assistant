@@ -7,9 +7,6 @@ export async function PUT(request) {
         // Obtiene los datos del usuario desde la petición
         const data = await request.json();
         
-        // Log de los datos recibidos
-        console.log("Datos recibidos:", data);
-
         // Asegúrate de que el nombre y el correo antiguo se envían en la solicitud
         if (!data.name || !data.oldEmail) {
             return NextResponse.json({
@@ -49,7 +46,7 @@ export async function PUT(request) {
         const updatedData = {
             name: data.name,
             email: data.newEmail ? data.newEmail : user.email, // Actualizar el correo si se proporciona
-            profile_picture_url: data.profile_picture_url // Agregar la ruta de la imagen
+            profile_picture_url: data.profile_picture_url // Añadir filePath aquí
         };
 
         // Si se proporciona una nueva contraseña, encriptarla y agregarla a la actualización
@@ -63,8 +60,8 @@ export async function PUT(request) {
             where: { email: user.email }, // Buscar por el correo electrónico antiguo
             data: updatedData,
         });
-        console.log("Usuario actualizado:", updatedUser);
         const { password: _, ...userWithoutPassword } = updatedUser; // Excluye la contraseña del objeto de respuesta
+
         return NextResponse.json(userWithoutPassword);
     } catch (error) {
         return NextResponse.json({

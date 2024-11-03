@@ -74,18 +74,20 @@ function InputBox({ className }) {
                     rows={1}
                     className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
                 />
-                <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} /> {/* Pasa inputSource aquí */}
-                {session && (
-                    <div>
-                        <button
-                    type="submit"
-                    disabled={isSending}
-                    className={`text-white px-4 ml-2 py-2 rounded ${isSending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-                >
-                    Enviar
-                </button>
-                    </div>
+               
+               {session && session.user.role === 'premium' && ( // Verifica el rol de usuario
+                    <>
+                        <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} />
+                        
+                    </>
                 )}
+                            <button
+                                type="submit"
+                                disabled={isSending}
+                                className={`text-white px-4 ml-2 py-2 rounded ${isSending ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+                            >
+                                Enviar
+                            </button>
             </form>
         </div>
     );

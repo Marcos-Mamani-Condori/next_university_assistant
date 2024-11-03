@@ -6,7 +6,7 @@ import LikeButton from '@/components/LikeButton'; // Importar el nuevo component
 import Image from "next/image";
 import { useSession } from 'next-auth/react';
 
-function SCMessage({ text, sender, id, image_url }) {
+function SCMessage({ text, sender, id, image_url, profileUrl }) {
     const { data: session } = useSession();
     const isUser = sender === 'user';
     const icon = isUser
@@ -23,9 +23,8 @@ function SCMessage({ text, sender, id, image_url }) {
         console.log("el user es sjaklsjd :  "+ id);
 
 
-        if (userId) {
-            const profileImagePath = `/uploads/${id}.webp`;
-            setProfileImage(profileImagePath);
+        if (profileUrl) {
+            setProfileImage(profileUrl);
         } else {
             setProfileImage('/uploads/default.png'); // Si no hay ID, usar imagen por defecto
         }
@@ -82,10 +81,11 @@ function SCMessage({ text, sender, id, image_url }) {
                 <Image 
                     src={image_url} // Mostrar image_url si existe
                     alt="Contenido de la imagen"
-                    width={120}
-                    height={120}
-                    className="rounded-full"
+                    width={200}
+                    height={200}
+                    className=""
                 />
+             
             )}
             <LikeButton messageId={id} username={username} />
         </div>

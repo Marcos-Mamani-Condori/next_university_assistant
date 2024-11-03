@@ -32,7 +32,7 @@ function ProfilePage({ onClose }) {
       email: session?.user?.email || '',
     },
   });
-
+  
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -65,20 +65,26 @@ function ProfilePage({ onClose }) {
   }, [userId, showUpload]); // Actualiza cuando showUpload cambia
 
   const onSubmit = handleSubmit(async (data) => {
+    const body = {
+      name: isEditingName ? data.name : session.user.name,
+      oldEmail: session.user.email,
+      newEmail: isEditingEmail ? data.email : session.user.email,
+      password: isEditingPassword ? data.password : null,
+    };
+  
+    // Solo añadir profile_picture_url si filePath no es null
+    if (filePath) {
+      body.profile_picture_url = filePath;
+    }
+  
     const res = await fetch("/api/auth/put", {
       method: "PUT",
-      body: JSON.stringify({
-        name: isEditingName ? data.name : session.user.name,
-        oldEmail: session.user.email,
-        newEmail: isEditingEmail ? data.email : session.user.email,
-        password: isEditingPassword ? data.password : null,
-        filePath: filePath // Agrega la ruta del archivo aquí
-      }),
+      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
     });
-
+  
     if (res.ok) {
       alert("Perfil actualizado con éxito");
       onClose();
@@ -88,7 +94,18 @@ function ProfilePage({ onClose }) {
       setError(errorData.message);
     }
   });
-
+useEffect(() => {
+  if (filePath) {
+    const data = {
+      name: isEditingName ? getValues("name") : session.user.name,
+      oldEmail: session.user.email,
+      newEmail: isEditingEmail ? getValues("email") : session.user.email,
+      password: isEditingPassword ? getValues("password") : null,
+      profile_picture_url: filePath, // Usar el filePath
+    };
+    onSubmit(data); // Llama a onSubmit con los datos
+  }
+}, [filePath]);
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
@@ -205,6 +222,7 @@ function ProfilePage({ onClose }) {
             type="button"
             onClick={() => setIsEditingPassword(!isEditingPassword)}
             className="bg-blue-500 text-white p-1 rounded-lg mt-4"
+            disabled={showUpload} // Desactiva el botón si showUpload es true
           >
             {isEditingPassword ? "Cancelar Cambiar Contraseña" : "Cambiar Contraseña"}
           </button>
@@ -254,7 +272,7 @@ function ProfilePage({ onClose }) {
           )}
 
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-            Guardar Cambios
+          Actualizar Perfil
           </button>
         </form>
       </div>

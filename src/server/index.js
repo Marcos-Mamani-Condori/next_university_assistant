@@ -6,7 +6,6 @@ const registerSockets = require('./sockets/socketchat');
 const registerLikes = require('./sockets/socketlike');
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
-const bodyParser = require('body-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -15,26 +14,16 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
     const server = express();
 
-    // Middleware para procesar el cuerpo de las solicitudes
-    server.use(express.json());
-    server.use(bodyParser.text());
-
-    // Usar las rutas
     server.use('/api', imageUploadRouter);
-    server.use('/api/connected-users', connectedUsersRouter);
+    server.use('/api/connected-users', connectedUsersRouter); 
 
-    // Crear el servidor HTTP
     const httpServer = http.createServer(server);
     const io = new Server(httpServer);
 
-    // Manejar la conexión de usuarios
+    // Manejar la conexión de usuarios y emitir el conteo
     io.on('connection', (socket) => {
-        console.log("Cliente conectado:", socket.id);
-
-        // Emitir el fileIndex actual al nuevo cliente conectado
-
-        handleusers(socket, io);
-        registerSockets(socket, io); // Pasar el valor actual de receivedData
+        handleusers(socket, io); // Manejar eventos de conexión de usuarios
+        registerSockets(socket, io);
         registerLikes(socket, io);
     });
 
