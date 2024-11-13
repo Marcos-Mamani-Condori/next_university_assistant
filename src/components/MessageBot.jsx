@@ -37,7 +37,7 @@ function MessageBot({ text, sender }) {
           setServerMessage(value);
           scrollToBottom();
         }
-      }, 50); // Ajusta este tiempo según sea necesario
+      }, 50); 
       return () => clearInterval(timer);
     }
   }, [text, isUser]);
@@ -50,7 +50,7 @@ function MessageBot({ text, sender }) {
           {isUser ? text : serverMessage}
         </p>
       </div>
-      <div ref={messageEndRef} /> {/* Elemento de referencia para el scroll */}
+      <div ref={messageEndRef} /> 
     </div>
   );
 }

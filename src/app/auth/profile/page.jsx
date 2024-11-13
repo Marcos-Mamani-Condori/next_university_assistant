@@ -40,7 +40,7 @@ function ProfilePage({ onClose }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
-  const [filePath, setFilePath] = useState(null); // Estado para la ruta del archivo subido
+  const [filePath, setFilePath] = useState(null); 
 
   const userId = session?.user?.id;
   const userImagePath = `/uploads/${userId}.webp`;
@@ -62,7 +62,7 @@ function ProfilePage({ onClose }) {
     };
 
     checkImage();
-  }, [userId, showUpload]); // Actualiza cuando showUpload cambia
+  }, [userId, showUpload]); 
 
   const onSubmit = handleSubmit(async (data) => {
     const body = {
@@ -72,7 +72,6 @@ function ProfilePage({ onClose }) {
       password: isEditingPassword ? data.password : null,
     };
   
-    // Solo añadir profile_picture_url si filePath no es null
     if (filePath) {
       body.profile_picture_url = filePath;
     }
@@ -101,9 +100,9 @@ useEffect(() => {
       oldEmail: session.user.email,
       newEmail: isEditingEmail ? getValues("email") : session.user.email,
       password: isEditingPassword ? getValues("password") : null,
-      profile_picture_url: filePath, // Usar el filePath
+      profile_picture_url: filePath, 
     };
-    onSubmit(data); // Llama a onSubmit con los datos
+    onSubmit(data); 
   }
 }, [filePath]);
   return (
@@ -126,7 +125,6 @@ useEffect(() => {
         )}
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Personalizar Perfil</h1>
         
-        {/* Mostrar imagen de perfil */}
         <div className="flex justify-center mb-4">
           <Image
             src={profileImage}
@@ -222,7 +220,7 @@ useEffect(() => {
             type="button"
             onClick={() => setIsEditingPassword(!isEditingPassword)}
             className="bg-blue-500 text-white p-1 rounded-lg mt-4"
-            disabled={showUpload} // Desactiva el botón si showUpload es true
+            disabled={showUpload} 
           >
             {isEditingPassword ? "Cancelar Cambiar Contraseña" : "Cambiar Contraseña"}
           </button>

@@ -1,8 +1,8 @@
 'use client'; 
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link'; // Usamos el componente Link de Next.js para la navegación
-import { usePathname } from 'next/navigation'; // Reemplaza useLocation
+import Link from 'next/link'; 
+import { usePathname } from 'next/navigation'; 
 import { useDevice } from '@/context/DeviceContext';
 import { useInputFocus } from '@/context/InputFocusContext';
 
@@ -10,16 +10,14 @@ const NavBar = ({ className }) => {
     const { deviceType } = useDevice();
     const { isInputFocused } = useInputFocus();
 
-    // Obtener la ruta actual usando el hook de Next.js
     const pathname = usePathname();
 
-    const [activeLink, setActiveLink] = useState(pathname); // Inicializa con la ruta actual
+    const [activeLink, setActiveLink] = useState(pathname); 
 
     const handleLinkClick = (link) => {
-        setActiveLink(link); // Cambia el enlace activo al hacer clic
+        setActiveLink(link); 
     };
 
-    // Actualiza el enlace activo cuando cambia la ruta
     useEffect(() => {
         setActiveLink(pathname);
     }, [pathname]);

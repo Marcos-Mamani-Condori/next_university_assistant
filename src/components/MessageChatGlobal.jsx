@@ -67,15 +67,26 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
                 </div>
             </div>
             <p className="text-sm">{text}</p>
+
             {image_url && image_url !== '' && (
-                <Image 
-                    src={image_url} 
-                    alt="Contenido de la imagen"
-                    width={200}
-                    height={200}
-                    className=""
-                />
+                <>
+                    {image_url.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                        <Image 
+                            src={image_url} 
+                            alt="Contenido de la imagen"
+                            width={200}
+                            height={200}
+                            className=""
+                        />
+                    ) : image_url.match(/\.(mp3|wav|ogg)$/i) ? (
+                        <audio controls>
+                            <source src={image_url} type="audio/mpeg" />
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                    ) : null}
+                </>
             )}
+
             <LikeButton messageId={id} username={username} />
         </div>
     );

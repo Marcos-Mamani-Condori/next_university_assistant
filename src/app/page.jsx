@@ -26,7 +26,6 @@ const Home = () => {
     
     return (
         //<div className={`${isRegisterModalOpen ? "blur-sm" : ""}`}></div>//
-        // Con (mx-2 md:mx-10 lg:mx-[10rem]) hacemos la responsividad en modo móvil, escritorio y tablet
         <div className="overflow-y-auto h-lvh ">
             <Announcements isModalOpen={isModalOpen} setModalOpen={setIsModalOpen} />
             <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">

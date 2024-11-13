@@ -7,21 +7,17 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-// Configurar multer para recibir el archivo como buffer
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Ruta para subir y comprimir imágenes
 router.post("/upload", upload.single("image"), async (req, res) => {
   console.log("Iniciando procesamiento de imagen...");
 
-  // Verificar si se subió un archivo
   if (!req.file) {
     console.log("Error: No se subió ningún archivo");
     return res.status(400).json({ error: "No se subió ningún archivo" });
   }
 
-  // Verificar si se proporcionó el token de autenticación
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     console.log("Error: No se proporcionó token de autenticación");
@@ -37,12 +33,10 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     let outputFileName;
     let outputFilePath;
 
-    // Verificar el valor de inputSource
     const inputSource = req.body.inputSource;
     console.log("Valor de inputSource:", inputSource);
 
     if (inputSource === "inputChat") {
-      // Crear la carpeta del usuario si no existe
       const userFolderPath = path.join(
         __dirname,
         "../../../public/uploads",
@@ -53,7 +47,6 @@ router.post("/upload", upload.single("image"), async (req, res) => {
         console.log(`Carpeta creada: ${userFolderPath}`);
       }
 
-      // Generar un nombre de archivo único en la carpeta del usuario
       let fileIndex = 1;
       do {
         outputFileName = `${fileIndex}.webp`;
@@ -63,13 +56,11 @@ router.post("/upload", upload.single("image"), async (req, res) => {
 
       console.log(`Ruta final para guardar la imagen en inputChat: ${outputFilePath}`);
     } else {
-      // Para el caso general, sobrescribir si existe
-      outputFileName = `${userId}.webp`; // Usar el ID para el archivo
+      outputFileName = `${userId}.webp`; 
       outputFilePath = path.join(__dirname, "../../../public/uploads", outputFileName);
       console.log(`Ruta final para guardar la imagen general: ${outputFilePath}`);
     }
 
-    // Procesar la imagen con Sharp
     await sharp(req.file.buffer)
       .resize(500, 500, { fit: "inside", kernel: sharp.kernel.lanczos3 })
       .webp({ quality: 100 })
@@ -79,12 +70,11 @@ router.post("/upload", upload.single("image"), async (req, res) => {
 
     const finalFileIndex = inputSource === "inputChat" 
       ? parseInt(outputFileName.replace(".webp", "")) 
-      : userId; // Usar userId como fileIndex en caso de no ser inputChat
+      : userId; 
 
-    // Enviar la respuesta al frontend incluyendo el fileIndex
     res.status(200).json({
       message: "Imagen convertida a WebP correctamente",
-      fileIndex: finalFileIndex, // Enviando el fileIndex al frontend
+      fileIndex: finalFileIndex, 
       filePath: inputSource === "inputChat" 
         ? `/uploads/${userId}/${outputFileName}` 
         : `/uploads/${outputFileName}`,

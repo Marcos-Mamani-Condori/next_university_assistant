@@ -2,6 +2,7 @@
 import React from "react";
 import { useSession } from 'next-auth/react';
 import imageicon from '@/public/static/more.png';
+import Image from "next/image";
 const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => { 
     const { data: session } = useSession();
 
@@ -20,7 +21,7 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
             }
         }
     };
-    const handleUpload = async (selectedFile) => { // Agrega inputSource como parámetro
+    const handleUpload = async (selectedFile) => { 
         if (!selectedFile) {
             console.error('No se ha seleccionado ningún archivo.');
             return null;
@@ -28,7 +29,7 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
 
         const formData = new FormData();
         formData.append('image', selectedFile);
-        formData.append('inputSource', inputSource); // Envía inputSource a la API
+        formData.append('inputSource', inputSource); 
         console.log('Preparando para subir el archivo source :', inputSource);
 
         try {
@@ -63,14 +64,14 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
                 className="hidden"
                 id="file-upload"
             />
-             <img 
-                src={imageicon.src} 
+            <Image
+                src={imageicon} 
                 alt="Seleccionar imagen" 
                 onClick={() => document.getElementById('file-upload').click()}
                 className="cursor-pointer"
-                style={{ width: '50px', height: '50px' }} // Ajusta el tamaño según sea necesario
+                width={50} 
+                height={50} 
             />
-            {/* Ya no necesitas mostrar la previsualización aquí */}
         </div>
     );
 };

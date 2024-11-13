@@ -10,7 +10,7 @@ function LikeButton({ messageId, username }) {
   const [hasLiked, setHasLiked] = useState(false);
   const { data: session } = useSession();
   const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
-  const socket = getSocket(); // Obtener la instancia del socket
+  const socket = getSocket(); 
 
   useEffect(() => {
     if (!socket) {

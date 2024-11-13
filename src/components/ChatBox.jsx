@@ -2,8 +2,8 @@
 import { useRef, useEffect, useContext, useState } from "react";
 import MessageBot from "@/components/MessageBot";
 import SCMessage from "@/components/MessageChatGlobal";
-import  BotContext  from "@/context/BotContext"; // Importación de contexto de Bot
-import { usePathname } from 'next/navigation'; // Uso de usePathname de Next.js
+import  BotContext  from "@/context/BotContext";
+import { usePathname } from 'next/navigation'; 
 import ChatGlobalContext from "@/context/ChatGlobalContext";
 
 function ChatBox({ className }) {
@@ -11,12 +11,10 @@ function ChatBox({ className }) {
     const containerRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [loadingTimeout, setLoadingTimeout] = useState(null);
-    const pathname = usePathname(); // Uso de usePathname para obtener la ruta actual
-    // Determinar el contexto según la ruta actual
+    const pathname = usePathname(); 
     const context = pathname === "/bot" ? BotContext : ChatGlobalContext;
     const { messages, loadMoreMessages, hasMoreMessages } = useContext(context);
 
-    // Manejar el scroll para cargar más mensajes si estamos en la parte superior
     const handleScroll = () => {
         const container = containerRef.current;
         if (!container) return;
@@ -30,24 +28,21 @@ function ChatBox({ className }) {
 
             const timeout = setTimeout(() => {
                 handleLoadMoreMessages();
-            }, 1500); // 1.5 segundos para mostrar la animación de carga
+            }, 1500); 
             setLoadingTimeout(timeout);
         }
     };
 
-    // Desplazar automáticamente hacia abajo al cambiar de ruta
     useEffect(() => {
         scrollToBottom();
-    }, [pathname, messages]); // Cambiar router.pathname a pathname
+    }, [pathname, messages]); 
 
-    // Desplazar hacia abajo
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     };
 
-    // Cargar más mensajes y mantener la posición del scroll
     const handleLoadMoreMessages = () => {
         const container = containerRef.current;
         if (!container) return;
@@ -60,7 +55,7 @@ function ChatBox({ className }) {
         setTimeout(() => {
             container.scrollTop = previousScrollTop + (container.scrollHeight - previousScrollHeight);
             setLoading(false);
-        }, 120); // Pequeño retraso para permitir que el DOM se actualice
+        }, 120); 
     };
     return (
         <div

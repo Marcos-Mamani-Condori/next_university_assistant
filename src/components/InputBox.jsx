@@ -14,7 +14,7 @@ function InputBox({ className }) {
 
     const pathname = usePathname();
     const contexts = pathname === "/bot" ? BotContext : ChatGlobalContext;
-    const inputSource = pathname === "/bot" ? "inputBot" : "inputChat"; // Determina el source
+    const inputSource = pathname === "/bot" ? "inputBot" : "inputChat"; 
     const { setInput, input, isSending, handleSend, setfilePath } = useContext(contexts);
     const { inputRef } = useInputFocus();
 
@@ -49,7 +49,7 @@ function InputBox({ className }) {
             console.log("Mensaje enviado:", { text: input, img: filePath });
             setInput('');
             setFilePath('');
-            setFile(null); // Limpiar el archivo
+            setFile(null); 
         } else {
             console.log("El input está vacío, no se enviará.");
         }
@@ -76,10 +76,10 @@ function InputBox({ className }) {
                     className="flex-1 px-4 py-2 border border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 resize-none"
                 />
                
-               {session && session.user.role === 'premium' && ( // Verifica el rol de usuario
+               {session && session.user.role === 'premium' && pathname === '/chat'  &&( // Verifica el rol de usuario
                     <>
                         <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} />
-                        <AudioUploader setFilePath={setFilePathState} file={file} setFile={setFile} />
+                        <AudioUploader setFilePath={setFilePath} file={file} setFile={setFile} />
                         
                     </>
                 )}

@@ -1,16 +1,14 @@
-'use client'; // Asegúrate de agregar esta línea para que el contexto se ejecute en el lado del cliente.
+'use client'; 
 
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation'; // Importar usePathname de Next.js
+import { usePathname } from 'next/navigation'; 
 
-// Crear el contexto
 const InputFocusContext = createContext();
 
-// Proveedor del contexto
 const InputFocusProvider = ({ children }) => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const inputRef = useRef(null);
-    const pathname = usePathname(); // Usa usePathname para acceder a la ubicación
+    const pathname = usePathname(); 
 
     useEffect(() => {
         const handleFocus = () => { 
@@ -29,7 +27,7 @@ const InputFocusProvider = ({ children }) => {
                 inputElement.removeEventListener('blur', handleBlur);
             };
         }
-    }, [pathname]); // Ejecuta el efecto cuando cambia la ruta
+    }, [pathname]); 
 
     return (
         <InputFocusContext.Provider value={{ isInputFocused, inputRef }}>
@@ -38,7 +36,6 @@ const InputFocusProvider = ({ children }) => {
     );
 };
 
-// Hook para usar el contexto
 const useInputFocus = () => useContext(InputFocusContext);
 
 export { InputFocusProvider, useInputFocus };

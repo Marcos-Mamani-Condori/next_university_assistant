@@ -21,13 +21,13 @@ const AnnouncementsModal = ({ isOpen, onClose, content, onNext, onPrev }) => {
                        <br/>
                     <div className="flex justify-between mt-4">
                         <button
-                            className=" text-3xl bg-slate-950 text-white rounded-full w-20 h-20 hover:bg-slate-700 ml-12 mt-7" // Se muestra en pantallas mayores a "sm"
+                            className=" text-3xl bg-slate-950 text-white rounded-full w-20 h-20 hover:bg-slate-700 ml-12 mt-7" 
                             onClick={onPrev}
                         >
                             &lt;
                         </button>
                         <button
-                            className=" text-3xl bg-slate-950 text-white rounded-full w-20 h-20 hover:bg-slate-700 mt-7 mr-12" // Se muestra en pantallas mayores a "sm"
+                            className=" text-3xl bg-slate-950 text-white rounded-full w-20 h-20 hover:bg-slate-700 mt-7 mr-12" 
                             onClick={onNext}
                         >
                             &gt;

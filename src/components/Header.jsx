@@ -12,7 +12,7 @@ import { signOut, useSession } from 'next-auth/react';
 const Header = ({ className }) => {
     const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false); // New state for notification box
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false); 
 
     const handleRegisterClick = () => {
         setIsLoged(false);
@@ -24,7 +24,7 @@ const Header = ({ className }) => {
     };
 
     const toggleNotificationBox = () => {
-        setIsNotificationOpen(!isNotificationOpen); // Toggle notification box visibility
+        setIsNotificationOpen(!isNotificationOpen); 
     };
 
     const pathname = usePathname();
@@ -42,7 +42,6 @@ const Header = ({ className }) => {
                 <h1 className="text-2xl font-bold text-white">{currentTitle}</h1>
             </div>
 
-            {/* Desktop-only section */}
             <div className="absolute left-1 hidden lg:block">
                 {session && (
                     <div>
@@ -54,7 +53,6 @@ const Header = ({ className }) => {
                 )}
             </div>
 
-            {/* User icon */}
             <div className="absolute right-4 md:right-10">
                 <button onClick={handleRegisterClick}>
                     <Image
@@ -68,9 +66,8 @@ const Header = ({ className }) => {
                 </button>
             </div>
 
-            {/* Bell icon */}
             <div className="absolute right-8 md:right-20">
-                <button onClick={toggleNotificationBox}> {/* Toggle notification box */}
+                <button onClick={toggleNotificationBox}> 
                     <Image 
                         src={bell_icon} 
                         alt="Notification bell icon" 
@@ -80,14 +77,13 @@ const Header = ({ className }) => {
                         loading="eager"
                     /> 
                 </button>
-                {isNotificationOpen && ( // Render white box if notification is open
+                {isNotificationOpen && ( 
                     <div className="absolute top-10 right-0 w-48 p-4 bg-white border border-gray-300 rounded shadow-lg">
                         <p className="text-gray-700">No new notifications</p>
                     </div>
                 )}
             </div>
 
-            {/* Register Modal */}
             {isRegisterModalOpen && (
                 <RegisterModal
                     isOpen={isRegisterModalOpen}

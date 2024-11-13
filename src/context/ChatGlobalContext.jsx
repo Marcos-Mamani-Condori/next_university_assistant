@@ -10,17 +10,16 @@ const ChatGlobalContext = createContext();
 const ChatGlobalProvider = ({ children }) => {
     const [isSending, setIsSending] = useState(false);
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([]); // Mantener el estado de mensajes
-    const [offset, setOffset] = useState(0); // Offset para cargar más mensajes
-    const [hasMoreMessages, setHasMoreMessages] = useState(true); // Control de mensajes
-    const socketRef = useRef(null); // Usamos useRef para evitar duplicados
+    const [messages, setMessages] = useState([]);
+    const [offset, setOffset] = useState(0); 
+    const [hasMoreMessages, setHasMoreMessages] = useState(true); 
+    const socketRef = useRef(null); 
     const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
-    const [filePath, setfilePath] = useState(null); // Estado para fileIndex
+    const [filePath, setfilePath] = useState(null); 
     useEffect(() => {
         console.log("Valor de filePath actualizado en global:", filePath);
     }, [filePath]);
-        // Inicializar el socket solo una vez
         if (!socketRef.current) {
             socketRef.current = getSocket();
 
@@ -45,7 +44,6 @@ const ChatGlobalProvider = ({ children }) => {
 
             socketRef.current.on('new_pregunta', (pregunta) => {
                 setMessages((prevMessages) => [...prevMessages, pregunta]);
-                 // Actualizar el offset para reflejar el nuevo mensaje
             setOffset((prevOffset) => prevOffset + 1);
             });
 

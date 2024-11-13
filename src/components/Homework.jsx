@@ -6,7 +6,6 @@ import Image from 'next/image';
 
 
 const Homework = () => {
-  //BORRAR DATOS QUEMADOS
   const [tareas, setTareas] = useState([{
     "id":1,
     "name":"esta es la tarea de sistemas 1",
@@ -186,10 +185,8 @@ const userId = 2; // Supongamos que el ID del usuario que está viendo la págin
     fetchTareas();
   }, []);
 */
-  // Encontrar al usuario con el userId
   const usuarioActual = usuarios.find(usuario => usuario.id === userId);
 
-  // Filtrar las tareas según la carrera del usuario, si el usuario está definido
   const tareasFiltradas = usuarioActual
     ? tareas.filter(tarea => tarea.carrera === usuarioActual.carrera)
     : [];

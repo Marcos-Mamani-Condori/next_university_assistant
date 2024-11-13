@@ -77,8 +77,8 @@ const Announcements = ({isModalOpen,setModalOpen}) => {
         className={`relative w-full max-w-3xl mx-auto p-4 rounded-lg shadow-lg ${isModalOpen ? "blur-sm" : ""}`}
         style={{
           backgroundImage: `url("https://i.blogs.es/89aaa3/650_1000_bliss-original/1366_2000.jpg")`,
-          backgroundSize: "cover", // Asegura que la imagen de fondo cubra el contenedor
-          backgroundPosition: "center", // Centra la imagen de fondo
+          backgroundSize: "cover", 
+          backgroundPosition: "center", 
         }}
       >
         <div className="relative overflow-hidden h-full">

@@ -1,7 +1,6 @@
 "use client";
 const ActivityCalendar = ({ activities }) => {
 
-    // Limitar las actividades a un máximo de 5
     const displayedActivities = activities.slice(0, 5);
 
     return (
@@ -10,7 +9,6 @@ const ActivityCalendar = ({ activities }) => {
             {displayedActivities.length > 0 ? (
                 <ul>
                     {displayedActivities.map((activity, index) => (
-                        /*<!-- Actividad -->*/
                         <li key={index} className="flex items-center p-2">
                             <a href="#" className="flex items-center w-full text-gray-700 hover:underline">
                                 <div className="flex flex-col items-center justify-center w-16 h-16 mr-4 text-white bg-gray-800 rounded">
