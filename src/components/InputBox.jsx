@@ -7,6 +7,7 @@ import ChatGlobalContext from "@/context/ChatGlobalContext";
 import { usePathname } from 'next/navigation'; 
 import ImageUploader from '@/components/ImageUploader';
 import { useSession } from 'next-auth/react';
+import AudioUploader from '@/components/AudioUploader';
 
 function InputBox({ className }) {
     const { data: session } = useSession();
@@ -78,6 +79,7 @@ function InputBox({ className }) {
                {session && session.user.role === 'premium' && ( // Verifica el rol de usuario
                     <>
                         <ImageUploader setFilePath={setFilePath} file={file} setFile={setFile} inputSource={inputSource} />
+                        <AudioUploader setFilePath={setFilePathState} file={file} setFile={setFile} />
                         
                     </>
                 )}

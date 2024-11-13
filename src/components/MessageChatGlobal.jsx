@@ -9,20 +9,18 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
     const isUser = sender === 'user';
 
     const { username, major, date } = sender;
-    const [profileImage, setProfileImage] = useState('/uploads/default.png'); // Inicializar con imagen por defecto
+    const [profileImage, setProfileImage] = useState('/uploads/default.png'); 
 
     useEffect(() => {
         console.log("Profile URL: ", profileUrl);
         
-        // Verificar si profileUrl es válido
         if (profileUrl && profileUrl.trim() !== 'no') {
             setProfileImage(profileUrl);
         } else {
-            setProfileImage('/uploads/default.png'); // Usar imagen por defecto
+            setProfileImage('/uploads/default.png'); 
         }
-    }, [profileUrl]); // Solo dependemos de profileUrl
+    }, [profileUrl]); 
 
-    // Para obtener la hora en que se envió el mensaje
     const obtenerTiempoTranscurrido = () => {
         const fechaComentarioDate = new Date(date);
         const fechaActual = new Date();
@@ -56,7 +54,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
         <div className={`flex flex-col ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
             <div className="flex items-center mb-2">
                 <Image 
-                    src={profileImage} // Forzar recarga
+                    src={profileImage} 
                     alt={`${username}'s profile`}
                     width={64}
                     height={64}
@@ -71,7 +69,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
             <p className="text-sm">{text}</p>
             {image_url && image_url !== '' && (
                 <Image 
-                    src={image_url} // Mostrar image_url si existe
+                    src={image_url} 
                     alt="Contenido de la imagen"
                     width={200}
                     height={200}
