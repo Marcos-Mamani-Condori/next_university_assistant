@@ -10,20 +10,21 @@ const ChatGlobalContext = createContext();
 const ChatGlobalProvider = ({ children }) => {
     const [isSending, setIsSending] = useState(false);
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([]); // Mantener el estado de mensajes
-    const [offset, setOffset] = useState(0); // Offset para cargar más mensajes
-    const [hasMoreMessages, setHasMoreMessages] = useState(true); // Control de mensajes
-    const socketRef = useRef(null); // Usamos useRef para evitar duplicados
+    const [messages, setMessages] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const [hasMoreMessages, setHasMoreMessages] = useState(true);
+    const socketRef = useRef(null);
     const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
 
-   
-        // Inicializar el socket solo una vez
+    useEffect(() => {
+        console.log('useEffect para inicializar el socket ejecutado');
+        
         if (!socketRef.current) {
+            console.log('Inicializando el socket...');
             socketRef.current = getSocket();
 
-            if (socketRef.current) {
-            socketRef.current.on('connect', () => {    
+            socketRef.current.on('connect', () => {
                 console.log('Conexión WebSocket establecida con el ID:', socketRef.current.id);
             });
 
@@ -36,19 +37,19 @@ const ChatGlobalProvider = ({ children }) => {
             });
 
             socketRef.current.on('initial_preguntas', (data) => {
-                console.log('Mensajes iniciales recibidos:', data.messages);
+                console.log('Evento initial_preguntas recibido con datos:', data);
                 setMessages(data.messages.reverse());
                 setOffset(data.messages.length);
             });
 
             socketRef.current.on('new_pregunta', (pregunta) => {
-                
+                console.log('Evento new_pregunta recibido:', pregunta);
                 setMessages((prevMessages) => [...prevMessages, pregunta]);
-                 // Actualizar el offset para reflejar el nuevo mensaje
-            setOffset((prevOffset) => prevOffset + 1);
+                setOffset((prevOffset) => prevOffset + 1);
             });
 
             socketRef.current.on('more_preguntas', (data) => {
+                console.log('Evento more_preguntas recibido con datos:', data);
                 if (data.messages && data.messages.length > 0) {
                     setMessages((prevMessages) => [...data.messages.reverse(), ...prevMessages]);
                     setOffset((prevOffset) => prevOffset + data.messages.length);
@@ -59,9 +60,17 @@ const ChatGlobalProvider = ({ children }) => {
             socketRef.current.onAny((event, ...args) => {
                 console.debug(`Evento recibido: ${event}`, args);
             });
-        }}
+        }
+
+        return () => {
+            if (socketRef.current) {
+                console.log('Desmontando componente y desconectando socket...');
+            }
+        };
+    }, []); 
 
     const handleSend = () => {
+        console.log('Intentando enviar mensaje:', input);
         if (!socketRef.current || !socketRef.current.connected || !session) {
             console.error('No se puede enviar el mensaje: WebSocket no está conectado o no hay sesión.');
             setIsRegisterModalOpen(true);
@@ -78,16 +87,15 @@ const ChatGlobalProvider = ({ children }) => {
             return;
         }
 
-
         socketRef.current.emit('send_pregunta', {
             message: input,
             token: accessToken 
         }, (response) => {
+            console.log('Respuesta del servidor al enviar mensaje:', response);
             setInput("");
             if (response && response.error) {
                 setIsRegisterModalOpen(true);
                 setIsLoged(false);
-                
                 console.error('Error al enviar mensaje al servidor:', response.error);
             } else if (response) {
                 console.log('Mensaje enviado exitosamente al chat global:', response);
@@ -98,6 +106,7 @@ const ChatGlobalProvider = ({ children }) => {
     };
 
     const loadMoreMessages = () => {
+        console.log('Intentando cargar más mensajes, offset actual:', offset);
         if (!hasMoreMessages) {
             console.log('No hay más mensajes para cargar.');
             return;
@@ -109,6 +118,7 @@ const ChatGlobalProvider = ({ children }) => {
         }
 
         socketRef.current.emit('load_more_preguntas', { offset }, (response) => {
+            console.log('Respuesta del servidor para load_more_preguntas:', response);
             if (response && Array.isArray(response.messages)) {
                 if (response.messages.length > 0) {
                     console.log('Más mensajes cargados:', response.messages);

@@ -9,6 +9,7 @@ import bell_icon from '@/public/static/bell_icon.svg'; // Importa el ícono pers
 
 const NotificationIcon = () => {
     const { unreadCount } = useContext(NotificationContext);
+    console.log('unreadCount:', unreadCount);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleIconClick = () => {

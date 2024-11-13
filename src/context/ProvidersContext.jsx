@@ -5,8 +5,15 @@ import { InputFocusProvider } from "@/context/InputFocusContext";
 import { ChatGlobalProvider } from '@/context/ChatGlobalContext';
 import { ModalProvider } from '@/context/ModalContext';
 import { NotificationProvider } from "./NotificationContext";
+import { useEffect } from "react";
 
 const ProvidersContext = ({ children }) => {
+  useEffect(() => {
+    console.log('ProvidersContext montado');
+    return () => {
+      console.log('ProvidersContext desmontado');
+    };
+  }, []);
   return (
     <ModalProvider>
       <DeviceProvider>

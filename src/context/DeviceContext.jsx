@@ -20,6 +20,9 @@ const DeviceProvider = ({ children }) => {
         } else {
             setDeviceType('PC');
         }
+        return () => {
+            console.log("Conponente deviceProvider desmontado");
+        }
     }, []); 
     
     const data = { deviceType };

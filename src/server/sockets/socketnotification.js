@@ -52,7 +52,7 @@ const registerNotificationSockets = (socket, io) => {
     });
 
     socket.on('new_notification', async (data) => {
-        const { token, type, targetId } = data; // Asegúrate de recibir el token
+        const { token, type, targetId } = data;
         try {
             const secret = process.env.NEXTAUTH_SECRET;
             const decoded = jwt.verify(token, secret); // Decodificamos el token

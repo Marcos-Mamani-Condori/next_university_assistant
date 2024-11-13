@@ -38,3 +38,6 @@ next-env.d.ts
 # base de datos
 /prisma/*
 !/prisma/schema.prisma
+
+# configuracion vscode
+/.vscode

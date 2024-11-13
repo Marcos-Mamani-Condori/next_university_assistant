@@ -17,27 +17,23 @@ const NotificationProvider = ({ children }) => {
 
     useEffect(() => {
         const socket = socketRef.current;
-
-        // Emisión de solicitud inicial de notificaciones
-        if (isLoged && session?.user?.token) { // Asegúrate de que haya un token
-            socket.emit('request_initial_notifications', { token: session.user.token }); // Enviar el token
+        console.log("Socket Useefect:", socket);
+        if (session?.user?.accessToken) { // Verificar si el token está presente
+            console.log("Token JWT:", session.user.accessToken); // Verifica el token en consola
+            socket.emit('request_initial_notifications', { token: session.user.accessToken });
         }
 
         socket.on('initial_notifications', (data) => {
             setNotifications(data.notifications);
             setUnreadCount(data.notifications.length);
+            console.log("Initial Notifications:", data.notifications);
         });
 
         socket.on('new_notification', (notification) => {
             setNotifications((prev) => [notification, ...prev]);
             setUnreadCount((prevCount) => prevCount + 1);
         });
-
-        return () => {
-            socket.off('initial_notifications');
-            socket.off('new_notification');
-        };
-    }, [isLoged, session]); // Mantener session como dependencia
+    }, [session?.user?.accessToken]);
 
     const markAllAsRead = () => setUnreadCount(0);
 
