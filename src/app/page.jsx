@@ -25,11 +25,11 @@ const Home = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     
     return (
-        //<div className={`${isRegisterModalOpen ? "blur-sm" : ""}`}></div>//
-        <div className="overflow-y-auto h-lvh ">
+        
+        <div className="overflow-y-auto h-lvh pt-5 pb-5">
             <Announcements isModalOpen={isModalOpen} setModalOpen={setIsModalOpen} />
             <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
-                <div className="flex-1 max-h-[200px] overflow-y-auto">
+                <div className="flex-1 max-h-[300px] overflow-y-auto">
                     <Homework />
                 </div>       
                 <div className="flex-1">
@@ -45,12 +45,12 @@ const Home = () => {
                     <StudentsCounter />
                 </div>
                 
-                <div className="flex-1 max-h-[300px] overflow-y-auto">
+                <div className="flex-1 max-h-[398px] overflow-y-auto">
                     <ActivityCalendar activities={activities} /> 
                 </div>
             </div>
-            
-            
+
+            <br /><br /><br /><br /><br /><br />
         </div>
     );
 }
