@@ -4,19 +4,18 @@ import "@/app/globals.css";
 import ProvidersContext from "@/context/ProvidersContext";
 import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
-import { SessionProvider } from "next-auth/react";  // Importa SessionProvider
+import { SessionProvider } from "next-auth/react";  
 const useDisableScrollOnMobile = () => {
   useEffect(() => {
-    // Verificar si estamos en el lado del cliente
     if (typeof window !== 'undefined') {
       const isMobile = /Mobi|Android/i.test(window.navigator.userAgent);
 
       if (isMobile) {
-        // Bloquear scroll
+        
         document.body.style.overflow = 'hidden';
       }
 
-      // Restaurar scroll al desmontar
+      
       return () => {
         document.body.style.overflow = '';
       };

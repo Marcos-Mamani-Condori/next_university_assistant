@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 
 const StudentsCounter = () => {
-    //ELIMINAR DATOS QUEMADOS CUANDO SE LOGRE LA COMUNICACION
   const [carrera, setCarrera] = useState([{
     "id":1,
     "carrera":"sistemas"
@@ -107,7 +106,7 @@ const StudentsCounter = () => {
 {
     "id":26,
     "carrera":"gastronomia"
-}]);//ELIMINAR CUANDO ESTE LISTA LA BASE DE DATOS
+}]);//ELIMINAR CUANDO ESTE LISTA 
   const [carreraCount, setCarreraCount] = useState({}); // Estado para contar carreras
 
   /*Realizar la comunicacion con el back
@@ -129,16 +128,15 @@ const StudentsCounter = () => {
   }, []);*/
 
   useEffect(() => {
-    // Contar las ocurrencias de cada carrera
     const count = carrera.reduce((acc, item) => {
-      acc[item.carrera] = (acc[item.carrera] || 0) + 1; // Incrementar el contador
+      acc[item.carrera] = (acc[item.carrera] || 0) + 1; 
       return acc;
     }, {});
 
-    setCarreraCount(count); // Guardar los resultados en el estado
-  }, [carrera]); // Ejecutar este efecto cuando carrera cambie
+    setCarreraCount(count); 
+  }, [carrera]); 
 
-  const totalCount = carrera.length; // Total de carreras
+  const totalCount = carrera.length; 
 
   return (
     <div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
@@ -146,14 +144,13 @@ const StudentsCounter = () => {
       {totalCount > 0 ? (
         <div>
           {Object.entries(carreraCount).map(([carreraName, count]) => {
-            const percentage = ((count / totalCount) * 100).toFixed(2); // Calcular porcentaje
+            const percentage = ((count / totalCount) * 100).toFixed(2); 
             
-            // Procesar carreraName
             const formattedCarreraName = carreraName
-              .trim() // Eliminar espacios al inicio y al final
-              .split(' ') // Dividir en palabras
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalizar la primera letra de cada palabra
-              .join(' '); // Unir las palabras nuevamente
+              .trim() 
+              .split(' ') 
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
+              .join(' '); 
   
             return (
               <div key={carreraName} className="mb-4 ">

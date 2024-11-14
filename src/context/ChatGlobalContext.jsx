@@ -10,15 +10,16 @@ const ChatGlobalContext = createContext();
 const ChatGlobalProvider = ({ children }) => {
     const [isSending, setIsSending] = useState(false);
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([]); // Mantener el estado de mensajes
-    const [offset, setOffset] = useState(0); // Offset para cargar más mensajes
-    const [hasMoreMessages, setHasMoreMessages] = useState(true); // Control de mensajes
-    const socketRef = useRef(null); // Usamos useRef para evitar duplicados
+    const [messages, setMessages] = useState([]);
+    const [offset, setOffset] = useState(0); 
+    const [hasMoreMessages, setHasMoreMessages] = useState(true); 
+    const socketRef = useRef(null); 
     const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
-
-   
-        // Inicializar el socket solo una vez
+    const [filePath, setfilePath] = useState(null); 
+    useEffect(() => {
+        console.log("Valor de filePath actualizado en global:", filePath);
+    }, [filePath]);
         if (!socketRef.current) {
             socketRef.current = getSocket();
 
@@ -43,7 +44,6 @@ const ChatGlobalProvider = ({ children }) => {
 
             socketRef.current.on('new_pregunta', (pregunta) => {
                 setMessages((prevMessages) => [...prevMessages, pregunta]);
-                 // Actualizar el offset para reflejar el nuevo mensaje
             setOffset((prevOffset) => prevOffset + 1);
             });
 
@@ -61,6 +61,9 @@ const ChatGlobalProvider = ({ children }) => {
         }}
 
     const handleSend = () => {
+        console.log("Preparando para enviar...");
+        console.log("Mensaje:", input);
+        console.log("Ruta de archivo:", filePath);
         if (!socketRef.current || !socketRef.current.connected || !session) {
             console.error('No se puede enviar el mensaje: WebSocket no está conectado o no hay sesión.');
             setIsRegisterModalOpen(true);
@@ -77,12 +80,13 @@ const ChatGlobalProvider = ({ children }) => {
             return;
         }
 
-
+       
         socketRef.current.emit('send_pregunta', {
             message: input,
-            token: accessToken 
+            img: filePath,
+            token: accessToken
+             
         }, (response) => {
-            setInput("");
             if (response && response.error) {
                 setIsRegisterModalOpen(true);
                 setIsLoged(false);
@@ -92,7 +96,7 @@ const ChatGlobalProvider = ({ children }) => {
                 console.log('Mensaje enviado exitosamente al chat global:', response);
             }
         });
-
+console.log("enviadooooo" +filePath)
         setIsSending(false);
     };
 
@@ -131,6 +135,8 @@ const ChatGlobalProvider = ({ children }) => {
         loadMoreMessages,
         hasMoreMessages,
         offset,
+        filePath,
+        setfilePath,
     };
 
     return (

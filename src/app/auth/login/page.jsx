@@ -1,6 +1,6 @@
 'use client';
 import { useForm } from "react-hook-form";
-import { signIn, useSession } from "next-auth/react"; // Importa useSession
+import { signIn, useSession } from "next-auth/react"; 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Warning from '@/components/Warning'; 
@@ -18,7 +18,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   const { data: session } = useSession(); 
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("Datos enviados:", data); // Verificar qué datos se están enviando
+    console.log("Datos enviados:", data); 
 
     const res = await signIn("credentials", {
       email: data.email,
@@ -26,7 +26,7 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
       redirect: false,
     });
 
-    console.log("Respuesta de signIn:", res); // Verificar la respuesta de la autenticación
+    console.log("Respuesta de signIn:", res); 
 
     if (res.error) {
       console.log('Error al iniciar sesión:', res.error); 
