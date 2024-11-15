@@ -4,7 +4,6 @@ const prisma = require('./../../libs/db');
 const registerSockets = (socket, io)=> {
     const sendInitialMessages = async () => {
         try {
-            console.log("Recuperando mensajes iniciales desde la base de datos...");
             const messages = await prisma.messages.findMany({
                 include: {
                     users: {
@@ -20,8 +19,6 @@ const registerSockets = (socket, io)=> {
                 },
                 take: 10,
             });
-
-            console.log("Mensajes iniciales recuperados:", messages);
 
             socket.emit("initial_preguntas", {
                 messages: messages.map(msg => ({

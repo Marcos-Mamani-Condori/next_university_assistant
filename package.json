@@ -7,14 +7,12 @@
     "dev:express": "node src/server/index.js",
     "build": "next build",
     "start": "next start",
+    "start:express": "cross-env NODE_ENV=production node src/server/index.js",
     "lint": "next lint"
   },
   "dependencies": {
-    "@eslint/config-array": "^0.18.0",
-    "@eslint/object-schema": "^2.1.4",
     "@prisma/client": "^5.20.0",
     "bcrypt": "^5.1.1",
-    "eslint": "^8.57.1",
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
     "glob": "^11.0.0",
@@ -26,15 +24,19 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
-    "rimraf": "^6.0.1",
     "sharp": "^0.33.5",
     "socket.io": "^4.8.0",
     "socket.io-client": "^4.8.0"
   },
   "devDependencies": {
+    "@eslint/config-array": "^0.19.0",
+    "@eslint/object-schema": "^2.1.4",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.14",
-    "postcss": "^8",
-    "prisma": "^5.20.0",
-    "tailwindcss": "^3.4.1"
+    "postcss": "^8.4.49",
+    "prisma": "^5.22.0",
+    "rimraf": "^6.0.1",
+    "tailwindcss": "^3.4.15"
   }
 }
