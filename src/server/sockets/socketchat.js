@@ -40,7 +40,6 @@ const registerSockets = (socket, io)=> {
     sendInitialMessages();
 
     socket.on('send_pregunta', async (data) => {
-        console.log("Recibido evento 'send_pregunta' con datos:", data);
         const token = data.token;
 
         try {
@@ -63,7 +62,6 @@ const registerSockets = (socket, io)=> {
                     },
                 });
 
-                console.log("Nuevo mensaje creado en la base de datos:", newMessage);
 
                 const user = await prisma.users.findUnique({
                     where: { id: userId },
@@ -74,7 +72,6 @@ const registerSockets = (socket, io)=> {
                     },
                 });
 
-                console.log("Usuario encontrado en la base de datos:", user);
 
                 const formattedMessage = {
                     id: newMessage.id,
@@ -86,7 +83,6 @@ const registerSockets = (socket, io)=> {
                     
                 };
 
-                console.log("Emitiendo 'new_pregunta' con el mensaje formateado:", formattedMessage);
                 io.emit("new_pregunta", formattedMessage);
             } else {
                 console.log("Token no válido. Desconectando socket.");
@@ -120,7 +116,6 @@ const registerSockets = (socket, io)=> {
                 take: 10,
             });
 
-            console.log("Mensajes adicionales cargados:", messages);
 
             const hasMore = messages.length === 10;
             console.log("¿Hay más mensajes disponibles?", hasMore);

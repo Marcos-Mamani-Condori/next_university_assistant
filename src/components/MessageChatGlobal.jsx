@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from "react";
 import LikeButton from '@/components/LikeButton';
 import Image from "next/image";
-import { useSession } from 'next-auth/react';
 
 function SCMessage({ text, sender, id, image_url, profileUrl }) {
-    const { data: session } = useSession();
     const isUser = sender === 'user';
 
     const { username, major, date } = sender;

@@ -20,15 +20,14 @@ const authOptions = {
         const userFound = await db.users.findUnique({
           where: { email: credentials.email },
         });
-        console.log("User Found:", userFound);
         if (!userFound) {
-          throw new Error("correo no encontrado");
+          throw new Error("datos incorrectos intenta otra vez");
         }
 
         const matchPassword = await bcrypt.compare(credentials.password, userFound.password);
 
         if (!matchPassword) {
-          throw new Error("Contraseña incorrecta");
+          throw new Error("datos incorrectos intenta otra vez");
         }
 
         const accessToken = jwt.sign(
