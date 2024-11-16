@@ -9,6 +9,18 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+const generateUniqueFilename = (directory, baseName, extension) => {
+  let counter = 1;
+  let uniqueName;
+
+  do {
+    uniqueName = `${baseName}${counter}${extension}`;
+    counter++;
+  } while (fs.existsSync(path.join(directory, uniqueName)));  
+
+  return uniqueName;
+};
+
 router.post("/upload-audio", upload.single("audio"), async (req, res) => {
   console.log("Iniciando procesamiento de audio...");
 
@@ -39,15 +51,17 @@ router.post("/upload-audio", upload.single("audio"), async (req, res) => {
       console.log(`Carpeta creada: ${userFolderPath}`);
     }
 
-    const outputFileName = `audio.mp3`;
-    const outputFilePath = path.join(userFolderPath, outputFileName);
+    const baseName = "audio";
+    const extension = ".mp3"; 
+    const uniqueFileName = generateUniqueFilename(userFolderPath, baseName, extension);
+    const outputFilePath = path.join(userFolderPath, uniqueFileName);
 
     fs.writeFileSync(outputFilePath, req.file.buffer);
     console.log(`Audio guardado con éxito en: ${outputFilePath}`);
 
     res.status(200).json({
       message: "Audio recibido correctamente",
-      filePath: `/uploads/audio/${userId}/${outputFileName}`,
+      filePath: `/uploads/audio/${userId}/${uniqueFileName}`,
     });
   } catch (error) {
     console.error("Error al procesar el audio:", error);

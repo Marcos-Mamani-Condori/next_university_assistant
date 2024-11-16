@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
 
-function InputRecorder({ setFilePath, file, setFile }) { 
+function InputRecorder({ setFilePath, file, setFile }) {
     const { data: session } = useSession();
     const [isRecording, setIsRecording] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [time, setTime] = useState(0);
     const [recorder, setRecorder] = useState(null);
     const [audioUrl, setAudioUrl] = useState(null);
+    const [stream, setStream] = useState(null); // Guardar el stream
 
     useEffect(() => {
         let intervalId;
@@ -24,20 +25,22 @@ function InputRecorder({ setFilePath, file, setFile }) {
 
     const startRecording = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
+            const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(audioStream);
             setRecorder(mediaRecorder);
+            setStream(audioStream); // Guardar el stream
             setIsRecording(true);
             setTime(0);
-            
+
             const chunks = [];
             mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
             mediaRecorder.onstop = async () => {
                 const audioBlob = new Blob(chunks, { type: "audio/wav" });
                 setFile(audioBlob);
-                const audioUrl = URL.createObjectURL(audioBlob);
-                setAudioUrl(audioUrl);
                 await handleUpload(audioBlob);
+
+                audioStream.getTracks().forEach(track => track.stop());
+                setStream(null); 
             };
 
             mediaRecorder.start();
@@ -62,6 +65,11 @@ function InputRecorder({ setFilePath, file, setFile }) {
             setIsRecording(false);
             setIsPaused(false);
             recorder.stop();
+        }
+
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            setStream(null);
         }
     };
 
@@ -92,27 +100,30 @@ function InputRecorder({ setFilePath, file, setFile }) {
     };
 
     return (
-        <div className="audio-uploader flex items-center space-x-4">
-            <button
-                onClick={isRecording ? pauseRecording : startRecording}
-                className={`px-4 py-2 rounded-full ${isRecording ? "bg-yellow-500" : "bg-green-500"} text-white`}
-            >
-                {isRecording && !isPaused ? "Pausar" : isPaused ? "Reanudar" : "Grabar"}
-            </button>
+        <div className="audio-uploader flex flex-row items-center space-x-4">
+        <button
+            onClick={isRecording ? pauseRecording : startRecording}
+            className={`px-4 py-2 rounded-full ${isRecording ? "bg-yellow-500" : "bg-green-500"} text-white`}
+        >
+            {isRecording && !isPaused ? "Pausar" : isPaused ? "Reanudar" : "Grabar"}
+        </button>
+    
+        {isRecording && (
+            <div className="timer text-lg font-bold">
+                {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
+            </div>
+        )}
+    
+        <button
+            onClick={stopRecording}
+            disabled={!isRecording}
+            className="px-4 py-2 rounded bg-red-500 text-white"
+        >
+            Finalizar
+        </button>
+    
 
-            {isRecording && (
-                <div className="timer text-lg font-bold">
-                    {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
-                </div>
-            )}
-
-            <button
-                onClick={stopRecording}
-                disabled={!isRecording}
-                className="px-4 py-2 rounded bg-red-500 text-white"
-            >
-                Finalizar
-            </button>
+           
         </div>
     );
 }

@@ -7,13 +7,14 @@ const registerLikes = require('./sockets/socketlike');
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
 const audioUploadRouter = require('./routes/audioUpload'); 
-
+const path = require('path');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
     const server = express();
+    server.use('/uploads', express.static(path.resolve('./uploads')));
 
     server.use('/api', imageUploadRouter);
     server.use('/api/connected-users', connectedUsersRouter); 

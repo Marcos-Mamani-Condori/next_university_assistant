@@ -7,7 +7,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
     const isUser = sender === 'user';
 
     const { username, major, date } = sender;
-    const [profileImage, setProfileImage] = useState('/uploads/default.png'); 
+    const [profileImage, setProfileImage] = useState(''); 
 
     useEffect(() => {
         console.log("Profile URL: ", profileUrl);
@@ -15,10 +15,19 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
         if (profileUrl && profileUrl.trim() !== 'no') {
             setProfileImage(profileUrl);
         } else {
-            setProfileImage('/uploads/default.png'); 
+            setProfileImage(`${window.origin}/uploads/default.png`);
         }
     }, [profileUrl]); 
 
+    // Establecer la imagen de la URL, usando window.origin si no es una ruta absoluta
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        if (image_url && image_url.trim() !== '') {
+            setImageUrl(`${window.origin}${image_url}`);
+        }
+    }, [image_url]);
+console.log("ADKJALDJASD"+`${window.origin}${image_url}`);
     const obtenerTiempoTranscurrido = () => {
         const fechaComentarioDate = new Date(date);
         const fechaActual = new Date();
@@ -66,19 +75,19 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
             </div>
             <p className="text-sm">{text}</p>
 
-            {image_url && image_url !== '' && (
+            {imageUrl && imageUrl !== '' && (
                 <>
-                    {image_url.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                    {imageUrl.match(/\.(jpg|jpeg|png|webp)$/i) ? (
                         <Image 
-                            src={image_url} 
+                            src={imageUrl} 
                             alt="Contenido de la imagen"
                             width={200}
                             height={200}
                             className=""
                         />
-                    ) : image_url.match(/\.(mp3|wav|ogg)$/i) ? (
+                    ) : imageUrl.match(/\.(mp3|wav|ogg)$/i) ? (
                         <audio controls>
-                            <source src={image_url} type="audio/mpeg" />
+                            <source src={imageUrl} type="audio/mpeg" />
                             Tu navegador no soporta el elemento de audio.
                         </audio>
                     ) : null}

@@ -44,7 +44,6 @@ const registerSockets = (socket, io)=> {
 
         try {
             const secret = process.env.NEXTAUTH_SECRET;
-            console.log("Verificando token de autenticación...");
             const decoded = jwt.verify(token, secret);
 
             if (decoded) {
