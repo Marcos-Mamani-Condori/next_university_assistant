@@ -16,9 +16,14 @@ const labelBaseStyles = () => {
 function ProfilePage({ onClose }) {
   const { data: session, status } = useSession();
 
-  if (status === 'loading') {
-    return <div>Cargando...</div>;
-  }
+
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   const {
     register,
@@ -32,37 +37,31 @@ function ProfilePage({ onClose }) {
       email: session?.user?.email || '',
     },
   });
-  
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [isEditingEmail, setIsEditingEmail] = useState(false);
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [error, setError] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
-  const [filePath, setFilePath] = useState(null); 
 
   const userId = session?.user?.id;
-  const userImagePath = `/uploads/${userId}.webp`;
-  const defaultImagePath = '/uploads/default.png';
-  const [profileImage, setProfileImage] = useState(defaultImagePath);
+
+  const [profileImage, setProfileImage] = useState('');
+  const defaultImagePath = `${window.origin}/uploads/default.png`; 
+   
 
   useEffect(() => {
-    const checkImage = async () => {
-      if (userId) {
+    if (typeof window !== "undefined" && userId) { // Solo se ejecuta en el cliente
+      const userImagePath = `${window.origin}/uploads/${userId}.webp`;
+
+      const checkImage = async () => {
         const response = await fetch(`${userImagePath}?${Date.now()}`, { method: 'HEAD' });
         if (response.ok) {
           setProfileImage(`${userImagePath}?${Date.now()}`);
         } else {
           setProfileImage(defaultImagePath);
         }
-      } else {
-        setProfileImage(defaultImagePath);
-      }
-    };
+      };
 
-    checkImage();
-  }, [userId, showUpload]); 
+      checkImage();
+    } else {
+      setProfileImage(defaultImagePath); // Fallback si no hay usuario o no es cliente
+    }
+  }, [userId, showUpload, defaultImagePath]);
 
   const onSubmit = handleSubmit(async (data) => {
     const body = {
@@ -71,11 +70,7 @@ function ProfilePage({ onClose }) {
       newEmail: isEditingEmail ? data.email : session.user.email,
       password: isEditingPassword ? data.password : null,
     };
-  
-    if (filePath) {
-      body.profile_picture_url = filePath;
-    }
-  
+
     const res = await fetch("/api/auth/put", {
       method: "PUT",
       body: JSON.stringify(body),
@@ -83,7 +78,7 @@ function ProfilePage({ onClose }) {
         "Content-Type": "application/json",
       },
     });
-  
+
     if (res.ok) {
       alert("Perfil actualizado con éxito");
       onClose();
@@ -93,18 +88,11 @@ function ProfilePage({ onClose }) {
       setError(errorData.message);
     }
   });
-useEffect(() => {
-  if (filePath) {
-    const data = {
-      name: isEditingName ? getValues("name") : session.user.name,
-      oldEmail: session.user.email,
-      newEmail: isEditingEmail ? getValues("email") : session.user.email,
-      password: isEditingPassword ? getValues("password") : null,
-      profile_picture_url: filePath, 
-    };
-    onSubmit(data); 
-  }
-}, [filePath]);
+
+  const handleUploadClick = () => {
+    setShowUpload(!showUpload); // Mostrar u ocultar el componente de carga
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-5"
@@ -124,7 +112,7 @@ useEffect(() => {
           <p className="bg-red-500 text-lg text-white p-3 rounded">{error}</p>
         )}
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Personalizar Perfil</h1>
-        
+
         <div className="flex justify-center mb-4">
           <Image
             src={profileImage}
@@ -137,13 +125,13 @@ useEffect(() => {
 
         <button
           type="button"
-          onClick={() => setShowUpload(!showUpload)}
+          onClick={handleUploadClick}
           className="bg-blue-500 text-white p-2 rounded mb-4"
         >
           {showUpload ? "Cancelar Cambiar Imagen" : "Cambiar Imagen de Perfil"}
         </button>
 
-        {showUpload && <ImageUploader setFilePath={setFilePath} inputSource="inputProfile" />}
+        {showUpload && <ImageUploader/>}
         <form onSubmit={onSubmit} className="flex flex-col">
           <label htmlFor="name" className={labelBaseStyles()}>
             Nombre de usuario:
@@ -220,7 +208,7 @@ useEffect(() => {
             type="button"
             onClick={() => setIsEditingPassword(!isEditingPassword)}
             className="bg-blue-500 text-white p-1 rounded-lg mt-4"
-            disabled={showUpload} 
+            disabled={showUpload}
           >
             {isEditingPassword ? "Cancelar Cambiar Contraseña" : "Cambiar Contraseña"}
           </button>
@@ -269,8 +257,12 @@ useEffect(() => {
             </>
           )}
 
-          <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-          Actualizar Perfil
+          <button
+            type="submit"
+            className="bg-green-500 text-white p-3 rounded mt-4"
+            disabled={showUpload}
+          >
+            Guardar cambios
           </button>
         </form>
       </div>

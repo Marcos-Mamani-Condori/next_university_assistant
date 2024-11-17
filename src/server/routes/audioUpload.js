@@ -42,7 +42,7 @@ router.post("/upload-audio", upload.single("audio"), async (req, res) => {
 
     const userFolderPath = path.join(
       __dirname,
-      "../../../public/uploads/audio",
+      "../../../uploads/audio",
       userId.toString()
     );
 

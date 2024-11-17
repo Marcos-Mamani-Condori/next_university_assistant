@@ -13,7 +13,7 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
         console.log("Profile URL: ", profileUrl);
         
         if (profileUrl && profileUrl.trim() !== 'no') {
-            setProfileImage(profileUrl);
+            setProfileImage(`${window.origin}${profileUrl}`);
         } else {
             setProfileImage(`${window.origin}/uploads/default.png`);
         }
@@ -27,7 +27,6 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
             setImageUrl(`${window.origin}${image_url}`);
         }
     }, [image_url]);
-console.log("ADKJALDJASD"+`${window.origin}${image_url}`);
     const obtenerTiempoTranscurrido = () => {
         const fechaComentarioDate = new Date(date);
         const fechaActual = new Date();
