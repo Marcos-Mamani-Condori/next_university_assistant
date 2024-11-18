@@ -70,9 +70,12 @@ function ChatBox({ className }) {
             )}
 
             {messages.map((msg, index) => {
+                 const fullProfileUrl = msg.profileUrl ? `${window.origin}${msg.profileUrl}` : '/uploads/default.png';
+                 const fullImageUrl = msg.image_url ? `${window.origin}${msg.image_url}` : '';
+             
                 return pathname === "/bot" 
-                    ? <MessageBot key={index} text={msg.text} sender={msg.sender}  imageUrl={msg.image_url} profileUrl={msg.profile_url} />
-                    : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} image_url={msg.image_url} profileUrl={msg.profileUrl}  />;
+                    ? <MessageBot key={index} text={msg.text} sender={msg.sender}  imageUrl={fullImageUrl} profileUrl={fullProfileUrl} />
+                    : <SCMessage key={index} text={msg.message} sender={msg} id={msg.id} image_url={fullImageUrl} profileUrl={fullProfileUrl}  />;
             })}
             <div ref={messagesEndRef} />
         </div>

@@ -34,6 +34,7 @@ app.prepare().then(() => {
     httpServer.listen(3000, (err) => {
         if (err) throw err;
         console.log('Servidor listo en http://localhost:3000');
+        console.log("Modo de Next.js:", dev ? "Desarrollo" : "Producción");
     });
 }).catch((ex) => {
     console.error(ex.stack);

@@ -5,7 +5,7 @@ import imageicon from '@/public/static/more.png';
 import Image from "next/image";
 const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => { 
     const { data: session } = useSession();
-console.log("imagen recibida en uploader: "+inputSource);
+
     const handleFileChange = async (e) => {
         const selectedFile = e.target.files[0];
         if(inputSource=="inputChat" || inputSource=="inputBot")
@@ -13,7 +13,7 @@ console.log("imagen recibida en uploader: "+inputSource);
         if (selectedFile) {
             console.log("Archivo seleccionado:", selectedFile);
             const uploadedFilePath = await handleUpload(selectedFile); 
-            if (uploadedFilePath && selectedFile && setFilePath) {
+            if (uploadedFilePath) {
                 console.log("Ruta del archivo devuelta:", uploadedFilePath);
                 setFilePath(uploadedFilePath);
             } else {

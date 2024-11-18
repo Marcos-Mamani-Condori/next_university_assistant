@@ -50,7 +50,6 @@ const registerSockets = (socket, io)=> {
                 const userId = decoded.id;
                 const messageText = data.message;
                 const filePath = data.img;
-             
                 const newMessage = await prisma.messages.create({
                     data: {
                         user_id: userId,
@@ -67,6 +66,7 @@ const registerSockets = (socket, io)=> {
                     select: {
                         name: true,
                         major: true,
+                            profile_picture_url: true,
                         
                     },
                 });
@@ -79,7 +79,7 @@ const registerSockets = (socket, io)=> {
                     major: user.major,
                     date: newMessage.created_at,
                     image_url: filePath,
-                    
+                    profileUrl: user?.profile_picture_url,
                 };
 
                 io.emit("new_pregunta", formattedMessage);

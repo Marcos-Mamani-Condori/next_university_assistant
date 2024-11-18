@@ -7,26 +7,14 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
     const isUser = sender === 'user';
 
     const { username, major, date } = sender;
-    const [profileImage, setProfileImage] = useState(''); 
-
+    const [profileImage, setProfileImage] = useState(profileUrl); 
     useEffect(() => {
-        console.log("Profile URL: ", profileUrl);
         
-        if (profileUrl && profileUrl.trim() !== 'no') {
-            setProfileImage(`${window.origin}${profileUrl}`);
-        } else {
-            setProfileImage(`${window.origin}/uploads/default.png`);
-        }
+        if (profileUrl && profileUrl.trim() ) {
+            setProfileImage(`${profileUrl}?${Date.now()}`);
+        } 
     }, [profileUrl]); 
-
-    // Establecer la imagen de la URL, usando window.origin si no es una ruta absoluta
-    const [imageUrl, setImageUrl] = useState('');
-
-    useEffect(() => {
-        if (image_url && image_url.trim() !== '') {
-            setImageUrl(`${window.origin}${image_url}`);
-        }
-    }, [image_url]);
+  
     const obtenerTiempoTranscurrido = () => {
         const fechaComentarioDate = new Date(date);
         const fechaActual = new Date();
@@ -60,10 +48,10 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
         <div className={`flex flex-col ${isUser ? 'bg-blue-100 text-right' : 'bg-gray-100 text-left'} rounded-lg p-4`}>
             <div className="flex items-center mb-2">
                 <Image 
-                    src={profileImage} 
-                    alt={`${username}'s profile`}
-                    width={64}
-                    height={64}
+                    src={`${profileImage}`} 
+                    alt={"profilee"}
+                    width={50}
+                    height={50}
                     className="rounded-full"
                 />
                 <div className="ml-2">
@@ -74,19 +62,19 @@ function SCMessage({ text, sender, id, image_url, profileUrl }) {
             </div>
             <p className="text-sm">{text}</p>
 
-            {imageUrl && imageUrl !== '' && (
+            {image_url && image_url !== '' && (
                 <>
-                    {imageUrl.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                    {image_url.match(/\.(jpg|jpeg|png|webp)$/i) ? (
                         <Image 
-                            src={imageUrl} 
+                            src={`${image_url}`} 
                             alt="Contenido de la imagen"
                             width={200}
                             height={200}
                             className=""
                         />
-                    ) : imageUrl.match(/\.(mp3|wav|ogg)$/i) ? (
+                    ) : image_url.match(/\.(mp3|wav|ogg)$/i) ? (
                         <audio controls>
-                            <source src={imageUrl} type="audio/mpeg" />
+                            <source src={`${image_url}`} type="audio/mpeg" />
                             Tu navegador no soporta el elemento de audio.
                         </audio>
                     ) : null}

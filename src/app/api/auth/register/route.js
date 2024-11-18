@@ -35,14 +35,13 @@ const newUser = await db.users.create({
             password: hashedPassword,
             name: data.name,
             email: data.email,
-            profile_picture_url: data.profile_picture_url || 'no',
+            profile_picture_url: data.profile_picture_url || '/uploads/default.png',
             major: data.major, 
             role: data.role || 'registrado', 
         }
     }
 )
 const {password: _, ...users}=newUser
-console.log("users:", JSON.stringify(users, null, 2)); 
      return NextResponse.json(users);
     } catch (error) {
         return NextResponse.json(
