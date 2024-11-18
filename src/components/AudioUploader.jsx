@@ -89,7 +89,6 @@ function InputRecorder({ setFilePath, file, setFile }) {
 
             const data = await response.json();
             if (response.ok) {
-                console.log("Audio subido correctamente:", data);
                 setFilePath(data.filePath);
             } else {
                 console.error("Error al subir el audio:", data.error);

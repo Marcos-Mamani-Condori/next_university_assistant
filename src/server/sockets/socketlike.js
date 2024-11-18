@@ -45,7 +45,6 @@ const registerLikes = (socket, io) => {
                         await tx.likes.delete({
                             where: { id: existingLike.id },
                         });
-                        console.log(`Like eliminado para el messageId: ${messageId} por el usuario: ${authenticatedUserId}`);
                         return 'removed'; 
                     } else {
                         await tx.likes.create({
@@ -54,7 +53,6 @@ const registerLikes = (socket, io) => {
                                 user_id: authenticatedUserId, 
                             },
                         });
-                        console.log(`Nuevo like agregado por el usuario con ID: ${authenticatedUserId}`);
                         return 'added'; 
                     }
                 });

@@ -33,9 +33,7 @@ export default function RootLayout({ children }) {
         <ProvidersContext>
           <div className="grid grid-cols-12 grid-rows-10 w-full h-full fixed overflow-fixed">
             <Header className={"col-span-12 row-span-1"} />
-            <div className="mx-2 md:mx-10 grid grid-rows-10 col-span-12 row-span-10">
               {children}
-            </div>
             <NavBar className={"col-span-12 row-span-1"} />
           </div>
         </ProvidersContext>

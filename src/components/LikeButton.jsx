@@ -26,8 +26,6 @@ function LikeButton({ messageId, username }) {
 
         if (accessToken) {
           socket.emit("check_user_like", { messageId, token: accessToken });
-        } else {
-          console.log("No hay token, no se puede comprobar si el usuario ha dado like.");
         }
       }
     };

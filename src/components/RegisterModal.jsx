@@ -20,7 +20,6 @@ const RegisterModal = ({ isOpen, onClose, setIsLoged }) => {
       {session ? ( 
         <>
           <ProfilePage onClose={onClose} />
-          {console.log("Usuario autenticado")}
         </>
       ) : isLogin ? ( 
         <LoginPage onClose={onClose} setIsLoged={setIsLoged} toggleLoginRegister={toggleLoginRegister} />

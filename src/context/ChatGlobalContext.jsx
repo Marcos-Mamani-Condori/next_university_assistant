@@ -17,9 +17,7 @@ const ChatGlobalProvider = ({ children }) => {
     const { setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
     const { data: session } = useSession();
     const [filePath, setfilePath] = useState(null); 
-    useEffect(() => {
-        console.log("Valor de filePath actualizado en global:", filePath);
-    }, [filePath]);
+  
         if (!socketRef.current) {
             socketRef.current = getSocket();
 
@@ -37,7 +35,6 @@ const ChatGlobalProvider = ({ children }) => {
             });
 
             socketRef.current.on('initial_preguntas', (data) => {
-                console.log('Mensajes iniciales recibidos:', data.messages);
                 setMessages(data.messages.reverse());
                 setOffset(data.messages.length);
             });
@@ -61,9 +58,6 @@ const ChatGlobalProvider = ({ children }) => {
         }}
 
     const handleSend = () => {
-        console.log("Preparando para enviar...");
-        console.log("Mensaje:", input);
-        console.log("Ruta de archivo:", filePath);
         if (!socketRef.current || !socketRef.current.connected || !session) {
             console.error('No se puede enviar el mensaje: WebSocket no está conectado o no hay sesión.');
             setIsRegisterModalOpen(true);
@@ -96,7 +90,6 @@ const ChatGlobalProvider = ({ children }) => {
                 console.log('Mensaje enviado exitosamente al chat global:', response);
             }
         });
-console.log("enviadooooo" +filePath)
         setIsSending(false);
     };
 

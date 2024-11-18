@@ -12,7 +12,6 @@ const ConnectedUsers = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log("Datos recibidos:", data);
                 setConnectedUsers(data.connectedUsers);
             } catch (error) {
                 console.error("Error al obtener el conteo de usuarios:", error);

@@ -10,9 +10,7 @@ const BotProvider = ({ children }) => {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [filePath, setfilePath] = useState(null); // Estado para fileIndex
-    useEffect(() => {
-        console.log("Valor de filePath actualizado en global:", filePath);
-    }, [filePath]);
+    
     const handleSend = () => {
         if (input.trim()) {
             const userMsg = {

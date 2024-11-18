@@ -34,18 +34,15 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     let outputFilePath;
 
     const inputSource = req.body.inputSource;
-    console.log("Valor de inputSource:", inputSource);
 
     if (inputSource === "inputChat") {
-      // Cambiar la ruta de almacenamiento aquí (fuera de public)
       const userFolderPath = path.join(
-        __dirname,  // Ruta relativa desde el archivo actual
-        "../../../uploads",  // Nueva carpeta fuera de public
+        __dirname,  
+        "../../../uploads",
         userId.toString()
       );
       if (!fs.existsSync(userFolderPath)) {
         fs.mkdirSync(userFolderPath, { recursive: true });
-        console.log(`Carpeta creada: ${userFolderPath}`);
       }
 
       let fileIndex = 1;
@@ -55,11 +52,9 @@ router.post("/upload", upload.single("image"), async (req, res) => {
         fileIndex++;
       } while (fs.existsSync(outputFilePath));
 
-      console.log(`Ruta final para guardar la imagen en inputChat: ${outputFilePath}`);
     } else {
       outputFileName = `${userId}.webp`; 
       outputFilePath = path.join(__dirname, "../../../uploads", outputFileName); // Cambiar aquí
-      console.log(`Ruta final para guardar la imagen general: ${outputFilePath}`);
     }
 
     await sharp(req.file.buffer)
@@ -67,7 +62,6 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       .webp({ quality: 100 })
       .toFile(outputFilePath);
 
-    console.log(`Imagen comprimida y guardada con éxito: ${outputFilePath}`);
 
     const finalFileIndex = inputSource === "inputChat" 
       ? parseInt(outputFileName.replace(".webp", "")) 

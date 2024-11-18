@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
 import Image from "next/image";
 import ImageUploader from '@/components/ImageUploader';
-
+import currentOrigin from "@/libs/config";
 const inputBaseStyles = () => {
   return "p-2 mb-4 rounded bg-gray-700 text-slate-100";
 };
@@ -41,17 +41,12 @@ function ProfilePage({ onClose }) {
 
   const userId = session?.user?.id;
 
-
-  const [imageSrc, setImageSrc] = useState("/uploads/default.png");
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setImageSrc(`${window.origin}/uploads/${userId}.webp?${Date.now()}`);
-    }
-  }, [userId]); // Se vuelve a ejecutar si el userId cambia
+  const [imageSrc, setImageSrc] = useState(
+    `${currentOrigin}/uploads/${userId}.webp`
+  );
 
   const handleImageError = () => {
-    // Función para cargar la imagen por defecto en caso de error
-    setImageSrc("/uploads/default.png");
+    setImageSrc(`${currentOrigin}/uploads/default.png`);
   };
   const onSubmit = handleSubmit(async (data) => {
     const body = {
@@ -120,7 +115,7 @@ useEffect(() => {
             width={100}
             height={100}
             className="rounded-full"
-            onError={handleImageError} 
+            onError={handleImageError}
           />
         </div>
 

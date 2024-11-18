@@ -11,10 +11,8 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
         if(inputSource=="inputChat" || inputSource=="inputBot")
         {setFile(selectedFile);}
         if (selectedFile) {
-            console.log("Archivo seleccionado:", selectedFile);
             const uploadedFilePath = await handleUpload(selectedFile); 
             if (uploadedFilePath) {
-                console.log("Ruta del archivo devuelta:", uploadedFilePath);
                 setFilePath(uploadedFilePath);
             } else {
                 console.error("Error al obtener la ruta del archivo.");
@@ -30,7 +28,6 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
         const formData = new FormData();
         formData.append('image', selectedFile);
         formData.append('inputSource', inputSource); 
-        console.log('Preparando para subir el archivo source :', inputSource);
 
         try {
             const response = await fetch('/api/upload', {
@@ -43,7 +40,6 @@ const ImageUploader = ({ setFilePath, file, setFile, inputSource }) => {
 
             const data = await response.json();
             if (response.ok) {
-                console.log('Imagen subida correctamente:', data);
                 return data.filePath; 
             } else {
                 console.error('Error al subir la imagen:', data.error);

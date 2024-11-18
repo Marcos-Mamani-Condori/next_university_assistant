@@ -57,7 +57,6 @@ router.post("/upload-audio", upload.single("audio"), async (req, res) => {
     const outputFilePath = path.join(userFolderPath, uniqueFileName);
 
     fs.writeFileSync(outputFilePath, req.file.buffer);
-    console.log(`Audio guardado con éxito en: ${outputFilePath}`);
 
     res.status(200).json({
       message: "Audio recibido correctamente",

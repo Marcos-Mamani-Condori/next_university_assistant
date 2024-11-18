@@ -29,7 +29,6 @@ function InputBox({ className }) {
 
     useEffect(() => {
         setfilePath(filePath);
-        console.log("Valor de filePath pasado en input:", filePath);
     }, [filePath, setfilePath]);
 
     const handleKeyDown = (e) => {
