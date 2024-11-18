@@ -18,7 +18,6 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
   const { data: session } = useSession(); 
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("Datos enviados:", data); 
 
     const res = await signIn("credentials", {
       email: data.email,
@@ -26,7 +25,6 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
       redirect: false,
     });
 
-    console.log("Respuesta de signIn:", res); 
 
     if (res.error) {
       console.log('Error al iniciar sesión:', res.error); 
@@ -103,7 +101,14 @@ const LoginPage = ({ onClose, setIsLoged, toggleLoginRegister }) => {
             Iniciar sesión
           </button>
         </form>
-
+        {session && (
+                    <div>
+                        <span className="text-white px-3">Bienvenidos, {session.user.name}!</span>
+                        <button className="bg-white text-black px-4 py-2 rounded-md" onClick={() => signOut()}>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                )}
         <button
           onClick={() => {
             toggleLoginRegister(); 

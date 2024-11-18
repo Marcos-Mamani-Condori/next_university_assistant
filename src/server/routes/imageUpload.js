@@ -11,7 +11,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post("/upload", upload.single("image"), async (req, res) => {
-  console.log("Iniciando procesamiento de imagen...");
 
   if (!req.file) {
     console.log("Error: No se subió ningún archivo");

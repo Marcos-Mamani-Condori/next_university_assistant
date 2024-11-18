@@ -2,17 +2,15 @@
 
 import { useContext, useState } from 'react';
 import Image from 'next/image';
-import user_icon from '@/public/static/user_icon.png';
 import bell_icon from '@/public/static/bell_icon.svg';
 import RegisterModal from '@/components/RegisterModal';
 import { usePathname } from 'next/navigation';
 import ModalContext from '@/context/ModalContext';
-import { signOut, useSession } from 'next-auth/react';
+import UserImage from '@/components/UserImage';
 
 const Header = ({ className }) => {
     const { isRegisterModalOpen, setIsRegisterModalOpen, setIsLoged } = useContext(ModalContext);
-    const { data: session } = useSession();
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false); 
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
     const handleRegisterClick = () => {
         setIsLoged(false);
@@ -24,7 +22,7 @@ const Header = ({ className }) => {
     };
 
     const toggleNotificationBox = () => {
-        setIsNotificationOpen(!isNotificationOpen); 
+        setIsNotificationOpen(!isNotificationOpen);
     };
 
     const pathname = usePathname();
@@ -42,42 +40,27 @@ const Header = ({ className }) => {
                 <h1 className="text-2xl font-bold text-white">{currentTitle}</h1>
             </div>
 
-            <div className="absolute left-1 hidden lg:block">
-                {session && (
-                    <div>
-                        <span className="text-white px-3">Bienvenidos, {session.user.name}!</span>
-                        <button className="bg-white text-black px-4 py-2 rounded-md" onClick={() => signOut()}>
-                            Cerrar Sesión
-                        </button>
-                    </div>
-                )}
+            <div className="absolute right-4 md:right-10">
+
+
+                <button onClick={handleRegisterClick}>
+                    <UserImage />
+                </button>
             </div>
 
-            <div className="absolute right-4 md:right-10">
-                <button onClick={handleRegisterClick}>
+
+            <div className="absolute right-40 md:right-30">
+                <button onClick={toggleNotificationBox}>
                     <Image
-                        src={user_icon}
-                        alt="User icon"
+                        src={bell_icon}
+                        alt="Notification bell icon"
                         width={32}
                         height={32}
                         className="h-8 w-8"
                         loading="eager"
                     />
                 </button>
-            </div>
-
-            <div className="absolute right-8 md:right-20">
-                <button onClick={toggleNotificationBox}> 
-                    <Image 
-                        src={bell_icon} 
-                        alt="Notification bell icon" 
-                        width={32} 
-                        height={32} 
-                        className="h-8 w-8" 
-                        loading="eager"
-                    /> 
-                </button>
-                {isNotificationOpen && ( 
+                {isNotificationOpen && (
                     <div className="absolute top-10 right-0 w-48 p-4 bg-white border border-gray-300 rounded shadow-lg">
                         <p className="text-gray-700">No new notifications</p>
                     </div>

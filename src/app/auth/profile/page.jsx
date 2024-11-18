@@ -1,7 +1,7 @@
 'use client';
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react'; // Importa signOut
 import Image from "next/image";
 import ImageUploader from '@/components/ImageUploader';
 import currentOrigin from "@/libs/config";
@@ -42,7 +42,7 @@ function ProfilePage({ onClose }) {
   const userId = session?.user?.id;
 
   const [imageSrc, setImageSrc] = useState(
-    `${currentOrigin}/uploads/${userId}.webp`
+    `${currentOrigin}/uploads/${userId}.webp?${Date.now()}`
   );
 
   const handleImageError = () => {
@@ -256,7 +256,15 @@ useEffect(() => {
           <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
           Actualizar Perfil
           </button>
+          
         </form>
+         {/* Botón para cerrar sesión */}
+         <button
+          onClick={() => signOut()}  // Llama a signOut de next-auth
+          className="w-full bg-red-500 text-white p-3 rounded-lg mt-4"
+        >
+          Cerrar Sesión
+        </button>
       </div>
     </div>
   );
