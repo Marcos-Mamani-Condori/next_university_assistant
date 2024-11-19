@@ -3,43 +3,28 @@ const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
-const jwt = require("jsonwebtoken");
+const authenticate = require("../middlewares/authenticate"); 
 
 const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post("/upload", upload.single("image"), async (req, res) => {
-
+router.post("/upload", authenticate, upload.single("image"), async (req, res) => {
   if (!req.file) {
     console.log("Error: No se subió ningún archivo");
     return res.status(400).json({ error: "No se subió ningún archivo" });
   }
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    console.log("Error: No se proporcionó token de autenticación");
-    return res.status(401).json({ error: "No se proporcionó token" });
-  }
-
-  const token = authHeader.split(" ")[1];
   try {
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
-    console.log("Token verificado, datos decodificados:", decoded);
-
-    const userId = decoded.id;
+    const userId = req.user.id;
     let outputFileName;
     let outputFilePath;
 
     const inputSource = req.body.inputSource;
 
     if (inputSource === "inputChat") {
-      const userFolderPath = path.join(
-        __dirname,  
-        "../../../uploads",
-        userId.toString()
-      );
+      const userFolderPath = path.join(__dirname, "../../../uploads", userId.toString());
       if (!fs.existsSync(userFolderPath)) {
         fs.mkdirSync(userFolderPath, { recursive: true });
       }
@@ -52,8 +37,8 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       } while (fs.existsSync(outputFilePath));
 
     } else {
-      outputFileName = `${userId}.webp`; 
-      outputFilePath = path.join(__dirname, "../../../uploads", outputFileName); // Cambiar aquí
+      outputFileName = `${userId}.webp`;
+      outputFilePath = path.join(__dirname, "../../../uploads", outputFileName);
     }
 
     await sharp(req.file.buffer)
@@ -61,16 +46,15 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       .webp({ quality: 100 })
       .toFile(outputFilePath);
 
-
     const finalFileIndex = inputSource === "inputChat" 
       ? parseInt(outputFileName.replace(".webp", "")) 
-      : userId; 
+      : userId;
 
     res.status(200).json({
       message: "Imagen convertida a WebP correctamente",
       fileIndex: finalFileIndex, 
-      filePath: inputSource === "inputChat" 
-        ? `/uploads/${userId}/${outputFileName}` 
+      filePath: inputSource === "inputChat"
+        ? `/uploads/${userId}/${outputFileName}`
         : `/uploads/${outputFileName}`,
     });
   } catch (error) {

@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const jwt = require("jsonwebtoken");
+const authenticate = require("../middlewares/authenticate");
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ const generateUniqueFilename = (directory, baseName, extension) => {
   return uniqueName;
 };
 
-router.post("/upload-audio", upload.single("audio"), async (req, res) => {
+router.post("/upload-audio", authenticate, upload.single("audio"), async (req, res) => {
   console.log("Iniciando procesamiento de audio...");
 
   if (!req.file) {
@@ -29,16 +29,8 @@ router.post("/upload-audio", upload.single("audio"), async (req, res) => {
     return res.status(400).json({ error: "No se subió ningún archivo" });
   }
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    console.log("Error: No se proporcionó token de autenticación");
-    return res.status(401).json({ error: "No se proporcionó token" });
-  }
-
-  const token = authHeader.split(" ")[1];
   try {
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
-    const userId = decoded.id;
+    const userId = req.user.id;
 
     const userFolderPath = path.join(
       __dirname,

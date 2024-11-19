@@ -1,7 +1,7 @@
 'use client';
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { useSession, signOut } from 'next-auth/react'; // Importa signOut
+import { useSession, signOut } from 'next-auth/react'; 
 import Image from "next/image";
 import ImageUploader from '@/components/ImageUploader';
 import currentOrigin from "@/libs/config";
@@ -258,9 +258,8 @@ useEffect(() => {
           </button>
           
         </form>
-         {/* Botón para cerrar sesión */}
          <button
-          onClick={() => signOut()}  // Llama a signOut de next-auth
+          onClick={() => signOut()}  
           className="w-full bg-red-500 text-white p-3 rounded-lg mt-4"
         >
           Cerrar Sesión
