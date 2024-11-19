@@ -4,8 +4,8 @@ const ActivityCalendar = ({ activities }) => {
     const displayedActivities = activities.slice(0, 5);
 
     return (
-        <div className="w-full max-w-md p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-            <h2 className="mb-4 text-xl font-semibold text-red-800">Actividades</h2>
+        <div className="row-span-5 col-span-6 overflow-y-auto w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+            <h2 className="mb-1 text-xl font-semibold text-red-800">Actividades</h2>
             {displayedActivities.length > 0 ? (
                 <ul>
                     {displayedActivities.map((activity, index) => (

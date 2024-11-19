@@ -139,7 +139,7 @@ const StudentsCounter = () => {
   const totalCount = carrera.length; 
 
   return (
-    <div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+    <div className="row-span-5 overflow-y-auto col-span-6 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
       <p className="text-xl font-semibold text-red-800 pb-4">Usuarios Activos</p>
       {totalCount > 0 ? (
         <div>

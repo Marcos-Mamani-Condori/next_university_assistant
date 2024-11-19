@@ -39,17 +39,14 @@ const Header = ({ className }) => {
             <div className="text-center">
                 <h1 className="text-2xl font-bold text-white">{currentTitle}</h1>
             </div>
-
-            <div className="absolute right-4 md:right-10">
+<div className="absolute right-4 flex items-center space-x-4 sm:right-10 md:right-30">
 
 
                 <button onClick={handleRegisterClick}>
                     <UserImage />
                 </button>
-            </div>
 
 
-            <div className="absolute right-40 md:right-30">
                 <button onClick={toggleNotificationBox}>
                     <Image
                         src={bell_icon}
@@ -66,7 +63,6 @@ const Header = ({ className }) => {
                     </div>
                 )}
             </div>
-
             {isRegisterModalOpen && (
                 <RegisterModal
                     isOpen={isRegisterModalOpen}

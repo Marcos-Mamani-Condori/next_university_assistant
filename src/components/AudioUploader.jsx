@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
 
@@ -10,6 +11,7 @@ function InputRecorder({ setFilePath, file, setFile }) {
     const [recorder, setRecorder] = useState(null);
     const [audioUrl, setAudioUrl] = useState(null);
     const [stream, setStream] = useState(null); // Guardar el stream
+    const [showButtons, setShowButtons] = useState(false); // Controlar la visibilidad de los botones de pausar y finalizar
 
     useEffect(() => {
         let intervalId;
@@ -31,6 +33,7 @@ function InputRecorder({ setFilePath, file, setFile }) {
             setStream(audioStream); // Guardar el stream
             setIsRecording(true);
             setTime(0);
+            setShowButtons(true); // Mostrar botones de pausar y finalizar
 
             const chunks = [];
             mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
@@ -71,6 +74,7 @@ function InputRecorder({ setFilePath, file, setFile }) {
             stream.getTracks().forEach(track => track.stop());
             setStream(null);
         }
+        setShowButtons(false); // Ocultar botones de pausar y finalizar después de parar la grabación
     };
 
     const handleUpload = async (audioBlob) => {
@@ -99,30 +103,42 @@ function InputRecorder({ setFilePath, file, setFile }) {
     };
 
     return (
-        <div className="audio-uploader flex flex-row items-center space-x-4">
-        <button
-            onClick={isRecording ? pauseRecording : startRecording}
-            className={`px-4 py-2 rounded-full ${isRecording ? "bg-yellow-500" : "bg-green-500"} text-white`}
-        >
-            {isRecording && !isPaused ? "Pausar" : isPaused ? "Reanudar" : "Grabar"}
-        </button>
-    
-        {isRecording && (
-            <div className="timer text-lg font-bold">
-                {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
-            </div>
-        )}
-    
-        <button
-            onClick={stopRecording}
-            disabled={!isRecording}
-            className="px-4 py-2 rounded bg-red-500 text-white"
-        >
-            Finalizar
-        </button>
-    
+        <div className="audio-uploader flex flex-col items-center space-y-4">
+            {/* Botón de Grabar */}
+            {!showButtons && (
+                <button
+                    onClick={startRecording}
+                    className="px-6 py-3 rounded-full bg-green-500 text-white"
+                >
+                    Grabar
+                </button>
+            )}
 
-           
+            {/* Botones Pausar, Reanudar y Finalizar */}
+            {showButtons && (
+                <div className="flex flex-col items-center space-y-2">
+                    <button
+                        onClick={pauseRecording}
+                        className={`px-6 py-3 rounded-full ${isRecording && !isPaused ? "bg-yellow-500" : "bg-blue-500"} text-white`}
+                    >
+                        {isRecording && !isPaused ? "Pausar" : isPaused ? "Reanudar" : "Grabar"}
+                    </button>
+
+                    {isRecording && (
+                        <div className="timer text-lg font-bold">
+                            {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}
+                        </div>
+                    )}
+
+                    <button
+                        onClick={stopRecording}
+                        disabled={!isRecording}
+                        className="px-6 py-3 rounded-full bg-red-500 text-white"
+                    >
+                        Finalizar
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

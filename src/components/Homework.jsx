@@ -195,9 +195,9 @@ const userId = 2; // Supongamos que el ID del usuario que está viendo la págin
   const aplicarBlur = usuarioActual && usuarioActual.rol !== 'premium' && usuarioActual.rol !== 'administrador';
 
   return (
-<div className="p-4 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+<div className="relative h-full row-span-4 col-span-6 flex items-center justify-center max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
       {aplicarBlur ? (
-        <div className="flex flex-col items-center" style={{
+        <div className=" items-center" style={{
           backgroundImage: `url("https://www.shutterstock.com/image-photo/close-old-dictionary-page-solution-260nw-1257550180.jpg")`,
           backgroundSize: "cover", 
           backgroundPosition: "center", 

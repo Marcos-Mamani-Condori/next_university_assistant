@@ -1,8 +1,3 @@
-///** @type {import('next').NextConfig} */
-//const nextConfig = {};
-
-//export default nextConfig;
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -12,9 +7,14 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http', // Cambia a 'http' si tu dominio no usa HTTPS
-        hostname: 'localhost', // Sustituye con tu dominio
-        port: '3000', // Deja vacío si usas los puertos estándar
-        pathname: '/uploads/**', // Ruta que incluye todas las imágenes dentro de /uploads/
+        hostname: '192.168.18.12', // Primer dominio
+        port: '3000', // Puerto del primer dominio
+        pathname: '/uploads/**', // Ruta para las imágenes en el primer dominio
+      },
+      {
+        protocol: 'http', // Protocolo para el segundo dominio
+        hostname: 'localhost', // Segundo dominio
+        pathname: '/uploads/**', // Ruta para las imágenes en el segundo dominio
       },
     ],
   },

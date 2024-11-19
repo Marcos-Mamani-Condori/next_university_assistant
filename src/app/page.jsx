@@ -26,29 +26,19 @@ const Home = () => {
     
     return (
         //<div className={`${isRegisterModalOpen ? "blur-sm" : ""}`}></div>//
-        <div className="overflow-y-auto h-lvh ">
+        <div className="mx-2 md:mx-10 lg:mx-[10rem] grid grid-rows-12 col-span-12 row-span-12">
             <Announcements isModalOpen={isModalOpen} setModalOpen={setIsModalOpen} />
-            <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
-                <div className="flex-1 max-h-[200px] overflow-y-auto">
                     <Homework />
-                </div>       
-                <div className="flex-1">
+
                     <CircularRadiusExam
                         startDate={'2024-10-17'}
                         dateExam={'2024-10-29'}
                         fechaActual={now}
                     />
-                </div>
-            </div>
-            <div className="flex flex-row mx-2 md:mx-10 lg:mx-[10rem] space-x-4">
-                <div className="flex-1">
+
                     <StudentsCounter />
-                </div>
                 
-                <div className="flex-1 max-h-[300px] overflow-y-auto">
                     <ActivityCalendar activities={activities} /> 
-                </div>
-            </div>
             
             
         </div>
