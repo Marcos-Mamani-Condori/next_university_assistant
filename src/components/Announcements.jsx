@@ -69,7 +69,7 @@ const Announcements = ({ isModalOpen, setModalOpen, className }) => {
   return (
     <>
       <div
-        className={`row-span-3 relative h-full col-span-12 flex items-center justify-center  rounded-lg shadow-lg ${isModalOpen ? "blur-sm" : ""} ${className}`}
+        className={`row-span-3 relative h-full col-span-12 flex items-center justify-center  rounded-lg  ${isModalOpen ? "blur-sm" : ""} ${className}`}
         style={{
           // backgroundImage: `url("https://i.blogs.es/89aaa3/650_1000_bliss-original/1366_2000.jpg")`,
           backgroundSize: "cover", // Imagen de fondo para todo el contenedor

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 const StudentsCounter = () => {
-  const [carrera, setCarrera] = useState([]); 
+  const [carrera, setCarrera] = useState([]);
   const [carreraCount, setCarreraCount] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const StudentsCounter = () => {
   useEffect(() => {
     const fetchCarrera = async () => {
       try {
-        const response = await fetch("/api/connected-users/protected"); 
+        const response = await fetch("/api/connected-users/protected");
 
         if (!response.ok) {
           throw new Error("Error al obtener las carreras de los usuarios");
@@ -19,7 +19,7 @@ const StudentsCounter = () => {
         const data = await response.json();
 
         if (data.majors) {
-            setCarrera(data.majors); 
+          setCarrera(data.majors);
         } else {
           setError("No se encontraron datos de usuarios.");
         }
@@ -32,13 +32,13 @@ const StudentsCounter = () => {
       }
     };
 
-    fetchCarrera(); 
+    fetchCarrera();
   }, []);
 
   useEffect(() => {
     if (carrera.length > 0) {
       const count = carrera.reduce((acc, item) => {
-        acc[item] = (acc[item] || 0) + 1; 
+        acc[item] = (acc[item] || 0) + 1;
         return acc;
       }, {});
       setCarreraCount(count);
@@ -66,8 +66,8 @@ const StudentsCounter = () => {
   const sortedCarreraCount = Object.entries(carreraCount).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="row-span-5 overflow-y-auto col-span-6 max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
-      <p className="text-xl font-semibold pb-4">Usuarios registrados por carrera</p>
+    <div className="row-span-6 p-4 overflow-y-auto col-span-5 max-w-md">
+      <p className="text-xl font-semibold pb-4">registrados </p>
       {totalCount > 0 ? (
         <div>
           {sortedCarreraCount.map(([majorName, count]) => {
@@ -75,8 +75,14 @@ const StudentsCounter = () => {
 
             return (
               <div key={majorName} className="mb-2">
-                <p className="py-1">{majorName}: {percentage}%</p>
-                <div className="w-full bg-gray-200 rounded-full h-4">
+                <p className="py-1">{majorName}</p>
+                <div className="relative w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="absolute inset-0 flex items-center justify-center text-black text-sm font-semibold"
+                    style={{ zIndex: 2 }}
+                  >
+                    {percentage}%
+                  </div>
                   <div
                     className="bg-blue-500 h-4 rounded-full"
                     style={{ width: `${percentage}%` }}
@@ -87,7 +93,7 @@ const StudentsCounter = () => {
           })}
         </div>
       ) : (
-        <p>No hay estudiantes conectados.</p>
+        <p>No hay estudiantes registrados.</p>
       )}
     </div>
   );

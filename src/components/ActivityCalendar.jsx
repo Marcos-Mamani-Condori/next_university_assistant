@@ -4,14 +4,14 @@ const ActivityCalendar = ({ activities }) => {
     const displayedActivities = activities.slice(0, 5);
 
     return (
-        <div className="row-span-5 col-span-6 overflow-y-auto w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-md">
+        <div className="row-span-6 p-3 col-span-7 overflow-y-auto w-full max-w-md">
             <h2 className="mb-0 text-xl font-semibold text-red-800">Actividades</h2>
             {displayedActivities.length > 0 ? (
                 <ul>
                     {displayedActivities.map((activity, index) => (
-                        <li key={index} className="flex items-center p-2">
+                        <li key={index} className="flex items-center p-1">
                             <a href="#" className="flex items-center w-full text-gray-700 hover:underline">
-                                <div className="flex flex-col items-center justify-center w-16 h-16 mr-4 text-white bg-red-800 rounded-full">
+                                <div className="flex flex-col items-center justify-center w-12 h-12 mr-2 text-white bg-red-800 rounded-full">
                                     <span className="text-2xl font-bold">{activity.day}</span>
                                     <span className="text-xs uppercase">{activity.month}</span>
                                 </div>

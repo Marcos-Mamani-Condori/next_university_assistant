@@ -34,12 +34,12 @@ const Header = ({ className }) => {
     const currentTitle = pageTitles[pathname] || "LoyoApp";
 
     return (
-        <header className={`${className} h-full bg-gray-800 overflow-hidden flex items-center justify-center relative`}>
+        <header className={`${className} h-full overflow-hidden flex items-center justify-center relative  border border-gray-400`}>
             <div className="absolute left-4"></div>
             <div className="text-center">
                 <h1 className="text-2xl font-bold text-white">{currentTitle}</h1>
             </div>
-<div className="absolute right-4 flex items-center space-x-4 sm:right-10 md:right-30">
+            <div className="absolute right-4 flex items-center space-x-4 sm:right-10 md:right-30">
 
 
                 <button onClick={handleRegisterClick}>
