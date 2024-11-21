@@ -1,30 +1,39 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from "react";
-import AnnouncementsModal from './AnnouncementsModal'; 
+import AnnouncementsModal from './AnnouncementsModal';
+
 const Announcements = ({ isModalOpen, setModalOpen, className }) => {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: "Este es un anuncio 1",
-      message: "Este es el mensaje del anuncio 1",
-      fecha: "2000-05-15",
-    },
-    {
-      id: 2,
-      name: "Este es un anuncio 2",
-      message: "Este es el mensaje del anuncio 2",
-      fecha: "2001-05-15",
-    },
-    {
-      id: 3,
-      name: "Este es un anuncio 3",
-      message: "Este es el mensaje del anuncio 3",
-      fecha: "2002-05-15",
-    },
-  ]);
+  const [data, setData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [modalContent, setModalContent] = useState(null);
+
+  // Fetch los anuncios desde la API
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('/api/announcements');
+        const announcements = await response.json();
+
+        if (Array.isArray(announcements) && announcements.length) {
+          setData(announcements);
+        } else {
+          // Maneja el caso si no hay anuncios
+          setData([{
+            id: 0,
+            title: "No hay anuncios disponibles",
+            image_url: "https://via.placeholder.com/300x200?text=Sin+Anuncios",
+            date: null,
+            created_at: null,
+          }]);
+        }
+      } catch (error) {
+        console.error("Error al obtener los anuncios:", error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -60,14 +69,14 @@ const Announcements = ({ isModalOpen, setModalOpen, className }) => {
   return (
     <>
       <div
-        className={`row-span-3 relative h-full col-span-12 flex items-center justify-center p-0 rounded-lg shadow-lg ${isModalOpen ? "blur-sm" : ""} ${className}`}
+        className={`row-span-3 relative h-full col-span-12 flex items-center justify-center  rounded-lg shadow-lg ${isModalOpen ? "blur-sm" : ""} ${className}`}
         style={{
-          backgroundImage: `url("https://i.blogs.es/89aaa3/650_1000_bliss-original/1366_2000.jpg")`,
-          backgroundSize: "cover",
+          // backgroundImage: `url("https://i.blogs.es/89aaa3/650_1000_bliss-original/1366_2000.jpg")`,
+          backgroundSize: "cover", // Imagen de fondo para todo el contenedor
           backgroundPosition: "center",
         }}
       >
-        <div className="relative overflow-hidden h-full w-full">
+        <div className="relative overflow-hidden w-full ">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -75,28 +84,36 @@ const Announcements = ({ isModalOpen, setModalOpen, className }) => {
             {data.map((item, index) => (
               <div
                 key={index}
-                className="min-w-full flex items-center justify-center bg-transparent text-center h-full"
+                className="min-w-full flex items-center justify-center bg-transparent "
               >
                 <div
-                  className="p-4 rounded-lg shadow-lg cursor-pointer bg-white bg-opacity-80"
-                  onClick={() => handleContainerClick(data[currentIndex])}
+                  className="rounded-lg shadow-lg p-12 cursor-pointer bg-white bg-opacity-80 flex flex-col justify-center items-center"
+                  onClick={() => handleContainerClick(item)}
+                  style={{
+                    width: "40%", // Ancho del 40% (ajustable)
+                    height: "100%", // Alto completo (100% de su contenedor)
+                    backgroundImage: `url(${item.image_url})`, // Fondo solo para el texto
+                    backgroundSize: "cover", // La imagen cubre el fondo
+                    backgroundPosition: "center", // Centra la imagen
+                  }}
                 >
-                  <h2 className="text-xl font-bold">{item.name}</h2>
-                  <p>{item.message}</p>
-                  <p className="text-sm">{item.fecha}</p>
+                  <div className="text-black  font-bold content-center">
+                    <p className="text-sm ">{item.title}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
+        {/* Botones de navegación */}
         <button
           onClick={() =>
             setCurrentIndex((prevIndex) =>
               prevIndex === 0 ? data.length - 1 : prevIndex - 1
             )
           }
-          className="absolute left-0 top-0 bottom-0 w-12 bg-transparent text-gray-500 hover:text-blue-500 hover:bg-neutral-300 focus:outline-none"
+          className="absolute left-0 top-0 bottom-0 w-12 bg-transparent text-gray-500 hover:text-blue-500 hover:bg-neutral-300 focus:outline-none "
         >
           &lt;
         </button>

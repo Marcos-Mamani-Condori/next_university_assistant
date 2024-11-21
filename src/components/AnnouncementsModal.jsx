@@ -11,14 +11,18 @@ const AnnouncementsModal = ({ isOpen, onClose, content, onNext, onPrev }) => {
                 >
                     X
                 </button>
-                <div className="bg-white p-4 rounded-lg shadow-lg mt-4" style={{ height: '200px', width: '90%', maxWidth: '770px' }}>
-                    <h2 className="text-xl font-bold">{content.name}</h2>
-                    <p>{content.message}</p>
-                    <p className="text-sm">{content.fecha}</p>
-                       <br/>
-                       <br/>
-                       <br/>
-                       <br/>
+                
+                <div className="bg-white p-4 rounded-lg shadow-lg mt-8 :w-full" style={{ height: '500px', width: '90%', maxWidth: '770px' }}>
+                    
+                    <h2 className="text-xl font-bold">{content.title}</h2>
+                    <p>{content.date}</p>
+                    {content.image_url && (
+                        <img
+                            src={content.image_url}
+                            alt={content.title}
+                            className="w-full h-auto max-h-64 object-cover rounded-lg mb-4"
+                        />
+                    )}
                     <div className="flex justify-between mt-4">
                         <button
                             className=" text-3xl bg-slate-950 text-white rounded-full w-20 h-20 hover:bg-slate-700 ml-12 mt-7" 

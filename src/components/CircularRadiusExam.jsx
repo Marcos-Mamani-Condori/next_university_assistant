@@ -37,7 +37,7 @@ const CircularRadiusExam = ({ startDate, dateExam, fechaActual }) => {
     const progressColor = daysPastEndDate > 3 ? 'text-gray-500 dark:text-neutral-700' : getColor(percentage);
 
     return (
-        <div className="row-span-4 col-span-6  flex flex-col items-center p-0">
+        <div className="row-span-4 col-span-6  flex flex-col items-center">
             <span className="text-xl font-semibold text-red-800">Fecha de Examen</span>
 
             <div className="relative w-40 h-40">

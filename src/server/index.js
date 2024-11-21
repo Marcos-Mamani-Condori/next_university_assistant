@@ -11,7 +11,7 @@ const path = require('path');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
+const announcementsRouter = require('./routes/announcements');
 app.prepare().then(() => {
     const server = express();
     server.use('/uploads', express.static(path.resolve('./uploads')));
@@ -19,6 +19,7 @@ app.prepare().then(() => {
     server.use('/api', imageUploadRouter);
     server.use('/api/connected-users', connectedUsersRouter); 
     server.use('/api', audioUploadRouter);
+    server.use('/api', announcementsRouter); // Agrega la nueva ruta de anuncios
 
     const httpServer = http.createServer(server);
     const io = new Server(httpServer);
