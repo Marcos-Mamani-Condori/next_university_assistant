@@ -7,6 +7,7 @@ const registerLikes = require('./sockets/socketlike');
 const imageUploadRouter = require('./routes/imageUpload');
 const { router: connectedUsersRouter, handleusers } = require('./routes/connectedUsers');
 const audioUploadRouter = require('./routes/audioUpload'); 
+const usersRouter = require('./routes/users');
 const path = require('path');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -20,7 +21,7 @@ app.prepare().then(() => {
     server.use('/api/connected-users', connectedUsersRouter); 
     server.use('/api', audioUploadRouter);
     server.use('/api', announcementsRouter); // Agrega la nueva ruta de anuncios
-
+    server.use('/api', usersRouter);
     const httpServer = http.createServer(server);
     const io = new Server(httpServer);
 

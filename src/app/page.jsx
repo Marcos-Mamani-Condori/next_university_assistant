@@ -32,8 +32,8 @@ const Home = () => {
 
                     <CircularRadiusExam
                         startDate={'2024-11-01'}
-                        dateExam={'2024-11-30'}
-                        fechaActual={'2024-11-03'}
+                        dateExam={'2024-11-27'}
+                        fechaActual={now}
                     />
 
                     <StudentsCounter />

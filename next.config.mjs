@@ -7,7 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http', // Cambia a 'http' si tu dominio no usa HTTPS
-        hostname: '192.168.1.37', // Primer dominio
+        hostname: '192.168.18.12', // Primer dominio
         port: '3000', // Puerto del primer dominio
         pathname: '/uploads/**', // Ruta para las imágenes en el primer dominio
       },

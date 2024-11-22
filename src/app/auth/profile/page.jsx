@@ -2,9 +2,8 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from 'next-auth/react'; 
-import Image from "next/image";
 import ImageUploader from '@/components/ImageUploader';
-import currentOrigin from "@/libs/config";
+import UserImage from "@/components/UserImage";
 const inputBaseStyles = () => {
   return "p-2 mb-4 rounded bg-gray-700 text-slate-100";
 };
@@ -39,15 +38,6 @@ function ProfilePage({ onClose }) {
   const [showUpload, setShowUpload] = useState(false);
   const [filePath, setFilePath] = useState(null); 
 
-  const userId = session?.user?.id;
-
-  const [imageSrc, setImageSrc] = useState(
-    `${currentOrigin}/uploads/${userId}.webp?${Date.now()}`
-  );
-
-  const handleImageError = () => {
-    setImageSrc(`${currentOrigin}/uploads/default.png`);
-  };
   const onSubmit = handleSubmit(async (data) => {
     const body = {
       name: isEditingName ? data.name : session.user.name,
@@ -109,16 +99,8 @@ useEffect(() => {
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Personalizar Perfil</h1>
         
         <div className="flex justify-center mb-4">
-          <Image
-            src={imageSrc}
-            alt="Imagen de Perfil"
-            width={100}
-            height={100}
-            className="rounded-full"
-            onError={handleImageError}
-          />
+        <UserImage />
         </div>
-
         <button
           type="button"
           onClick={() => setShowUpload(!showUpload)}

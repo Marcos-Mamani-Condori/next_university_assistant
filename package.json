@@ -7,7 +7,6 @@
     "dev:express": "node src/server/index.js",
     "build": "next build",
     "start": "next start",
-    "start:express": "cross-env NODE_ENV=production node src/server/index.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -31,7 +30,6 @@
   "devDependencies": {
     "@eslint/config-array": "^0.19.0",
     "@eslint/object-schema": "^2.1.4",
-    "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.14",
     "postcss": "^8.4.49",
